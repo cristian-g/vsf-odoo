@@ -1,2 +1,1 @@
-# restful
-RESTful API Odoo Module
+# RESTful API Odoo Module
