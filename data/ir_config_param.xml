@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="access_token_expires_in" model="ir.config_parameter">
+            <field name="key">access_token_expires_in</field>
+            <field name="value">600</field>
+        </record>
+    </data>
+</odoo>
