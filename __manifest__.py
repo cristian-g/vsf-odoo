@@ -21,7 +21,7 @@ See https://github.com/cristian-g/restful
         'security/ir.model.access.csv',
     ],
     'images': ['static/description/main_screenshot.png'],
-    'license': 'Other Propietary',
+    'license': 'OEEL-1',
     'installable': True,
     'auto_install': False,
 }
