@@ -44,3 +44,17 @@ class PublicAPI(http.Controller):
             return valid_response(data)
         else:
             return invalid_response(data)
+
+    @http.route('/api/category_products', methods=['GET'], type='http', auth='none', csrf=False)
+    def category_products(self, **payload):
+        data = request.env['product.template'].sudo().search_read(
+            domain=[('public_categ_ids', 'in', [payload.get('category_id')])],
+            fields=['id', 'name', 'description', 'price', 'public_categ_ids'],
+            offset=None,
+            limit=None,
+            order=None
+        )
+        if data:
+            return valid_response(data)
+        else:
+            return invalid_response(data)
