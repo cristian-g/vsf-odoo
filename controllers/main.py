@@ -83,6 +83,52 @@ class APIController(http.Controller):
         )
         """
 
+    @validate_token
+    @http.route('/api/cart', type='http', auth="none", methods=['GET'], csrf=False)
+    def get(self, model=None, id=None, **payload):
+        data = request.env['sale.order'].sudo().search_read(
+            domain=[('user_id', '=', request.session.uid)],
+            fields=[
+                'id',
+                'state',
+                #'date_order',
+                'require_payment',
+                #'create_date',
+                #'confirmation_date',
+                'amount_untaxed',
+                'amount_tax',
+                'amount_total',
+                #'write_date',
+            ],
+            offset=None,
+            limit=1,
+            order='create_date DESC'
+        )
+        if data:
+            data[0]['lines'] = request.env['sale.order.line'].sudo().search_read(
+                domain=[('order_id', '=', data[0]['id'])],
+                fields=[
+                    'id',
+                    'name',
+                    'invoice_status',
+                    'price_unit',
+                    'price_subtotal',
+                    'price_tax',
+                    'price_total',
+                    'price_reduce',
+                    'price_reduce_taxinc',
+                    'price_reduce_taxexcl',
+                    'discount',
+                    'product_id',
+                    'product_uom_qty',
+                ],
+                offset=None,
+                limit=None,
+                order='id DESC'
+            )
+            return valid_response(data)
+        else:
+            return invalid_response(data)
 
     @validate_token
     @http.route(_routes, type='http', auth="none", methods=['POST'], csrf=False)
