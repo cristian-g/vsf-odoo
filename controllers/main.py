@@ -1,5 +1,7 @@
 import functools
 import logging
+import json
+import werkzeug.wrappers
 from odoo import http
 from odoo.http import request
 from odoo.addons.restful.common import valid_response, invalid_response, extract_arguments
@@ -56,6 +58,31 @@ class APIController(http.Controller):
             else:
                 return valid_response(data)
         return invalid_response('invalid object model', 'The model %s is not available in the registry.' % ioc_name)
+
+    @validate_token
+    @http.route('/api/profile', type='http', auth="none", methods=['GET'], csrf=False)
+    def get(self, model=None, id=None, **payload):
+
+        data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
+        if data:
+            return valid_response(data)
+        else:
+            return invalid_response(data)
+
+        """
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[('Cache-Control', 'no-store'),
+                     ('Pragma', 'no-cache')],
+            response=json.dumps({
+                'request.httprequest.headers.get': request.httprequest.headers.get('access_token'),
+                'request.session.uid': request.session.uid,
+                'request.uid': request.uid,
+            }),
+        )
+        """
+
 
     @validate_token
     @http.route(_routes, type='http', auth="none", methods=['POST'], csrf=False)
