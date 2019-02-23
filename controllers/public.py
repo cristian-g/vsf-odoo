@@ -60,7 +60,7 @@ class PublicAPI(http.Controller):
             return invalid_response(data)
 
     @http.route('/api/signup', methods=['POST'], type='http', auth='none', csrf=False)
-    def category_products(self, **payload):
+    def signup(self, **payload):
             resource = request.env['res.users'].sudo().create({
                       'name': payload.get('name'),
                       'login': payload.get('email'),

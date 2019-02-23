@@ -61,7 +61,7 @@ class APIController(http.Controller):
 
     @validate_token
     @http.route('/api/profile', type='http', auth="none", methods=['GET'], csrf=False)
-    def get(self, model=None, id=None, **payload):
+    def profile(self, model=None, id=None, **payload):
 
         data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
         if data:
