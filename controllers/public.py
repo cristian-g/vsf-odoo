@@ -58,3 +58,21 @@ class PublicAPI(http.Controller):
             return valid_response(data)
         else:
             return invalid_response(data)
+
+    @http.route('/api/signup', methods=['POST'], type='http', auth='none', csrf=False)
+    def category_products(self, **payload):
+            resource = request.env['res.users'].sudo().create({
+                      'name': payload.get('name'),
+                      'login': payload.get('email'),
+                      'company_ids': [1],
+                      'company_id': 1,
+                      'new_password': payload.get('password'),
+                      'is_company' : False,
+                       'groups_id': [9]
+                  })
+            data = {'id': resource.id}
+            request.env.cr.execute('INSERT INTO res_company_users_rel(user_id, cid) VALUES('+str(resource.id)+', 1)')
+            if resource:
+                return valid_response(data)
+            else:
+                return invalid_response(data)
