@@ -131,6 +131,11 @@ class APIController(http.Controller):
             return invalid_response(data)
 
     @validate_token
+    @http.route('/api/change_password', type='http', auth="none", methods=['PATCH'], csrf=False)
+    def change_password(self, **payload):
+        request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({'password': payload.get('password')})
+
+    @validate_token
     @http.route(_routes, type='http', auth="none", methods=['POST'], csrf=False)
     def create(self, model=None, id=None, **payload):
         ioc_name = model
