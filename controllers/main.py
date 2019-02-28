@@ -86,8 +86,15 @@ class APIController(http.Controller):
     @validate_token
     @http.route('/api/cart', type='http', auth="none", methods=['GET'], csrf=False)
     def get(self, model=None, id=None, **payload):
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
         data = request.env['sale.order'].sudo().search_read(
-            domain=[('user_id', '=', request.session.uid)],
+            domain=[('partner_id', '=', user_data[0].get('partner_id')[0])],
             fields=[
                 'id',
                 'state',
