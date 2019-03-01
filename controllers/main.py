@@ -276,6 +276,27 @@ class APIController(http.Controller):
             return invalid_response(data)
 
     @validate_token
+    @http.route('/api/set_shipping', type='http', auth="none", methods=['PATCH'], csrf=False)
+    def set_shipping(self, **payload):
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        order_data = request.env['sale.order'].sudo().search_read(
+            domain=[('partner_id', '=', user_data[0].get('partner_id')[0])],
+            fields=['id'],
+            offset=None,
+            limit=1,
+            order='create_date DESC'
+        )
+        request.env['sale.order'].sudo().search([('id', '=', order_data[0].get('id'))]).write({
+            'partner_shipping_id': user_data[0].get('partner_id')[0],
+        })
+
+    @validate_token
     @http.route('/api/change_password', type='http', auth="none", methods=['PATCH'], csrf=False)
     def change_password(self, **payload):
         request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({'password': payload.get('password')})
