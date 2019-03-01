@@ -244,6 +244,38 @@ class APIController(http.Controller):
             return invalid_response('missing_line', 'line with id %s could not be found' % payload.get('line_id'), 404)
 
     @validate_token
+    @http.route('/api/add_to_cart', methods=['POST'], type='http', auth='none', csrf=False)
+    def add_to_cart(self, **payload):
+
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        order = request.env['sale.order'].sudo().search_read(
+            domain=[('partner_id', '=', user_data[0].get('partner_id')[0])],
+            fields=['id'],
+            offset=None,
+            limit=1,
+            order='create_date DESC'
+        )
+        resource = request.env['sale.order.line'].sudo().create({
+            'order_id': int(order[0].get('id')),
+            'product_id': int(payload.get('product_id')),
+            'product_uom_qty': payload.get('quantity'),
+            'customer_lead': 0.0,
+            'name': 'New line',
+            'price_unit': 100.0,
+        })
+        data = {'id': resource.id}
+        if resource:
+            return valid_response(data)
+        else:
+            return invalid_response(data)
+
+    @validate_token
     @http.route('/api/change_password', type='http', auth="none", methods=['PATCH'], csrf=False)
     def change_password(self, **payload):
         request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({'password': payload.get('password')})
