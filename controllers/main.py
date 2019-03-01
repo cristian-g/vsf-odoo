@@ -174,6 +174,76 @@ class APIController(http.Controller):
             return invalid_response(data)
 
     @validate_token
+    @http.route('/api/edit_quantity', type='http', auth="none", methods=['PATCH'], csrf=False)
+    def edit_quantity(self, **payload):
+
+        # Check if line is related to authenticated user
+        line_data = request.env['sale.order.line'].sudo().search_read(
+            domain=[('id', '=', payload.get('line_id'))],
+            fields=['order_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        order_data = request.env['sale.order'].sudo().search_read(
+            domain=[('id', '=', line_data[0].get('order_id')[0])],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        if order_data[0].get('partner_id') != user_data[0].get('partner_id'):
+            return invalid_response('params', {'errors': ['Unauthorized']})
+
+        request.env['sale.order.line'].sudo().search([('id', '=', payload.get('line_id'))]).write({
+            'product_uom_qty': payload.get('quantity'),
+        })
+
+    @validate_token
+    @http.route('/api/remove_line', type='http', auth="none", methods=['DELETE'], csrf=False)
+    def remove_line(self, **payload):
+
+        # Check if line is related to authenticated user
+        line_data = request.env['sale.order.line'].sudo().search_read(
+            domain=[('id', '=', payload.get('line_id'))],
+            fields=['order_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        order_data = request.env['sale.order'].sudo().search_read(
+            domain=[('id', '=', line_data[0].get('order_id')[0])],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        if order_data[0].get('partner_id') != user_data[0].get('partner_id'):
+            return invalid_response('params', {'errors': ['Unauthorized']})
+
+        # Remove line
+        record = request.env['sale.order.line'].sudo().search([('id', '=', payload.get('line_id'))])
+        if record:
+            record.unlink()
+            return valid_response('line %s has been successfully deleted' % record.id)
+        else:
+            return invalid_response('missing_line', 'line with id %s could not be found' % payload.get('line_id'), 404)
+
+    @validate_token
     @http.route('/api/change_password', type='http', auth="none", methods=['PATCH'], csrf=False)
     def change_password(self, **payload):
         request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({'password': payload.get('password')})
