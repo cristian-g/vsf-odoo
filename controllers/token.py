@@ -21,10 +21,10 @@ class APIToken(http.Controller):
     @http.route('/api/auth/token', methods=['GET'], type='http', auth='none', csrf=False)
     def token(self, **post):
         _token = request.env['api.access_token']
+        db = 'odoo'
         params = ['db', 'login', 'password']
         params = {key: post.get(key) for key in params if post.get(key)}
-        db, username, password = post.get(
-            'db'), post.get('login'), post.get('password')
+        db, username, password = db, post.get('login'), post.get('password')
         if not all([db, username, password]):
             # Empty 'db' or 'username' or 'password:
             return invalid_response(400, 'missing error', 'either of the following are missing [db, username,password]')
