@@ -121,7 +121,7 @@ class APIController(http.Controller):
 
     @validate_token
     @http.route('/api/cart', type='http', auth="none", methods=['GET'], csrf=False)
-    def get(self, model=None, id=None, **payload):
+    def cart(self, model=None, id=None, **payload):
         user_data = request.env['res.users'].sudo().search_read(
             domain=[('id', '=', request.session.uid)],
             fields=['partner_id'],
@@ -130,7 +130,10 @@ class APIController(http.Controller):
             order=None
         )
         data = request.env['sale.order'].sudo().search_read(
-            domain=[('partner_id', '=', user_data[0].get('partner_id')[0])],
+            domain=[
+                ('partner_id', '=', user_data[0].get('partner_id')[0]),
+                ('state', '=', 'draft'),
+            ],
             fields=[
                 'id',
                 'state',
@@ -295,6 +298,61 @@ class APIController(http.Controller):
         request.env['sale.order'].sudo().search([('id', '=', order_data[0].get('id'))]).write({
             'partner_shipping_id': user_data[0].get('partner_id')[0],
         })
+
+    @validate_token
+    @http.route('/api/orders', type='http', auth="none", methods=['GET'], csrf=False)
+    def orders(self, **payload):
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        orders = request.env['sale.order'].sudo().search_read(
+            domain=[
+                ('partner_id', '=', user_data[0].get('partner_id')[0]),
+                ('state', '=', 'sent'),
+            ],
+            fields=[
+                'id',
+                'state',
+                #'date_order',
+                'require_payment',
+                #'create_date',
+                #'confirmation_date',
+                'amount_untaxed',
+                'amount_tax',
+                'amount_total',
+                #'write_date',
+            ],
+            offset=None,
+            limit=None,
+            order='create_date DESC'
+        )
+        for order in orders:
+            order['lines'] = request.env['sale.order.line'].sudo().search_read(
+                domain=[('order_id', '=', order['id'])],
+                fields=[
+                    'id',
+                    'name',
+                    'invoice_status',
+                    'price_unit',
+                    'price_subtotal',
+                    'price_tax',
+                    'price_total',
+                    'price_reduce',
+                    'price_reduce_taxinc',
+                    'price_reduce_taxexcl',
+                    'discount',
+                    'product_id',
+                    'product_uom_qty',
+                ],
+                offset=None,
+                limit=None,
+                order='id ASC'
+            )
+        return valid_response(orders)
 
     @validate_token
     @http.route('/api/change_password', type='http', auth="none", methods=['PATCH'], csrf=False)
