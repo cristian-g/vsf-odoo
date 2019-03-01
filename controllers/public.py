@@ -59,6 +59,21 @@ class PublicAPI(http.Controller):
         else:
             return invalid_response(data)
 
+    @http.route('/api/stock', methods=['GET'], type='http', auth='none', csrf=False)
+    def stock(self, **payload):
+
+        product = request.env['product.product'].sudo().browse(int(payload.get('product_id')))
+        available_qty = product.qty_available
+
+        # For specific warehouse / location:
+        #available_qty = product.with_context({'warehouse': WAREHOUSE_ID}).qty_available
+        #available_qty = product.with_context({'location': LOCATION_ID}).qty_available
+        # Source: https://www.odoo.com/es_ES/forum/ayuda-1/question/how-to-get-product-quantity-109870
+
+        return valid_response({
+            'stock': available_qty
+        })
+
     @http.route('/api/signup', methods=['POST'], type='http', auth='none', csrf=False)
     def signup(self, **payload):
             resource = request.env['res.users'].sudo().create({
