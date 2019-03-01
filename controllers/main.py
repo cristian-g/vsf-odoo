@@ -84,6 +84,42 @@ class APIController(http.Controller):
         """
 
     @validate_token
+    @http.route('/api/edit_profile', type='http', auth="none", methods=['PATCH'], csrf=False)
+    def edit_profile(self, **payload):
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        partner_data = request.env['res.partner'].sudo().search_read(
+            domain=[('id', '=', user_data[0].get('partner_id')[0])],
+            fields=['email'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+        request.env['res.partner'].sudo().search([('id', '=', user_data[0].get('partner_id')[0])]).write({
+            'name': payload.get('name'),
+            'email': payload.get('email'),
+            'phone': payload.get('phone'),
+            'company_name': payload.get('company_name'),
+            'commercial_company_name': payload.get('company_name'),
+            'vat': payload.get('nif'),
+            'street': payload.get('street'),
+            'city': payload.get('city'),
+            'zip': payload.get('zip'),
+            'country_id': 68,
+            'state_id': payload.get('state_id'),
+        })
+        if payload.get('email') != partner_data[0].get('email'):
+            # Running this will cause to expire the token on web session (web module)
+            request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({
+                'login': payload.get('email'),
+            })
+
+    @validate_token
     @http.route('/api/cart', type='http', auth="none", methods=['GET'], csrf=False)
     def get(self, model=None, id=None, **payload):
         user_data = request.env['res.users'].sudo().search_read(
