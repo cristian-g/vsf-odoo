@@ -3,7 +3,7 @@ import json
 import werkzeug.wrappers
 from odoo import http
 from odoo.http import request
-from odoo.addons.restful.common import invalid_response, valid_response
+from odoo.addons.restful.common import invalid_response, valid_response, simple_response
 
 _logger = logging.getLogger(__name__)
 
@@ -203,6 +203,41 @@ class PublicAPI(http.Controller):
               "specialPriceTax":None,
               "specialPriceInclTax":None
            }
+
+    @http.route('/api/stock/check', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
+    def stock_check(self, **payload):
+        response = {
+            "code": 200,
+            "result": {
+                "item_id": 580,
+                "product_id": 580,
+                "stock_id": 1,
+                "qty": 53,
+                "is_in_stock": True,
+                "is_qty_decimal": False,
+                "show_default_notification_message": False,
+                "use_config_min_qty": True,
+                "min_qty": 0,
+                "use_config_min_sale_qty": 1,
+                "min_sale_qty": 1,
+                "use_config_max_sale_qty": True,
+                "max_sale_qty": 10000,
+                "use_config_backorders": True,
+                "backorders": 0,
+                "use_config_notify_stock_qty": True,
+                "notify_stock_qty": 1,
+                "use_config_qty_increments": True,
+                "qty_increments": 0,
+                "use_config_enable_qty_inc": True,
+                "enable_qty_increments": False,
+                "use_config_manage_stock": True,
+                "manage_stock": True,
+                "low_stock_date": None,
+                "is_decimal_divided": False,
+                "stock_status_changed_auto": 0
+            }
+        }
+        return simple_response(response)
 
     @http.route('/api/catalog/vue_storefront_catalog/category', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def categories(self, **payload):
