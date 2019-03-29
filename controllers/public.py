@@ -32,12 +32,12 @@ class PublicAPI(http.Controller):
             #return valid_response(self.productJSON())
             products = []
             for element in data:
-                products.append(self.productJSON(element.get('name')))
+                products.append(self.productJSON(element.get('name'), element.get('id')))
             return valid_response(products)
         else:
             return invalid_response(data)
 
-    def productJSON(self, name):
+    def productJSON(self, name, item_id):
         return {
               "pattern":"197",
               "slug":"slug",
@@ -60,7 +60,7 @@ class PublicAPI(http.Controller):
                           "label":"Green"
                        }
                     ],
-                    "product_id":99,
+                    "product_id": item_id,
                     "id":7,
                     "label":"Color",
                     "slug":"slug",
@@ -91,7 +91,7 @@ class PublicAPI(http.Controller):
                           "label":"XL"
                        }
                     ],
-                    "product_id":99,
+                    "product_id": item_id,
                     "id":6,
                     "label":"Size",
                     "slug":"slug",
@@ -120,23 +120,23 @@ class PublicAPI(http.Controller):
               "links":[
 
               ],
-              "id":99,
+              "id": item_id,
               "category_ids":[
                  "15",
                  "36",
                  "2"
               ],
-              "sku":"MH03",
+              "sku":"MH" + str(item_id),
               "stock":{
                  "min_sale_qty":1,
-                 "item_id":99,
+                 "item_id": item_id,
                  "min_qty":0,
                  "stock_status_changed_auto":0,
                  "is_in_stock":True,
                  "max_sale_qty":10000,
                  "show_default_notification_message":False,
                  "backorders":0,
-                 "product_id":99,
+                 "product_id": item_id,
                  "qty":0,
                  "is_decimal_divided":False,
                  "is_qty_decimal":False,
