@@ -45,29 +45,6 @@ class PublicAPI(http.Controller):
               "eco_collection":"1",
               "configurable_options":[
                  {
-                    "attribute_id":"93",
-                    "values":[
-                       {
-                          "value_index":49,
-                          "label":"Black"
-                       },
-                       {
-                          "value_index":50,
-                          "label":"Blue"
-                       },
-                       {
-                          "value_index":53,
-                          "label":"Green"
-                       }
-                    ],
-                    "product_id": item_id,
-                    "id":7,
-                    "label":"Color",
-                    "slug":"slug",
-                    "position":1,
-                    "attribute_code":"color"
-                 },
-                 {
                     "attribute_id":"142",
                     "values":[
                        {
@@ -97,8 +74,239 @@ class PublicAPI(http.Controller):
                     "slug":"slug",
                     "position":0,
                     "attribute_code":"size"
+                 },
+                 {
+                    "attribute_id":"93",
+                    "values":[
+                       {
+                          "value_index":167,
+                          "label":"XS"
+                       },
+                       {
+                          "value_index":168,
+                          "label":"S"
+                       },
+                       {
+                          "value_index":169,
+                          "label":"M"
+                       },
+                       {
+                          "value_index":170,
+                          "label":"L"
+                       },
+                       {
+                          "value_index":171,
+                          "label":"XL"
+                       }
+                    ],
+                    "product_id": item_id,
+                    "id":6,
+                    "label":"Color",
+                    "slug":"slug",
+                    "position":0,
+                    "attribute_code":"color"
                  }
               ],
+
+                "configurable_children": [
+                    {
+                        "image": "/w/s/wsh12-green_main.jpg",
+                        "color": "53",
+                        "size": "172",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2030,
+                        "sku": "WSH12-28-Green",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-purple_main.jpg",
+                        "color": "57",
+                        "size": "172",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2031,
+                        "sku": "WSH12-28-Purple",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-red_main.jpg",
+                        "color": "58",
+                        "size": "172",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2032,
+                        "sku": "WSH12-28-Red",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-green_main.jpg",
+                        "color": "53",
+                        "size": "173",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2033,
+                        "sku": "WSH12-29-Green",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-purple_main.jpg",
+                        "color": "57",
+                        "size": "173",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2034,
+                        "sku": "WSH12-29-Purple",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-red_main.jpg",
+                        "color": "58",
+                        "size": "173",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2035,
+                        "sku": "WSH12-29-Red",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-green_main.jpg",
+                        "color": "53",
+                        "size": "174",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2036,
+                        "sku": "WSH12-30-Green",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-purple_main.jpg",
+                        "color": "57",
+                        "size": "174",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2037,
+                        "sku": "WSH12-30-Purple",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-red_main.jpg",
+                        "color": "58",
+                        "size": "174",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2038,
+                        "sku": "WSH12-30-Red",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-green_main.jpg",
+                        "color": "53",
+                        "size": "175",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2039,
+                        "sku": "WSH12-31-Green",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-purple_main.jpg",
+                        "color": "57",
+                        "size": "175",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2040,
+                        "sku": "WSH12-31-Purple",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-red_main.jpg",
+                        "color": "58",
+                        "size": "175",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2041,
+                        "sku": "WSH12-31-Red",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-green_main.jpg",
+                        "color": "53",
+                        "size": "176",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2042,
+                        "sku": "WSH12-32-Green",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-purple_main.jpg",
+                        "color": "57",
+                        "size": "176",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2043,
+                        "sku": "WSH12-32-Purple",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    },
+                    {
+                        "image": "/w/s/wsh12-red_main.jpg",
+                        "color": "58",
+                        "size": "176",
+                        "special_price": 0,
+                        "price": 45,
+                        "id": 2044,
+                        "sku": "WSH12-32-Red",
+                        "priceTax": 10.35,
+                        "priceInclTax": 55.35,
+                        "specialPriceTax": None,
+                        "specialPriceInclTax": None
+                    }
+                ],
+
+
               "tsk":1549474025451,
               "custom_attributes":None,
               "size_options":[
@@ -179,9 +387,6 @@ class PublicAPI(http.Controller):
               "special_price":0,
               "minimal_price":77.490001,
               "name":name,
-              "configurable_children":[
-
-              ],
               "max_regular_price":77.490001,
               "category":[
                  {
@@ -203,6 +408,137 @@ class PublicAPI(http.Controller):
               "specialPriceTax":None,
               "specialPriceInclTax":None
            }
+
+    @http.route('/api/catalog/vue_storefront_catalog/attribute', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
+    def attributes_json(self, **payload):
+        attributes = []
+        attributes.append(self.attributeJSON(93, "color", "Color"))
+        attributes.append(self.attributeJSON(142, "size", "Size"))
+        return valid_response(attributes)
+
+    def attributeJSON(self, attribute_id, attribute_code, default_frontend_label):
+        return {
+          "is_wysiwyg_enabled": False,
+          "is_html_allowed_on_front": True,
+          "used_for_sort_by": False,
+          "is_filterable": True,
+          "is_filterable_in_search": False,
+          "is_used_in_grid": False,
+          "is_visible_in_grid": False,
+          "is_filterable_in_grid": False,
+          "position": 0,
+          "apply_to": [],
+          "is_searchable": "0",
+          "is_visible_in_advanced_search": "0",
+          "is_comparable": "0",
+          "is_used_for_promo_rules": "1",
+          "is_visible_on_front": "0",
+          "used_in_product_listing": "1",
+          "is_visible": True,
+          "scope": "global",
+          "attribute_id": attribute_id,
+          "attribute_code": attribute_code,
+          "frontend_input": "select",
+          "entity_type_id": "4",
+          "is_required": False,
+          "options": [
+            {
+              "label": " ",
+              "value": ""
+            },
+            {
+              "label": "55 cm",
+              "value": "91"
+            },
+            {
+              "label": "XS",
+              "value": "167"
+            },
+            {
+              "label": "65 cm",
+              "value": "92"
+            },
+            {
+              "label": "S",
+              "value": "168"
+            },
+            {
+              "label": "75 cm",
+              "value": "93"
+            },
+            {
+              "label": "M",
+              "value": "169"
+            },
+            {
+              "label": "6 foot",
+              "value": "94"
+            },
+            {
+              "label": "L",
+              "value": "170"
+            },
+            {
+              "label": "8 foot",
+              "value": "95"
+            },
+            {
+              "label": "XL",
+              "value": "171"
+            },
+            {
+              "label": "10 foot",
+              "value": "96"
+            },
+            {
+              "label": "28",
+              "value": "172"
+            },
+            {
+              "label": "29",
+              "value": "173"
+            },
+            {
+              "label": "30",
+              "value": "174"
+            },
+            {
+              "label": "31",
+              "value": "175"
+            },
+            {
+              "label": "32",
+              "value": "176"
+            },
+            {
+              "label": "33",
+              "value": "177"
+            },
+            {
+              "label": "34",
+              "value": "178"
+            },
+            {
+              "label": "36",
+              "value": "179"
+            },
+            {
+              "label": "38",
+              "value": "180"
+            }
+          ],
+          "is_user_defined": True,
+          "default_frontend_label": default_frontend_label,
+          "frontend_labels": None,
+          "backend_type": "int",
+          "is_unique": "0",
+          "validation_rules": [],
+          "id": 142,
+          "tsk": 1512134647691,
+          "default_value": "91",
+          "source_model": "Magento\\Eav\\Model\\Entity\\Attribute\\Source\\Table",
+          "sgn": "vHkjS2mGumtgjjzlDrGJnF6i8EeUU2twc2zkZe69ABc"
+        }
 
     @http.route('/api/stock/check', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def stock_check(self, **payload):
