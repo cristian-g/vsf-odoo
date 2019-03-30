@@ -4,7 +4,7 @@ import json
 import werkzeug.wrappers
 from odoo import http
 from odoo.http import request
-from odoo.addons.restful.common import valid_response, invalid_response, extract_arguments
+from odoo.addons.restful.common import valid_response, invalid_response, extract_arguments, simple_response
 
 _logger = logging.getLogger(__name__)
 
@@ -14,7 +14,8 @@ def validate_token(func):
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         """."""
-        access_token = request.httprequest.headers.get('access_token')
+        #access_token = request.httprequest.headers.get('access_token')
+        access_token = kwargs.get('token')
         if not access_token:
             return invalid_response('access_token_not_found', 'missing access token in request header', 401)
         access_token_data = request.env['api.access_token'].sudo().search(
@@ -60,12 +61,67 @@ class APIController(http.Controller):
         return invalid_response('invalid object model', 'The model %s is not available in the registry.' % ioc_name)
 
     @validate_token
-    @http.route('/api/profile', type='http', auth="none", methods=['GET'], csrf=False)
+    @http.route('/api/user/me', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def profile_options(self, model=None, id=None, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @validate_token
+    @http.route('/api/user/me', type='http', auth="none", methods=['GET'], csrf=False)
     def profile(self, model=None, id=None, **payload):
 
         data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
         if data:
-            return valid_response(data)
+            #return valid_response(data)
+            user_info = data[0]
+            response_data = {
+                "code":200,
+                "result":
+                    {
+                        "id":158,
+                        "group_id":1,
+                        "default_shipping":"67",
+                        "created_at":"2018-02-28 12:05:39",
+                        "updated_at":"2018-03-29 10:46:03",
+                        "created_in":"Default Store View",
+                        "email": user_info.get('login'),
+                        "firstname":"Piotr",
+                        "lastname":"Karwatka",
+                        "store_id":1,
+                        "website_id":1,
+                        "addresses":[
+                                {
+                                    "id":67,
+                                    "customer_id":158,
+                                    "region":
+                                        {
+                                            "region_code":None,
+                                            "region":None,
+                                            "region_id":0
+                                        },
+                                    "region_id":0,
+                                    "country_id":"PL",
+                                    "street": ["Street name","13"],
+                                    "telephone":"",
+                                    "postcode":"41-157",
+                                    "city":"Wrocław",
+                                    "firstname":"John","lastname":"Murphy",
+                                    "default_shipping":True
+                                }],
+                        "disable_auto_group_change":0
+                    }
+            }
+            return simple_response(response_data, 200)
         else:
             return invalid_response(data)
 
