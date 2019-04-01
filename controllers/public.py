@@ -616,20 +616,64 @@ class PublicAPI(http.Controller):
             'stock': available_qty
         })
 
-    @http.route('/api/signup', methods=['POST'], type='http', auth='none', csrf=False)
+    @http.route('/api/user/create', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def signup_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/user/create', methods=['POST'], type='http', auth='none', csrf=False)
     def signup(self, **payload):
-            resource = request.env['res.users'].sudo().create({
-                      'name': payload.get('name'),
-                      'login': payload.get('email'),
-                      'company_ids': [1],
-                      'company_id': 1,
-                      'new_password': payload.get('password'),
-                      'is_company' : False,
-                       'groups_id': [9]
-                  })
-            data = {'id': resource.id}
-            request.env.cr.execute('INSERT INTO res_company_users_rel(user_id, cid) VALUES('+str(resource.id)+', 1)')
-            if resource:
-                return valid_response(data)
-            else:
-                return invalid_response(data)
+
+        body = request.httprequest.get_data()
+        payload = json.loads(body.decode("utf-8"))
+
+        firstname = payload.get('customer').get('firstname')
+        lastname = payload.get('customer').get('lastname')
+        email = payload.get('customer').get('email')
+        password = payload.get('password')
+
+        resource = request.env['res.users'].sudo().create({
+                  'name': firstname,
+                  'parent_name': lastname,
+                  'login': email,
+                  'company_ids': [1],
+                  'company_id': 1,
+                  'new_password': password,
+                  'is_company' : False,
+                   'groups_id': [9]
+              })
+
+        #data = {'id': resource.id}
+        data = {
+          "code": 200,
+          "result": {
+            "id": resource.id,
+            "group_id": 1,
+            "created_at": "2018-04-03 13:35:13",
+            "updated_at": "2018-04-03 13:35:13",
+            "created_in": "Default Store View",
+            "email": email,
+            "firstname": firstname,
+            "lastname": lastname,
+            "store_id": 1,
+            "website_id": 1,
+            "addresses": [],
+            "disable_auto_group_change": 0
+          }
+        }
+
+        request.env.cr.execute('INSERT INTO res_company_users_rel(user_id, cid) VALUES('+str(resource.id)+', 1)')
+        if resource:
+            return simple_response(data)
+        else:
+            return invalid_response(data)
