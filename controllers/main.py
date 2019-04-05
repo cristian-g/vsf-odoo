@@ -501,6 +501,56 @@ class APIController(http.Controller):
             response=data
         )
 
+    @http.route('/api/cart/shipping-methods', methods=['OPTIONS'], type='http', auth='none', csrf=False)
+    def shipping_methods_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/cart/shipping-methods', methods=['POST'], type='http', auth='none', csrf=False)
+    def shipping_methods(self, **payload):
+
+        body = request.httprequest.get_data()
+        body_json = json.loads(body.decode("utf-8"))
+
+        data = {
+            "code":200,
+            "result":
+            [
+                {
+                    "carrier_code":"flatrate",
+                    "method_code":"flatrate",
+                    "carrier_title":"Flat Rate",
+                    "method_title":"Fixed",
+                    "amount":5,
+                    "base_amount":5
+                    ,"available":True,
+                    "error_message":"",
+                    "price_excl_tax":5,
+                    "price_incl_tax":5
+                }
+            ]
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
     @validate_token
     @http.route(_routes, type='http', auth="none", methods=['POST'], csrf=False)
     def create(self, model=None, id=None, **payload):
