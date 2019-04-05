@@ -175,9 +175,24 @@ class APIController(http.Controller):
                 'login': payload.get('email'),
             })
 
+    @http.route('/api/cart/pull', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def cart_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
     @validate_token
-    @http.route('/api/cart', type='http', auth="none", methods=['GET'], csrf=False)
-    def cart(self, model=None, id=None, **payload):
+    @http.route('/api/cart/pull', type='http', auth="none", methods=['GET'], csrf=False)
+    def cart(self, **payload):
         user_data = request.env['res.users'].sudo().search_read(
             domain=[('id', '=', request.session.uid)],
             fields=['partner_id'],
@@ -228,9 +243,44 @@ class APIController(http.Controller):
                 limit=None,
                 order='id DESC'
             )
-            return valid_response(data)
+
+            items = []
+            items.append(self.cart_item_json(93, "color", "Color"))
+            items.append(self.cart_item_json(142, "size", "Size"))
+
+            return simple_response(
+                {
+                    "code": 200,
+                    "result": items
+                }
+            )
         else:
             return invalid_response(data)
+
+    def cart_item_json(self, name, item_id):
+        return {
+          "item_id": 66266,
+          "sku": "WS08-XS-Red",
+          "qty": 1,
+          "name": "Minerva LumaTech&trade; V-Tee",
+          "price": 32,
+          "product_type": "configurable",
+          "quote_id": "dceac8e2172a1ff0cfba24d757653257",
+          "product_option": {
+            "extension_attributes": {
+              "configurable_item_options": [
+                {
+                  "option_id": "93",
+                  "option_value": 58
+                },
+                {
+                  "option_id": "142",
+                  "option_value": 167
+                }
+              ]
+            }
+          }
+        }
 
     @validate_token
     @http.route('/api/edit_quantity', type='http', auth="none", methods=['PATCH'], csrf=False)
