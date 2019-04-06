@@ -149,6 +149,20 @@ class APIController(http.Controller):
                 'login': payload.get('email'),
             })
 
+    @validate_token
+    @http.route('/api/cart/create', type='http', auth="none", methods=['POST'], csrf=False)
+    def cart_create(self, **payload):
+
+        body = request.httprequest.get_data()
+        body_json = json.loads(body.decode("utf-8"))
+
+        return simple_response(
+            {
+                "code": 200,
+                "result": "81668"
+            }
+        )
+
     @http.route('/api/cart/pull', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def cart_options(self, **payload):
         data = {
