@@ -87,39 +87,7 @@ class APIController(http.Controller):
             response_data = {
                 "code":200,
                 "result":
-                    {
-                        "id":158,
-                        "group_id":1,
-                        "default_shipping":"67",
-                        "created_at":"2018-02-28 12:05:39",
-                        "updated_at":"2018-03-29 10:46:03",
-                        "created_in":"Default Store View",
-                        "email": user_info.get('login'),
-                        "firstname":"Piotr",
-                        "lastname":"Karwatka",
-                        "store_id":1,
-                        "website_id":1,
-                        "addresses":[
-                                {
-                                    "id":67,
-                                    "customer_id":158,
-                                    "region":
-                                        {
-                                            "region_code":None,
-                                            "region":None,
-                                            "region_id":0
-                                        },
-                                    "region_id":0,
-                                    "country_id":"PL",
-                                    "street": ["Street name","13"],
-                                    "telephone":"",
-                                    "postcode":"41-157",
-                                    "city":"Wrocław",
-                                    "firstname":"John","lastname":"Murphy",
-                                    "default_shipping":True
-                                }],
-                        "disable_auto_group_change":0
-                    }
+                    self.user_json(user_info.get('login'))
             }
             return simple_response(response_data, 200)
         else:
@@ -280,6 +248,41 @@ class APIController(http.Controller):
               ]
             }
           }
+        }
+
+    def user_json(self, email):
+        return {
+            "id":158,
+            "group_id":1,
+            "default_shipping":"67",
+            "created_at":"2018-02-28 12:05:39",
+            "updated_at":"2018-03-29 10:46:03",
+            "created_in":"Default Store View",
+            "email": email,
+            "firstname":"Piotr",
+            "lastname":"Karwatka",
+            "store_id":1,
+            "website_id":1,
+            "addresses":[
+                    {
+                        "id":67,
+                        "customer_id":158,
+                        "region":
+                            {
+                                "region_code":None,
+                                "region":None,
+                                "region_id":0
+                            },
+                        "region_id":0,
+                        "country_id":"PL",
+                        "street": ["Street name","13"],
+                        "telephone":"",
+                        "postcode":"41-157",
+                        "city":"Wrocław",
+                        "firstname":"John","lastname":"Murphy",
+                        "default_shipping":True
+                    }],
+            "disable_auto_group_change":0
         }
 
     @validate_token
