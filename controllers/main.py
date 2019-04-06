@@ -560,6 +560,38 @@ class APIController(http.Controller):
             response=data
         )
 
+    @http.route('/api/cart/payment-methods', methods=['GET'], type='http', auth='none', csrf=False)
+    def payment_methods(self, **payload):
+
+        data = {
+            "code":200,
+            "result":
+                [
+                    {
+                        "code":"cashondelivery",
+                        "title":"Cash On Delivery"
+                    },
+                    {
+                        "code":"checkmo","title":
+                        "Check / Money order"
+                    },
+                    {
+                        "code":"free",
+                        "title":"No Payment Information Required"
+                    }
+                ]
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
     @http.route('/api/cart/shipping-information', methods=['OPTIONS'], type='http', auth='none', csrf=False)
     def shipping_information_options(self, **payload):
         data = {
