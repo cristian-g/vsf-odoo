@@ -551,6 +551,147 @@ class APIController(http.Controller):
             response=data
         )
 
+
+    @http.route('/api/cart/shipping-information', methods=['OPTIONS'], type='http', auth='none', csrf=False)
+    def shipping_information_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/cart/shipping-information', methods=['POST'], type='http', auth='none', csrf=False)
+    def shipping_information(self, **payload):
+
+        body = request.httprequest.get_data()
+        body_json = json.loads(body.decode("utf-8"))
+
+        data = {
+          "code": 200,
+          "result": {
+            "payment_methods": [
+              {
+                "code": "cashondelivery",
+                "title": "Cash On Delivery"
+              },
+              {
+                "code": "checkmo",
+                "title": "Check / Money order"
+              }
+            ],
+            "totals": {
+              "grand_total": 45.8,
+              "base_grand_total": 55.18,
+              "subtotal": 48,
+              "base_subtotal": 48,
+              "discount_amount": -8.86,
+              "base_discount_amount": -8.86,
+              "subtotal_with_discount": 39.14,
+              "base_subtotal_with_discount": 39.14,
+              "shipping_amount": 5,
+              "base_shipping_amount": 5,
+              "shipping_discount_amount": 0,
+              "base_shipping_discount_amount": 0,
+              "tax_amount": 9.38,
+              "base_tax_amount": 9.38,
+              "weee_tax_applied_amount": None,
+              "shipping_tax_amount": 0,
+              "base_shipping_tax_amount": 0,
+              "subtotal_incl_tax": 59.04,
+              "shipping_incl_tax": 5,
+              "base_shipping_incl_tax": 5,
+              "base_currency_code": "USD",
+              "quote_currency_code": "USD",
+              "items_qty": 2,
+              "items": [
+                {
+                  "item_id": 5853,
+                  "price": 24,
+                  "base_price": 24,
+                  "qty": 2,
+                  "row_total": 48,
+                  "base_row_total": 48,
+                  "row_total_with_discount": 0,
+                  "tax_amount": 9.38,
+                  "base_tax_amount": 9.38,
+                  "tax_percent": 23,
+                  "discount_amount": 8.86,
+                  "base_discount_amount": 8.86,
+                  "discount_percent": 15,
+                  "price_incl_tax": 29.52,
+                  "base_price_incl_tax": 29.52,
+                  "row_total_incl_tax": 59.04,
+                  "base_row_total_incl_tax": 59.04,
+                  "options": "[]",
+                  "weee_tax_applied_amount": None,
+                  "weee_tax_applied": None,
+                  "name": "Logan  HeatTec&reg; Tee-XS-Black"
+                }
+              ],
+              "total_segments": [
+                {
+                  "code": "subtotal",
+                  "title": "Subtotal",
+                  "value": 59.04
+                },
+                {
+                  "code": "shipping",
+                  "title": "Shipping & Handling (Flat Rate - Fixed)",
+                  "value": 5
+                },
+                {
+                  "code": "discount",
+                  "title": "Discount",
+                  "value": -8.86
+                },
+                {
+                  "code": "tax",
+                  "title": "Tax",
+                  "value": 9.38,
+                  "area": "taxes",
+                  "extension_attributes": {
+                    "tax_grandtotal_details": [
+                      {
+                        "amount": 9.38,
+                        "rates": [
+                          {
+                            "percent": "23",
+                            "title": "VAT23"
+                          }
+                        ],
+                        "group_id": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "code": "grand_total",
+                  "title": "Grand Total",
+                  "value": 55.18,
+                  "area": "footer"
+                }
+              ]
+            }
+          }
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
     @validate_token
     @http.route(_routes, type='http', auth="none", methods=['POST'], csrf=False)
     def create(self, model=None, id=None, **payload):
