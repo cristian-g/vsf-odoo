@@ -93,20 +93,6 @@ class APIController(http.Controller):
         else:
             return invalid_response(data)
 
-        """
-        return werkzeug.wrappers.Response(
-            status=200,
-            content_type='application/json; charset=utf-8',
-            headers=[('Cache-Control', 'no-store'),
-                     ('Pragma', 'no-cache')],
-            response=json.dumps({
-                'request.httprequest.headers.get': request.httprequest.headers.get('access_token'),
-                'request.session.uid': request.session.uid,
-                'request.uid': request.uid,
-            }),
-        )
-        """
-
     @validate_token
     @http.route('/api/edit_profile', type='http', auth="none", methods=['PATCH'], csrf=False)
     def edit_profile(self, **payload):
