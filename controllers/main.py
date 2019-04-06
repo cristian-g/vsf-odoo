@@ -150,11 +150,36 @@ class APIController(http.Controller):
             })
 
     @validate_token
+    @http.route('/api/user/order-history', type='http', auth="none", methods=['GET'], csrf=False)
+    def order_history(self, **payload):
+
+        return simple_response(
+            {
+                "code": 200,
+                "result": "81668"
+            }
+        )
+
+    @http.route('/api/cart/create', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def cart_create_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
     @http.route('/api/cart/create', type='http', auth="none", methods=['POST'], csrf=False)
     def cart_create(self, **payload):
 
-        body = request.httprequest.get_data()
-        body_json = json.loads(body.decode("utf-8"))
+        #body = request.httprequest.get_data()
+        #body_json = json.loads(body.decode("utf-8"))
 
         return simple_response(
             {
