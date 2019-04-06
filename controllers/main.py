@@ -78,7 +78,27 @@ class APIController(http.Controller):
 
     @validate_token
     @http.route('/api/user/me', type='http', auth="none", methods=['GET'], csrf=False)
-    def profile(self, model=None, id=None, **payload):
+    def profile(self, **payload):
+
+        data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
+        if data:
+            #return valid_response(data)
+            user_info = data[0]
+            response_data = {
+                "code":200,
+                "result":
+                    self.user_json(user_info.get('login'))
+            }
+            return simple_response(response_data, 200)
+        else:
+            return invalid_response(data)
+
+    @validate_token
+    @http.route('/api/user/me', type='http', auth="none", methods=['POST'], csrf=False)
+    def profile(self, **payload):
+
+        body = request.httprequest.get_data()
+        body_json = json.loads(body.decode("utf-8"))
 
         data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
         if data:
