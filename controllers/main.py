@@ -95,7 +95,7 @@ class APIController(http.Controller):
 
     @validate_token
     @http.route('/api/user/me', type='http', auth="none", methods=['POST'], csrf=False)
-    def profile(self, **payload):
+    def profile_edit(self, **payload):
 
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
