@@ -577,6 +577,51 @@ class PublicAPI(http.Controller):
 
     @http.route('/api/catalog/vue_storefront_catalog/category', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def categories(self, **payload):
+
+        response = {
+            "items": [
+                {
+                    "id": 27,
+                    "parent_id": 2,
+                    "name": "Category without childs",
+                    "is_active": True,
+                    "position": 5,
+                    "level": 2,
+                    "product_count": 2,
+
+                    "entity_type_id": 3,
+                    "attribute_set_id": 3,
+                    "children_count": 0,
+                    "request_path": "accessories/shoes.html",
+
+
+                    "children_data": [
+
+                    ],
+                    "created_at": "2017-11-06 12:16:41",
+                    "updated_at": "2017-11-06 12:16:42",
+                    "path": "1/2/29",
+                    "available_sort_by": [
+
+                    ],
+                    "include_in_menu": False,
+                    "display_mode": "PAGE",
+                    "is_anchor": "0",
+                    "url_key": "promotions-29",
+                    "url_path": "promotions/promotions-29",
+                    "slug": "promotions-29",
+                    "tsk": 1551705224325
+                }
+            ],
+            "total": 3,
+            "start": 1,
+            "perPage": 3,
+            "aggregations": [
+
+            ]
+        }
+        return simple_response(response)
+
         data = request.env['product.public.category'].sudo().search_read(
             domain=[],
             fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
