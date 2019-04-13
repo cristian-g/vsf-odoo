@@ -29,6 +29,27 @@ def validate_token(func):
         return func(self, *args, **kwargs)
     return wrap
 
+def validate_optional_token(func):
+    """."""
+    @functools.wraps(func)
+    def optional_wrap(self, *args, **kwargs):
+        """."""
+        #access_token = request.httprequest.headers.get('access_token')
+        access_token = kwargs.get('token')
+
+        if access_token:
+
+            access_token_data = request.env['api.access_token'].sudo().search(
+                [('token', '=', access_token)], order='id DESC', limit=1)
+
+            if access_token_data.find_one_or_create_token(user_id=access_token_data.user_id.id) != access_token:
+                return invalid_response('access_token', 'token seems to have expired or invalid', 401)
+
+            request.session.uid = access_token_data.user_id.id
+            request.uid = access_token_data.user_id.id
+
+        return func(self, *args, **kwargs)
+    return optional_wrap
 
 _routes = [
     '/api/<model>',
@@ -203,63 +224,133 @@ class APIController(http.Controller):
             response=data
         )
 
-    @validate_token
+    @validate_optional_token
     @http.route('/api/cart/pull', type='http', auth="none", methods=['GET'], csrf=False)
     def cart(self, **payload):
-        user_data = request.env['res.users'].sudo().search_read(
-            domain=[('id', '=', request.session.uid)],
-            fields=['partner_id'],
-            offset=None,
-            limit=1,
-            order=None
+
+        return simple_response(
+            {
+                "code": 200,
+                "result": [
+                    {
+                        "item_id": 66257,
+                        "sku": "WS08-M-Black",
+                        "qty": 1,
+                        "name": "Minerva LumaTech&trade; V-Tee",
+                        "price": 32,
+                        "product_type": "configurable",
+                        "quote_id": "dceac8e2172a1ff0cfba24d757653257",
+                        "product_option": {
+                            "extension_attributes": {
+                                "configurable_item_options": [
+                                    {
+                                        "option_id": "93",
+                                        "option_value": 49
+                                    },
+                                    {
+                                        "option_id": "142",
+                                        "option_value": 169
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "item_id": 66266,
+                        "sku": "WS08-XS-Red",
+                        "qty": 1,
+                        "name": "Minerva LumaTech&trade; V-Tee",
+                        "price": 32,
+                        "product_type": "configurable",
+                        "quote_id": "dceac8e2172a1ff0cfba24d757653257",
+                        "product_option": {
+                            "extension_attributes": {
+                                "configurable_item_options": [
+                                    {
+                                        "option_id": "93",
+                                        "option_value": 58
+                                    },
+                                    {
+                                        "option_id": "142",
+                                        "option_value": 167
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
         )
-        data = request.env['sale.order'].sudo().search_read(
-            domain=[
-                ('partner_id', '=', user_data[0].get('partner_id')[0]),
-                ('state', '=', 'draft'),
-            ],
-            fields=[
-                'id',
-                'state',
-                #'date_order',
-                'require_payment',
-                #'create_date',
-                #'confirmation_date',
-                'amount_untaxed',
-                'amount_tax',
-                'amount_total',
-                #'write_date',
-            ],
-            offset=None,
-            limit=1,
-            order='create_date DESC'
-        )
-        if data:
-            data[0]['lines'] = request.env['sale.order.line'].sudo().search_read(
-                domain=[('order_id', '=', data[0]['id'])],
+
+        if request.session.uid:
+
+            user_data = request.env['res.users'].sudo().search_read(
+                domain=[('id', '=', request.session.uid)],
+                fields=['partner_id'],
+                offset=None,
+                limit=1,
+                order=None
+            )
+            data = request.env['sale.order'].sudo().search_read(
+                domain=[
+                    ('partner_id', '=', user_data[0].get('partner_id')[0]),
+                    ('state', '=', 'draft'),
+                ],
                 fields=[
                     'id',
-                    'name',
-                    'invoice_status',
-                    'price_unit',
-                    'price_subtotal',
-                    'price_tax',
-                    'price_total',
-                    'price_reduce',
-                    'price_reduce_taxinc',
-                    'price_reduce_taxexcl',
-                    'discount',
-                    'product_id',
-                    'product_uom_qty',
+                    'state',
+                    #'date_order',
+                    'require_payment',
+                    #'create_date',
+                    #'confirmation_date',
+                    'amount_untaxed',
+                    'amount_tax',
+                    'amount_total',
+                    #'write_date',
                 ],
                 offset=None,
-                limit=None,
-                order='id DESC'
+                limit=1,
+                order='create_date DESC'
             )
+            if data:
+                data[0]['lines'] = request.env['sale.order.line'].sudo().search_read(
+                    domain=[('order_id', '=', data[0]['id'])],
+                    fields=[
+                        'id',
+                        'name',
+                        'invoice_status',
+                        'price_unit',
+                        'price_subtotal',
+                        'price_tax',
+                        'price_total',
+                        'price_reduce',
+                        'price_reduce_taxinc',
+                        'price_reduce_taxexcl',
+                        'discount',
+                        'product_id',
+                        'product_uom_qty',
+                    ],
+                    offset=None,
+                    limit=None,
+                    order='id DESC'
+                )
 
+                items = []
+                items.append(self.cart_item_json(93, "color", "Color"))
+                items.append(self.cart_item_json(142, "size", "Size"))
+
+                return simple_response(
+                    {
+                        "code": 200,
+                        "result": items
+                    }
+                )
+            else:
+                return invalid_response(data)
+        else:
             items = []
-            items.append(self.cart_item_json(93, "color", "Color"))
-            items.append(self.cart_item_json(142, "size", "Size"))
+            items.append(self.cart_item_json("Minerva LumaTech&trade; V-Tee", 66266))
+            items.append(self.cart_item_json("Minerva 2", 66267))
 
             return simple_response(
                 {
@@ -267,15 +358,13 @@ class APIController(http.Controller):
                     "result": items
                 }
             )
-        else:
-            return invalid_response(data)
 
     def cart_item_json(self, name, item_id):
         return {
-          "item_id": 66266,
+          "item_id": item_id,
           "sku": "WS08-XS-Red",
           "qty": 1,
-          "name": "Minerva LumaTech&trade; V-Tee",
+          "name": name,
           "price": 32,
           "product_type": "configurable",
           "quote_id": "dceac8e2172a1ff0cfba24d757653257",
@@ -330,13 +419,49 @@ class APIController(http.Controller):
             "disable_auto_group_change":0
         }
 
-    @validate_token
-    @http.route('/api/edit_quantity', type='http', auth="none", methods=['PATCH'], csrf=False)
+    @http.route('/api/cart/update', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def edit_quantity_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @validate_optional_token
+    @http.route('/api/cart/update', type='http', auth="none", methods=['POST'], csrf=False)
     def edit_quantity(self, **payload):
+
+        payload_line_id = payload.get('line_id')
+        payload_quantity = payload.get('quantity')
+
+        response = {
+            "code": 200,
+            "result":
+                {
+                    "item_id": 5853,
+                    "sku": "MS10-XS-Black",
+                    "qty": 2,
+                    "name": "Logan  HeatTec&reg; Tee-XS-Black",
+                    "price": 24,
+                    "product_type": "simple",
+                    "quote_id": "81668"
+                }
+        }
+
+        return simple_response(
+            response
+        )
 
         # Check if line is related to authenticated user
         line_data = request.env['sale.order.line'].sudo().search_read(
-            domain=[('id', '=', payload.get('line_id'))],
+            domain=[('id', '=', payload_line_id)],
             fields=['order_id'],
             offset=None,
             limit=1,
@@ -359,8 +484,8 @@ class APIController(http.Controller):
         if order_data[0].get('partner_id') != user_data[0].get('partner_id'):
             return invalid_response('params', {'errors': ['Unauthorized']})
 
-        request.env['sale.order.line'].sudo().search([('id', '=', payload.get('line_id'))]).write({
-            'product_uom_qty': payload.get('quantity'),
+        request.env['sale.order.line'].sudo().search([('id', '=', payload_line_id)]).write({
+            'product_uom_qty': payload_quantity,
         })
 
     @validate_token
