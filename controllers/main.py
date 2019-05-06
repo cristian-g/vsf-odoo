@@ -177,7 +177,254 @@ class APIController(http.Controller):
         return simple_response(
             {
                 "code": 200,
-                "result": "81668"
+                "result": {
+                    "items": [
+                        {
+                            "applied_rule_ids": "1,5",
+                            "base_currency_code": "USD",
+                            "base_discount_amount": -3.3,
+                            "base_grand_total": 28,
+                            "base_discount_tax_compensation_amount": 0,
+                            "base_shipping_amount": 5,
+                            "base_shipping_discount_amount": 0,
+                            "base_shipping_incl_tax": 5,
+                            "base_shipping_tax_amount": 0,
+                            "base_subtotal": 22,
+                            "base_subtotal_incl_tax": 27.06,
+                            "base_tax_amount": 4.3,
+                            "base_total_due": 28,
+                            "base_to_global_rate": 1,
+                            "base_to_order_rate": 1,
+                            "billing_address_id": 204,
+                            "created_at": "2018-01-23 15:30:04",
+                            "customer_email": "pkarwatka28@example.com",
+                            "customer_group_id": 0,
+                            "customer_is_guest": 1,
+                            "customer_note_notify": 1,
+                            "discount_amount": -3.3,
+                            "email_sent": 1,
+                            "entity_id": 102,
+                            "global_currency_code": "USD",
+                            "grand_total": 28,
+                            "discount_tax_compensation_amount": 0,
+                            "increment_id": "000000102",
+                            "is_virtual": 0,
+                            "order_currency_code": "USD",
+                            "protect_code": "3984835d33abd2423b8a47efd0f74579",
+                            "quote_id": 1112,
+                            "shipping_amount": 5,
+                            "shipping_description": "Flat Rate - Fixed",
+                            "shipping_discount_amount": 0,
+                            "shipping_discount_tax_compensation_amount": 0,
+                            "shipping_incl_tax": 5,
+                            "shipping_tax_amount": 0,
+                            "state": "new",
+                            "status": "pending",
+                            "store_currency_code": "USD",
+                            "store_id": 1,
+                            "store_name": "Main Website\nMain Website Store\n",
+                            "store_to_base_rate": 0,
+                            "store_to_order_rate": 0,
+                            "subtotal": 22,
+                            "subtotal_incl_tax": 27.06,
+                            "tax_amount": 4.3,
+                            "total_due": 28,
+                            "total_item_count": 1,
+                            "total_qty_ordered": 1,
+                            "updated_at": "2018-01-23 15:30:05",
+                            "weight": 1,
+                            "items": [
+                                {
+                                    "amount_refunded": 0,
+                                    "applied_rule_ids": "1,5",
+                                    "base_amount_refunded": 0,
+                                    "base_discount_amount": 3.3,
+                                    "base_discount_invoiced": 0,
+                                    "base_discount_tax_compensation_amount": 0,
+                                    "base_original_price": 22,
+                                    "base_price": 22,
+                                    "base_price_incl_tax": 27.06,
+                                    "base_row_invoiced": 0,
+                                    "base_row_total": 22,
+                                    "base_row_total_incl_tax": 27.06,
+                                    "base_tax_amount": 4.3,
+                                    "base_tax_invoiced": 0,
+                                    "created_at": "2018-01-23 15:30:04",
+                                    "discount_amount": 3.3,
+                                    "discount_invoiced": 0,
+                                    "discount_percent": 15,
+                                    "free_shipping": 0,
+                                    "discount_tax_compensation_amount": 0,
+                                    "is_qty_decimal": 0,
+                                    "is_virtual": 0,
+                                    "item_id": 224,
+                                    "name": "Radiant Tee-XS-Blue",
+                                    "no_discount": 0,
+                                    "order_id": 102,
+                                    "original_price": 22,
+                                    "price": 22,
+                                    "price_incl_tax": 27.06,
+                                    "product_id": 1546,
+                                    "product_type": "simple",
+                                    "qty_canceled": 0,
+                                    "qty_invoiced": 0,
+                                    "qty_ordered": 1,
+                                    "qty_refunded": 0,
+                                    "qty_shipped": 0,
+                                    "quote_item_id": 675,
+                                    "row_invoiced": 0,
+                                    "row_total": 22,
+                                    "row_total_incl_tax": 27.06,
+                                    "row_weight": 1,
+                                    "sku": "WS12-XS-Blue",
+                                    "store_id": 1,
+                                    "tax_amount": 4.3,
+                                    "tax_invoiced": 0,
+                                    "tax_percent": 23,
+                                    "updated_at": "2018-01-23 15:30:04",
+                                    "weight": 1
+                                }
+                            ],
+                            "billing_address": {
+                                "address_type": "billing",
+                                "city": "Some city2",
+                                "company": "Divante",
+                                "country_id": "PL",
+                                "email": "pkarwatka28@example.com",
+                                "entity_id": 204,
+                                "firstname": "Piotr",
+                                "lastname": "Karwatka",
+                                "parent_id": 102,
+                                "postcode": "50-203",
+                                "street": [
+                                    "XYZ",
+                                    "17"
+                                ],
+                                "telephone": None,
+                                "vat_id": "PL8951930748"
+                            },
+                            "payment": {
+                                "account_status": None,
+                                "additional_information": [
+                                    "Cash On Delivery",
+                                    ""
+                                ],
+                                "amount_ordered": 28,
+                                "base_amount_ordered": 28,
+                                "base_shipping_amount": 5,
+                                "cc_last4": None,
+                                "entity_id": 102,
+                                "method": "cashondelivery",
+                                "parent_id": 102,
+                                "shipping_amount": 5
+                            },
+                            "status_histories": [],
+                            "extension_attributes": {
+                                "shipping_assignments": [
+                                    {
+                                        "shipping": {
+                                            "address": {
+                                                "address_type": "shipping",
+                                                "city": "Some city",
+                                                "company": "NA",
+                                                "country_id": "PL",
+                                                "email": "pkarwatka28@example.com",
+                                                "entity_id": 203,
+                                                "firstname": "Piotr",
+                                                "lastname": "Karwatka",
+                                                "parent_id": 102,
+                                                "postcode": "51-169",
+                                                "street": [
+                                                    "XYZ",
+                                                    "13"
+                                                ],
+                                                "telephone": None
+                                            },
+                                            "method": "flatrate_flatrate",
+                                            "total": {
+                                                "base_shipping_amount": 5,
+                                                "base_shipping_discount_amount": 0,
+                                                "base_shipping_incl_tax": 5,
+                                                "base_shipping_tax_amount": 0,
+                                                "shipping_amount": 5,
+                                                "shipping_discount_amount": 0,
+                                                "shipping_discount_tax_compensation_amount": 0,
+                                                "shipping_incl_tax": 5,
+                                                "shipping_tax_amount": 0
+                                            }
+                                        },
+                                        "items": [
+                                            {
+                                                "amount_refunded": 0,
+                                                "applied_rule_ids": "1,5",
+                                                "base_amount_refunded": 0,
+                                                "base_discount_amount": 3.3,
+                                                "base_discount_invoiced": 0,
+                                                "base_discount_tax_compensation_amount": 0,
+                                                "base_original_price": 22,
+                                                "base_price": 22,
+                                                "base_price_incl_tax": 27.06,
+                                                "base_row_invoiced": 0,
+                                                "base_row_total": 22,
+                                                "base_row_total_incl_tax": 27.06,
+                                                "base_tax_amount": 4.3,
+                                                "base_tax_invoiced": 0,
+                                                "created_at": "2018-01-23 15:30:04",
+                                                "discount_amount": 3.3,
+                                                "discount_invoiced": 0,
+                                                "discount_percent": 15,
+                                                "free_shipping": 0,
+                                                "discount_tax_compensation_amount": 0,
+                                                "is_qty_decimal": 0,
+                                                "is_virtual": 0,
+                                                "item_id": 224,
+                                                "name": "Radiant Tee-XS-Blue",
+                                                "no_discount": 0,
+                                                "order_id": 102,
+                                                "original_price": 22,
+                                                "price": 22,
+                                                "price_incl_tax": 27.06,
+                                                "product_id": 1546,
+                                                "product_type": "simple",
+                                                "qty_canceled": 0,
+                                                "qty_invoiced": 0,
+                                                "qty_ordered": 1,
+                                                "qty_refunded": 0,
+                                                "qty_shipped": 0,
+                                                "quote_item_id": 675,
+                                                "row_invoiced": 0,
+                                                "row_total": 22,
+                                                "row_total_incl_tax": 27.06,
+                                                "row_weight": 1,
+                                                "sku": "WS12-XS-Blue",
+                                                "store_id": 1,
+                                                "tax_amount": 4.3,
+                                                "tax_invoiced": 0,
+                                                "tax_percent": 23,
+                                                "updated_at": "2018-01-23 15:30:04",
+                                                "weight": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "search_criteria": {
+                        "filter_groups": [
+                            {
+                                "filters": [
+                                    {
+                                        "field": "customer_email",
+                                        "value": "pkarwatka28@example.com",
+                                        "condition_type": "eq"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "total_count": 61
+                }
             }
         )
 
@@ -713,16 +960,7 @@ class APIController(http.Controller):
                 }
             ]
         }
-        return werkzeug.wrappers.Response(
-            status=200,
-            content_type='application/json; charset=utf-8',
-            headers=[
-                ('Access-Control-Allow-Origin', '*'),
-                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
-                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
-            ],
-            response=data
-        )
+        return simple_response(data)
 
     @http.route('/api/cart/payment-methods', methods=['GET'], type='http', auth='none', csrf=False)
     def payment_methods(self, **payload):
@@ -745,16 +983,7 @@ class APIController(http.Controller):
                     }
                 ]
         }
-        return werkzeug.wrappers.Response(
-            status=200,
-            content_type='application/json; charset=utf-8',
-            headers=[
-                ('Access-Control-Allow-Origin', '*'),
-                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
-                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
-            ],
-            response=data
-        )
+        return simple_response(data)
 
     @http.route('/api/cart/shipping-information', methods=['OPTIONS'], type='http', auth='none', csrf=False)
     def shipping_information_options(self, **payload):
@@ -885,16 +1114,7 @@ class APIController(http.Controller):
             }
           }
         }
-        return werkzeug.wrappers.Response(
-            status=200,
-            content_type='application/json; charset=utf-8',
-            headers=[
-                ('Access-Control-Allow-Origin', '*'),
-                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
-                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
-            ],
-            response=data
-        )
+        return simple_response(data)
 
     @http.route('/api/cart/collect-totals', methods=['OPTIONS'], type='http', auth='none', csrf=False)
     def collect_totals_options(self, **payload):

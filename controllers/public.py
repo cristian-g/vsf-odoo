@@ -69,7 +69,7 @@ class PublicAPI(http.Controller):
                        }
                     ],
                     "product_id": item_id,
-                    "id":6,
+                    "id": item_id,
                     "label":"Size",
                     "slug":"slug",
                     "position":0,
@@ -100,7 +100,7 @@ class PublicAPI(http.Controller):
                        }
                     ],
                     "product_id": item_id,
-                    "id":6,
+                    "id": item_id,
                     "label":"Color",
                     "slug":"slug",
                     "position":0,
@@ -412,8 +412,8 @@ class PublicAPI(http.Controller):
     @http.route('/api/catalog/vue_storefront_catalog/attribute', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def attributes_json(self, **payload):
         attributes = []
-        attributes.append(self.attributeJSON(93, "color", "Color"))
-        attributes.append(self.attributeJSON(142, "size", "Size"))
+        attributes.append(self.attributeJSON("93", "color", "Color"))
+        attributes.append(self.attributeJSON("142", "size", "Size"))
         return valid_response(attributes)
 
     def attributeJSON(self, attribute_id, attribute_code, default_frontend_label):
