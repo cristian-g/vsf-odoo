@@ -1,4 +1,4 @@
-# RESTful API Odoo Module
+# Odoo module for Vue Storefront
 ## Installation
 1. `cd C:\Program Files (x86)\Odoo 12.0\server\odoo\addons`
 2. `git clone https://github.com/cristian-g/restful.git restful`
