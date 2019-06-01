@@ -26,18 +26,18 @@ class PublicAPI(http.Controller):
             #}),
         #)
         data = request.env['product.template'].sudo().search_read(
-            domain=[], fields=['id', 'name', 'description', 'price', 'public_categ_ids'], offset=None, limit=None,
+            domain=[], fields=['id', 'name', 'description', 'price', 'public_categ_ids', 'default_code'], offset=None, limit=None,
             order=None)
         if data:
             #return valid_response(self.productJSON())
             products = []
             for element in data:
-                products.append(self.productJSON(element.get('name'), element.get('id')))
+                products.append(self.productJSON(element.get('name'), element.get('id'), element.get('default_code')))
             return valid_response(products)
         else:
             return invalid_response(data)
 
-    def productJSON(self, name, item_id):
+    def productJSON(self, name, item_id, code):
         return {
               "pattern":"197",
               "slug":"slug",
@@ -111,12 +111,12 @@ class PublicAPI(http.Controller):
                 "configurable_children": [
                     {
                         "image": "/w/s/wsh12-green_main.jpg",
-                        "color": "53",
-                        "size": "172",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2030,
-                        "sku": "WSH12-28-Green",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -124,12 +124,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": "57",
-                        "size": "172",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2031,
-                        "sku": "WSH12-28-Purple",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -137,12 +137,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-red_main.jpg",
-                        "color": "58",
-                        "size": "172",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2032,
-                        "sku": "WSH12-28-Red",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -150,12 +150,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-green_main.jpg",
-                        "color": "53",
-                        "size": "173",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2033,
-                        "sku": "WSH12-29-Green",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -163,12 +163,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": "57",
-                        "size": "173",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2034,
-                        "sku": "WSH12-29-Purple",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -176,12 +176,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-red_main.jpg",
-                        "color": "58",
-                        "size": "173",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2035,
-                        "sku": "WSH12-29-Red",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -189,12 +189,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-green_main.jpg",
-                        "color": "53",
-                        "size": "174",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2036,
-                        "sku": "WSH12-30-Green",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -202,12 +202,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": "57",
-                        "size": "174",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2037,
-                        "sku": "WSH12-30-Purple",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -215,12 +215,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-red_main.jpg",
-                        "color": "58",
-                        "size": "174",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2038,
-                        "sku": "WSH12-30-Red",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -228,12 +228,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-green_main.jpg",
-                        "color": "53",
-                        "size": "175",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2039,
-                        "sku": "WSH12-31-Green",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -241,12 +241,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": "57",
-                        "size": "175",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2040,
-                        "sku": "WSH12-31-Purple",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -254,11 +254,11 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-red_main.jpg",
-                        "color": "58",
-                        "size": "175",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
-                        "id": 2041,
+                        "id": code,
                         "sku": "WSH12-31-Red",
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
@@ -267,12 +267,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-green_main.jpg",
-                        "color": "53",
-                        "size": "176",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2042,
-                        "sku": "WSH12-32-Green",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -280,12 +280,12 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": "57",
-                        "size": "176",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2043,
-                        "sku": "WSH12-32-Purple",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
@@ -293,20 +293,18 @@ class PublicAPI(http.Controller):
                     },
                     {
                         "image": "/w/s/wsh12-red_main.jpg",
-                        "color": "58",
-                        "size": "176",
+                        "color": 171,
+                        "size": 171,
                         "special_price": 0,
                         "price": 45,
                         "id": 2044,
-                        "sku": "WSH12-32-Red",
+                        "sku": code,
                         "priceTax": 10.35,
                         "priceInclTax": 55.35,
                         "specialPriceTax": None,
                         "specialPriceInclTax": None
                     }
                 ],
-
-
               "tsk":1549474025451,
               "custom_attributes":None,
               "size_options":[
