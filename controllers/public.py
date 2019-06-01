@@ -10,6 +10,8 @@ _logger = logging.getLogger(__name__)
 class PublicAPI(http.Controller):
     """."""
 
+    category_offset = 2
+
     def __init__(self):
         return
 
@@ -896,225 +898,119 @@ class PublicAPI(http.Controller):
     @http.route('/api/catalog/vue_storefront_catalog/category/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def categories(self, **payload):
 
-        response = {
-            "took":1,
-            "timed_out": False,
-            "_shards":{
-                "total":5,
-                "successful":5,
-                "skipped":0,
-                "failed":0
-            },
-            "hits":{
-                "total":6,
-                "max_score": None,
-                "hits":[
-                    {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id":"38",
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/38",
-                            "is_active": True,
-                            "level":2,
-                            "product_count":0,
-                            "children_count":"0",
-                            "parent_id":2,
-                            "name":"What's New",
-                            "id":38,
-                            "url_key":"whats-new-38",
-                            "url_path":"what-is-new/whats-new-38"
-                        },
-                        "sort":[
-                            1
-                        ]
-                    },
-                    {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id":"20",
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/20",
-                            "is_active": True,
-                            "level":2,
-                            "product_count":0,
-                            "children_count":"8",
-                            "parent_id":2,
-                            "name":"Women" + str(json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq')),
-                            "id":20,
-                            "url_path":"women/women-20",
-                            "url_key":"women-20",
-                            "children_data":[
-                                {
-                                    "id":21,
-                                    "children_data":[
-                                        {
-                                            "id":23
-                                        },
-                                        {
-                                            "id":24
-                                        },
-                                        {
-                                            "id":25
-                                        },
-                                        {
-                                            "id":26
-                                        }
-                                    ]
-                                },
-                                {
-                                    "id":22,
-                                    "children_data":[
-                                        {
-                                            "id":27
-                                        },
-                                        {
-                                            "id":28
-                                        }
-                                    ]
-                                }
+        #str(json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq'))
+        # == 2 --> root categories
+
+        parent_id = json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq')
+        if parent_id == 2:
+            categories = request.env['product.public.category'].sudo().search_read(
+                domain=[('parent_id', '=', False)],
+                fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
+                offset=None, limit=None,
+                order=None)
+            if categories:
+                response = self.categories_to_response(categories, 2, parent_id)
+                return simple_response(response)
+            else:
+                return invalid_response({
+                    "error": 500
+                })
+        else:
+            categories = request.env['product.public.category'].sudo().search_read(
+                domain=[('parent_id', '=', parent_id - self.category_offset)],
+                fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
+                offset=None, limit=None,
+                order=None)
+            if categories:
+                response = self.categories_to_response(categories, 3, parent_id)
+                return simple_response(response)
+            else:
+                return invalid_response({
+                    "error": 500
+                })
+
+            response = {
+                "took":1,
+                "timed_out": False,
+                "_shards":{
+                    "total":5,
+                    "successful":5,
+                    "skipped":0,
+                    "failed":0
+                },
+                "hits":{
+                    "total":2,
+                    "max_score": None,
+                    "hits":[
+                        {
+                            "_index":"vue_storefront_catalog_1552559102",
+                            "_type":"category",
+                            "_id":"21",
+                            "_score": None,
+                            "_source":{
+                                "path":"1/2/20/21",
+                                "is_active": True,
+                                "level":3,
+                                "product_count":0,
+                                "children_count":"4",
+                                "parent_id": parent_id,
+                                "name":"Tops" + str(json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq')),
+                                "id":21,
+                                "url_path":"women/tops-women/tops-21",
+                                "url_key":"tops-21",
+                                "children_data":[
+                                    {
+                                        "id":23
+                                    },
+                                    {
+                                        "id":24
+                                    },
+                                    {
+                                        "id":25
+                                    },
+                                    {
+                                        "id":26
+                                    }
+                                ]
+                            },
+                            "sort":[
+                                1
                             ]
                         },
-                        "sort":[
-                            2
-                        ]
-                    },
-                    {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id":"11",
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/11",
-                            "is_active": True,
-                            "level":2,
-                            "product_count":0,
-                            "children_count":"8",
-                            "parent_id":2,
-                            "name":"Men",
-                            "id":11,
-                            "url_key":"men-11",
-                            "children_data":[
-                                {
-                                    "id":12,
-                                    "children_data":[
-                                        {
-                                            "id":14
-                                        },
-                                        {
-                                            "id":15
-                                        },
-                                        {
-                                            "id":16
-                                        },
-                                        {
-                                            "id":17
-                                        }
-                                    ]
-                                },
-                                {
-                                    "id":13,
-                                    "children_data":[
-                                        {
-                                            "id":18
-                                        },
-                                        {
-                                            "id":19
-                                        }
-                                    ]
-                                }
-                            ],
-                            "url_path":"men/men-11"
-                        },
-                        "sort":[
-                            3
-                        ]
-                    },
-                    {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id":"3",
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/3",
-                            "is_active": True,
-                            "level":2,
-                            "product_count":46,
-                            "children_count":"3",
-                            "parent_id":2,
-                            "name":"Gear",
-                            "id":3,
-                            "url_key":"gear-3",
-                            "children_data":[
-                                {
-                                    "id":4
-                                },
-                                {
-                                    "id":5
-                                },
-                                {
-                                    "id":6
-                                }
-                            ],
-                            "url_path":"gear/gear-3"
-                        },
-                        "sort":[
-                            4
-                        ]
-                    },
-                    {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id":"9",
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/9",
-                            "is_active": True,
-                            "level":2,
-                            "product_count":6,
-                            "children_count":"1",
-                            "parent_id":2,
-                            "name":"Training",
-                            "id":9,
-                            "url_key":"training-9",
-                            "children_data":[
-                                {
-                                    "id":10
-                                }
-                            ],
-                            "url_path":"training/training-9"
-                        },
-                        "sort":[
-                            5
-                        ]
-                    },
-                    {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id":"37",
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/37",
-                            "is_active": True,
-                            "level":2,
-                            "product_count":0,
-                            "children_count":"0",
-                            "parent_id":2,
-                            "name":"Sale",
-                            "id":37,
-                            "url_key":"sale-37",
-                            "url_path":"sale/sale-37"
-                        },
-                        "sort":[
-                            6
-                        ]
-                    }
-                ]
+                        {
+                            "_index":"vue_storefront_catalog_1552559102",
+                            "_type":"category",
+                            "_id":"22",
+                            "_score": None,
+                            "_source":{
+                                "path":"1/2/20/22",
+                                "is_active": True,
+                                "level":3,
+                                "product_count":0,
+                                "children_count":"2",
+                                "parent_id": parent_id,
+                                "name":"Bottoms",
+                                "id":22,
+                                "url_key":"bottoms-22",
+                                "children_data":[
+                                    {
+                                        "id":27
+                                    },
+                                    {
+                                        "id":28
+                                    }
+                                ],
+                                "url_path":"women/bottoms-women/bottoms-22"
+                            },
+                            "sort":[
+                                2
+                            ]
+                        }
+                    ]
+                }
             }
-        }
-        return simple_response(response)
+            return simple_response(response)
+
 
         response = {
             "items": [
@@ -1161,7 +1057,7 @@ class PublicAPI(http.Controller):
         return simple_response(response)
 
         data = request.env['product.public.category'].sudo().search_read(
-            domain=[],
+            domain=[('parent_id', '=', False)],
             fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
             offset=None, limit=None,
             order=None)
@@ -1169,6 +1065,64 @@ class PublicAPI(http.Controller):
             return valid_response(data)
         else:
             return invalid_response(data)
+
+    def categories_to_response(self, categories, level, parent_id):
+        categories_array = []
+        for category in categories:
+            categories_array.append(self.category_json(
+                category["name"],
+                category["id"],
+                parent_id,
+                category["child_id"],
+                level
+            ))
+
+        response = {
+            "took": 1,
+            "timed_out": False,
+            "_shards": {
+                "total": 5,
+                "successful": 5,
+                "skipped": 0,
+                "failed": 0
+            },
+            "hits": {
+                "total": 6,
+                "max_score": None,
+                "hits": categories_array
+            }
+        }
+        return response
+
+    def category_json(self, name, id, parent_id, childs, level):
+        children_data = []
+        for child in childs:
+            children_data.append({
+                "id": child
+            })
+        result = {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id": id,
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/20",
+                            "is_active": True,
+                            "level": level,
+                            "product_count":1,
+                            "children_count": len(children_data),
+                            "parent_id": parent_id,
+                            "name": name,
+                            "id": id + self.category_offset,
+                            "url_path":"women/women-20",
+                            "url_key":"women-20",
+                            "children_data": children_data
+                        },
+                        "sort":[
+                            2
+                        ]
+                    }
+        return result
 
     @http.route('/api/category_products', methods=['GET'], type='http', auth='none', csrf=False)
     def category_products(self, **payload):
