@@ -456,6 +456,34 @@ class APIController(http.Controller):
             }
         )
 
+    @http.route('/api/cart/delete', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def cart_delete_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/cart/delete', type='http', auth="none", methods=['POST'], csrf=False)
+    def cart_delete(self, **payload):
+
+        #body = request.httprequest.get_data()
+        #body_json = json.loads(body.decode("utf-8"))
+
+        return simple_response(
+            {
+                "code": 200,
+                "result": True
+            }
+        )
+
     @http.route('/api/cart/pull', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def cart_options(self, **payload):
         data = {
