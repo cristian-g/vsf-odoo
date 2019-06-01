@@ -28,19 +28,51 @@ class PublicAPI(http.Controller):
             #}),
         #)
         data = request.env['product.template'].sudo().search_read(
-            domain=[], fields=['id', 'name', 'description', 'price', 'public_categ_ids', 'default_code'], offset=None, limit=None,
+            domain=[], fields=['id', 'name', 'description', 'price', 'public_categ_ids', 'default_code', 'attribute_line_ids'], offset=None, limit=None,
             order=None)
         if data:
             #return valid_response(self.productJSON())
             products = []
             for element in data:
-                products.append(self.productJSON(element.get('name'), element.get('id'), element.get('default_code')))
+
+                variants_array = []
+
+                attribute_line_ids = element.get('attribute_line_ids')
+                for attribute_line_id in attribute_line_ids:
+                    variant = request.env['product.template.attribute.line'].sudo().search_read(
+                        domain=[('id', '=', attribute_line_id)],
+                        fields=['id', 'value_ids', 'attribute_id'],
+                        offset=None,
+                        limit=None,
+                        order=None)[0]
+                    value_ids = variant['value_ids']
+                    variant['attributes'] = []
+                    for value_id in value_ids:
+                        attribute = request.env['product.attribute.value'].sudo().search_read(
+                            domain=[('id', '=', value_id)],
+                            fields=['name'],
+                            offset=None,
+                            limit=None,
+                            order=None)
+                        variant['attributes'].append(attribute)
+
+                    variants_array.append(variant)
+
+                products.append(self.productJSON(
+                    element.get('name'),
+                    element.get('id'),
+                    element.get('default_code'),
+                    element.get('attribute_line_ids'),
+                    variants_array,
+                ))
             return valid_response(products)
         else:
             return invalid_response(data)
 
-    def productJSON(self, name, item_id, code):
+    def productJSON(self, name, item_id, code, attribute_line_ids, variants):
         source = {
+            "attribute_line_ids": attribute_line_ids,
+            "variants": variants,
        "pattern":"197",
        "description":"<p>When rising temps threaten to melt you down, Elisa EverCool™ Tee brings serious relief. Moisture-wicking fabric pulls sweat away from your skin, while the innovative seams hug your muscles to enhance your range of motion.</p>\n<p>• Purple heather v-neck tee.<br />• Short-Sleeves.<br />• Luma EverCool™ fabric. <br />• Machine wash/line dry.</p>",
        "eco_collection":"1",
@@ -61,7 +93,7 @@ class PublicAPI(http.Controller):
                    "label":"Red"
                 }
              ],
-             "product_id":1465,
+             "product_id":item_id,
              "id":201,
              "label":"Color",
              "position":1,
@@ -91,7 +123,7 @@ class PublicAPI(http.Controller):
                    "label":"XL"
                 }
              ],
-             "product_id":1465,
+             "product_id":item_id,
              "id":200,
              "label":"Size",
              "position":0,
@@ -119,7 +151,7 @@ class PublicAPI(http.Controller):
        "links":{
 
        },
-       "id":1465,
+       "id": item_id,
        "category_ids":[
           "25",
           "33",
@@ -127,25 +159,27 @@ class PublicAPI(http.Controller):
           "36",
           "2"
        ],
-       "sku":"WS06",
+       "sku": "MH" + str(item_id),
        "stock":{
           "min_sale_qty":1,
-          "item_id":1465,
+          "item_id":item_id,
           "min_qty":0,
           "stock_status_changed_auto":0,
           "is_in_stock":True,
           "max_sale_qty":10000,
           "show_default_notification_message":False,
           "backorders":0,
-          "product_id":1465,
+          "product_id":item_id,
           "qty":0,
           "is_decimal_divided":False,
           "is_qty_decimal":False,
           "low_stock_date": None,
           "use_config_qty_increments":True
        },
-       "slug":"elisa-evercool-and-trade-tee-1465",
-       "url_path":"women/tops-women/tees-women/tees-25/elisa-evercool-and-trade-tee-1465.html",
+#       "slug":"elisa-evercool-and-trade-tee-1465",
+#       "url_path":"women/tops-women/tees-women/tees-25/elisa-evercool-and-trade-tee-1465.html",
+       "slug": code,
+       "url_path": code,
        "image":"/w/s/ws06-purple_main.jpg",
        "new":"1",
        "thumbnail":"/w/s/ws06-purple_main.jpg",
@@ -729,7 +763,7 @@ class PublicAPI(http.Controller):
             "_score": 1
         }
 
-    @http.route('/api/catalog/vue_storefront_catalog/attribute', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
+    @http.route('/api/catalog/vue_storefront_catalog/attribute/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def attributes_json(self, **payload):
         attributes = []
         attributes.append(self.attributeJSON("93", "color", "Color"))
@@ -901,8 +935,14 @@ class PublicAPI(http.Controller):
         #str(json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq'))
         # == 2 --> root categories
 
-        parent_id = json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq')
+        applied_filter = json.loads(payload.get('request')).get('_appliedFilters')[0]
+        if applied_filter.get('attribute') == "url_key":
+            parent_id = 2
+        else:
+            parent_id = applied_filter.get('value').get('eq')
+
         if parent_id == 2:
+            # Root categories
             categories = request.env['product.public.category'].sudo().search_read(
                 domain=[('parent_id', '=', False)],
                 fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
