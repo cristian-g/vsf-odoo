@@ -13,7 +13,7 @@ class PublicAPI(http.Controller):
     def __init__(self):
         return
 
-    @http.route('/api/catalog/vue_storefront_catalog/product', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
+    @http.route('/api/catalog/vue_storefront_catalog/product/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def products(self, **payload):
         # Successful response:
         #return werkzeug.wrappers.Response(
@@ -38,374 +38,694 @@ class PublicAPI(http.Controller):
             return invalid_response(data)
 
     def productJSON(self, name, item_id, code):
+        source = {
+       "pattern":"197",
+       "description":"<p>When rising temps threaten to melt you down, Elisa EverCool™ Tee brings serious relief. Moisture-wicking fabric pulls sweat away from your skin, while the innovative seams hug your muscles to enhance your range of motion.</p>\n<p>• Purple heather v-neck tee.<br />• Short-Sleeves.<br />• Luma EverCool™ fabric. <br />• Machine wash/line dry.</p>",
+       "eco_collection":"1",
+       "configurable_options":[
+          {
+             "attribute_id":"93",
+             "values":[
+                {
+                   "value_index":52,
+                   "label":"Gray"
+                },
+                {
+                   "value_index":57,
+                   "label":"Purple"
+                },
+                {
+                   "value_index":58,
+                   "label":"Red"
+                }
+             ],
+             "product_id":1465,
+             "id":201,
+             "label":"Color",
+             "position":1,
+             "attribute_code":"color"
+          },
+          {
+             "attribute_id":"142",
+             "values":[
+                {
+                   "value_index":167,
+                   "label":"XS"
+                },
+                {
+                   "value_index":168,
+                   "label":"S"
+                },
+                {
+                   "value_index":169,
+                   "label":"M"
+                },
+                {
+                   "value_index":170,
+                   "label":"L"
+                },
+                {
+                   "value_index":171,
+                   "label":"XL"
+                }
+             ],
+             "product_id":1465,
+             "id":200,
+             "label":"Size",
+             "position":0,
+             "attribute_code":"size"
+          }
+       ],
+       "tsk":1551705236617,
+       "custom_attributes": None,
+       "size_options":[
+          167,
+          168,
+          169,
+          170,
+          171
+       ],
+       "regular_price":29,
+       "erin_recommends":"0",
+       "final_price":35.670001,
+       "price":29,
+       "color_options":[
+          52,
+          57,
+          58
+       ],
+       "links":{
+
+       },
+       "id":1465,
+       "category_ids":[
+          "25",
+          "33",
+          "8",
+          "36",
+          "2"
+       ],
+       "sku":"WS06",
+       "stock":{
+          "min_sale_qty":1,
+          "item_id":1465,
+          "min_qty":0,
+          "stock_status_changed_auto":0,
+          "is_in_stock":True,
+          "max_sale_qty":10000,
+          "show_default_notification_message":False,
+          "backorders":0,
+          "product_id":1465,
+          "qty":0,
+          "is_decimal_divided":False,
+          "is_qty_decimal":False,
+          "low_stock_date": None,
+          "use_config_qty_increments":True
+       },
+       "slug":"elisa-evercool-and-trade-tee-1465",
+       "url_path":"women/tops-women/tees-women/tees-25/elisa-evercool-and-trade-tee-1465.html",
+       "image":"/w/s/ws06-purple_main.jpg",
+       "new":"1",
+       "thumbnail":"/w/s/ws06-purple_main.jpg",
+       "visibility":4,
+       "type_id":"configurable",
+       "tax_class_id":"2",
+       "media_gallery":[
+          {
+             "vid": None,
+             "image":"/w/s/ws06-purple_main.jpg",
+             "pos":1,
+             "typ":"image",
+             "lab":""
+          },
+          {
+             "vid": None,
+             "image":"/w/s/ws06-purple_back.jpg",
+             "pos":2,
+             "typ":"image",
+             "lab":""
+          }
+       ],
+       "climate":"205,209",
+       "style_general":"136",
+       "url_key":"elisa-evercool-trade-tee",
+       "performance_fabric":"0",
+       "sale":"0",
+       "max_price":35.670001,
+       "minimal_regular_price":35.670001,
+       "material":"153,154",
+       "special_price":0,
+       "minimal_price":35.670001,
+       "name": name,
+       "configurable_children":[
+          {
+             "image":"/w/s/ws06-gray_main.jpg",
+             "thumbnail":"/w/s/ws06-gray_main.jpg",
+             "color":"52",
+             "small_image":"/w/s/ws06-gray_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xs-gray",
+             "required_options":"0",
+             "size":"167",
+             "price":29,
+             "name": name + "-XS-Gray",
+             "id":1450,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-XS-Gray",
+             "status":1,
+             "special_price":0,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-purple_main.jpg",
+             "thumbnail":"/w/s/ws06-purple_main.jpg",
+             "color":"57",
+             "small_image":"/w/s/ws06-purple_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xs-purple",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"167",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-XS-Purple",
+             "id":1451,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-XS-Purple",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-red_main.jpg",
+             "thumbnail":"/w/s/ws06-red_main.jpg",
+             "color":"58",
+             "small_image":"/w/s/ws06-red_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xs-red",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"167",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-XS-Red",
+             "id":1452,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-XS-Red",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-gray_main.jpg",
+             "thumbnail":"/w/s/ws06-gray_main.jpg",
+             "color":"52",
+             "small_image":"/w/s/ws06-gray_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-s-gray",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"168",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-S-Gray",
+             "id":1453,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-S-Gray",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-purple_main.jpg",
+             "thumbnail":"/w/s/ws06-purple_main.jpg",
+             "color":"57",
+             "small_image":"/w/s/ws06-purple_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-s-purple",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"168",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-S-Purple",
+             "id":1454,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-S-Purple",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-red_main.jpg",
+             "thumbnail":"/w/s/ws06-red_main.jpg",
+             "color":"58",
+             "small_image":"/w/s/ws06-red_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-s-red",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"168",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-S-Red",
+             "id":1455,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-S-Red",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-gray_main.jpg",
+             "thumbnail":"/w/s/ws06-gray_main.jpg",
+             "color":"52",
+             "small_image":"/w/s/ws06-gray_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-m-gray",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"169",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-M-Gray",
+             "id":1456,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-M-Gray",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-purple_main.jpg",
+             "thumbnail":"/w/s/ws06-purple_main.jpg",
+             "color":"57",
+             "small_image":"/w/s/ws06-purple_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-m-purple",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"169",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-M-Purple",
+             "id":1457,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-M-Purple",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-red_main.jpg",
+             "thumbnail":"/w/s/ws06-red_main.jpg",
+             "color":"58",
+             "small_image":"/w/s/ws06-red_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-m-red",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"169",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-M-Red",
+             "id":1458,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-M-Red",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-gray_main.jpg",
+             "thumbnail":"/w/s/ws06-gray_main.jpg",
+             "color":"52",
+             "small_image":"/w/s/ws06-gray_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-l-gray",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"170",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-L-Gray",
+             "id":1459,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-L-Gray",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-purple_main.jpg",
+             "thumbnail":"/w/s/ws06-purple_main.jpg",
+             "color":"57",
+             "small_image":"/w/s/ws06-purple_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-l-purple",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"170",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-L-Purple",
+             "id":1460,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-L-Purple",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-red_main.jpg",
+             "thumbnail":"/w/s/ws06-red_main.jpg",
+             "color":"58",
+             "small_image":"/w/s/ws06-red_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-l-red",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"170",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-L-Red",
+             "id":1461,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-L-Red",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-gray_main.jpg",
+             "thumbnail":"/w/s/ws06-gray_main.jpg",
+             "color":"52",
+             "small_image":"/w/s/ws06-gray_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xl-gray",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"171",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-XL-Gray",
+             "id":1462,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-XL-Gray",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-purple_main.jpg",
+             "thumbnail":"/w/s/ws06-purple_main.jpg",
+             "color":"57",
+             "small_image":"/w/s/ws06-purple_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xl-purple",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"171",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-XL-Purple",
+             "id":1463,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-XL-Purple",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          },
+          {
+             "image":"/w/s/ws06-red_main.jpg",
+             "thumbnail":"/w/s/ws06-red_main.jpg",
+             "color":"58",
+             "small_image":"/w/s/ws06-red_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xl-red",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size":"171",
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": name + "-XL-Red",
+             "id":1464,
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             "sku":"WS06-XL-Red",
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          }
+       ],
+       "max_regular_price":35.670001,
+       "category":[
+          {
+             "path":"women/tops-women/tees-women/tees-25",
+             "category_id":25,
+             "name":"Tees",
+             "slug":"tees-25"
+          },
+          {
+             "path":"promotions/tees-all/tees-33",
+             "category_id":33,
+             "name":"Tees",
+             "slug":"tees-33"
+          },
+          {
+             "path":"collections/yoga-new/new-luma-yoga-collection-8",
+             "category_id":8,
+             "name":"New Luma Yoga Collection",
+             "slug":"new-luma-yoga-collection-8"
+          },
+          {
+             "path":"collections/eco-friendly/eco-friendly-36",
+             "category_id":36,
+             "name":"Eco Friendly",
+             "slug":"eco-friendly-36"
+          },
+          {
+             "path":"default-category-2",
+             "category_id":2,
+             "name":"Default Category",
+             "slug":"default-category-2"
+          }
+       ],
+       "status":1,
+       "priceTax":6.67,
+       "priceInclTax":35.67,
+       "specialPriceTax": None,
+       "specialPriceInclTax": None
+    }
         return {
-              "pattern":"197",
-              "slug":"slug",
-              "description":"<p>Stay comfortable and stay in the race no matter what the weather's up to. The Bruno Compete Hoodie's water-repellent exterior shields you from the elements, while advanced fabric technology inside wicks moisture to keep you dry.<\/p>\n<p>\u2022 Full zip black hoodie pullover. <br \/>\u2022 Adjustable drawstring hood. <br \/>\u2022 Ribbed cuffs\/waistband. <br \/>\u2022 Kangaroo pocket. <br \/>\u2022 Machine wash\/dry.<\/p>",
-              "eco_collection":"1",
-              "configurable_options":[
-                 {
-                    "attribute_id":"142",
-                    "values":[
-                       {
-                          "value_index":167,
-                          "label":"XS"
-                       },
-                       {
-                          "value_index":168,
-                          "label":"S"
-                       },
-                       {
-                          "value_index":169,
-                          "label":"M"
-                       },
-                       {
-                          "value_index":170,
-                          "label":"L"
-                       },
-                       {
-                          "value_index":171,
-                          "label":"XL"
-                       }
-                    ],
-                    "product_id": item_id,
-                    "id": item_id,
-                    "label":"Size",
-                    "slug":"slug",
-                    "position":0,
-                    "attribute_code":"size"
-                 },
-                 {
-                    "attribute_id":"93",
-                    "values":[
-                       {
-                          "value_index":167,
-                          "label":"XS"
-                       },
-                       {
-                          "value_index":168,
-                          "label":"S"
-                       },
-                       {
-                          "value_index":169,
-                          "label":"M"
-                       },
-                       {
-                          "value_index":170,
-                          "label":"L"
-                       },
-                       {
-                          "value_index":171,
-                          "label":"XL"
-                       }
-                    ],
-                    "product_id": item_id,
-                    "id": item_id,
-                    "label":"Color",
-                    "slug":"slug",
-                    "position":0,
-                    "attribute_code":"color"
-                 }
-              ],
-
-                "configurable_children": [
-                    {
-                        "image": "/w/s/wsh12-green_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2030,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2031,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-red_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2032,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-green_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2033,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2034,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-red_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2035,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-green_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2036,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2037,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-red_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2038,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-green_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2039,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2040,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-red_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": code,
-                        "sku": "WSH12-31-Red",
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-green_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2042,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-purple_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2043,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    },
-                    {
-                        "image": "/w/s/wsh12-red_main.jpg",
-                        "color": 171,
-                        "size": 171,
-                        "special_price": 0,
-                        "price": 45,
-                        "id": 2044,
-                        "sku": code,
-                        "priceTax": 10.35,
-                        "priceInclTax": 55.35,
-                        "specialPriceTax": None,
-                        "specialPriceInclTax": None
-                    }
-                ],
-              "tsk":1549474025451,
-              "custom_attributes":None,
-              "size_options":[
-                 167,
-                 168,
-                 169,
-                 170,
-                 171
-              ],
-              "regular_price":63,
-              "final_price":77.490001,
-              "erin_recommends":"1",
-              "price":63,
-              "color_options":[
-                 49,
-                 50,
-                 53
-              ],
-              "links":[
-
-              ],
-              "id": item_id,
-              "category_ids":[
-                 "15",
-                 "36",
-                 "2"
-              ],
-              "sku":"MH" + str(item_id),
-              "stock":{
-                 "min_sale_qty":1,
-                 "item_id": item_id,
-                 "min_qty":0,
-                 "stock_status_changed_auto":0,
-                 "is_in_stock":True,
-                 "max_sale_qty":10000,
-                 "show_default_notification_message":False,
-                 "backorders":0,
-                 "product_id": item_id,
-                 "qty":0,
-                 "is_decimal_divided":False,
-                 "is_qty_decimal":False,
-                 "low_stock_date":None,
-                 "use_config_qty_increments":True
-              },
-              "image":"\/m\/h\/mh03-black_main.jpg",
-              "new":"1",
-              "thumbnail":"\/m\/h\/mh03-black_main.jpg",
-              "visibility":4,
-              "type_id":"configurable",
-              "tax_class_id":"2",
-              "media_gallery":[
-                 {
-                    "image":"\/m\/h\/mh03-black_main.jpg",
-                    "pos":1,
-                    "typ":"image",
-                    "lab":""
-                 },
-                 {
-                    "image":"\/m\/h\/mh03-black_alt1.jpg",
-                    "pos":2,
-                    "typ":"image",
-                    "lab":""
-                 },
-                 {
-                    "image":"\/m\/h\/mh03-black_back.jpg",
-                    "pos":3,
-                    "typ":"image",
-                    "lab":""
-                 }
-              ],
-              "climate":"202,204,205,208,210",
-              "url_key":"bruno-compete-hoodie",
-              "performance_fabric":"0",
-              "sale":"0",
-              "max_price":77.490001,
-              "minimal_regular_price":77.490001,
-              "material":"154",
-              "special_price":0,
-              "minimal_price":77.490001,
-              "name":name,
-              "max_regular_price":77.490001,
-              "category":[
-                 {
-                    "category_id":15,
-                    "name":"Hoodies & Sweatshirts"
-                 },
-                 {
-                    "category_id":36,
-                    "name":"Eco Friendly"
-                 },
-                 {
-                    "category_id":2,
-                    "name":"Default Category"
-                 }
-              ],
-              "status":1,
-              "priceTax":14.49,
-              "priceInclTax":77.49,
-              "specialPriceTax":None,
-              "specialPriceInclTax":None
-           }
+            "_source": source,
+            "_score": 1
+        }
 
     @http.route('/api/catalog/vue_storefront_catalog/attribute', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def attributes_json(self, **payload):
@@ -573,8 +893,228 @@ class PublicAPI(http.Controller):
         }
         return simple_response(response)
 
-    @http.route('/api/catalog/vue_storefront_catalog/category', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
+    @http.route('/api/catalog/vue_storefront_catalog/category/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def categories(self, **payload):
+
+        response = {
+            "took":1,
+            "timed_out": False,
+            "_shards":{
+                "total":5,
+                "successful":5,
+                "skipped":0,
+                "failed":0
+            },
+            "hits":{
+                "total":6,
+                "max_score": None,
+                "hits":[
+                    {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id":"38",
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/38",
+                            "is_active": True,
+                            "level":2,
+                            "product_count":0,
+                            "children_count":"0",
+                            "parent_id":2,
+                            "name":"What's New",
+                            "id":38,
+                            "url_key":"whats-new-38",
+                            "url_path":"what-is-new/whats-new-38"
+                        },
+                        "sort":[
+                            1
+                        ]
+                    },
+                    {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id":"20",
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/20",
+                            "is_active": True,
+                            "level":2,
+                            "product_count":0,
+                            "children_count":"8",
+                            "parent_id":2,
+                            "name":"Women" + str(json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq')),
+                            "id":20,
+                            "url_path":"women/women-20",
+                            "url_key":"women-20",
+                            "children_data":[
+                                {
+                                    "id":21,
+                                    "children_data":[
+                                        {
+                                            "id":23
+                                        },
+                                        {
+                                            "id":24
+                                        },
+                                        {
+                                            "id":25
+                                        },
+                                        {
+                                            "id":26
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id":22,
+                                    "children_data":[
+                                        {
+                                            "id":27
+                                        },
+                                        {
+                                            "id":28
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "sort":[
+                            2
+                        ]
+                    },
+                    {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id":"11",
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/11",
+                            "is_active": True,
+                            "level":2,
+                            "product_count":0,
+                            "children_count":"8",
+                            "parent_id":2,
+                            "name":"Men",
+                            "id":11,
+                            "url_key":"men-11",
+                            "children_data":[
+                                {
+                                    "id":12,
+                                    "children_data":[
+                                        {
+                                            "id":14
+                                        },
+                                        {
+                                            "id":15
+                                        },
+                                        {
+                                            "id":16
+                                        },
+                                        {
+                                            "id":17
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id":13,
+                                    "children_data":[
+                                        {
+                                            "id":18
+                                        },
+                                        {
+                                            "id":19
+                                        }
+                                    ]
+                                }
+                            ],
+                            "url_path":"men/men-11"
+                        },
+                        "sort":[
+                            3
+                        ]
+                    },
+                    {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id":"3",
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/3",
+                            "is_active": True,
+                            "level":2,
+                            "product_count":46,
+                            "children_count":"3",
+                            "parent_id":2,
+                            "name":"Gear",
+                            "id":3,
+                            "url_key":"gear-3",
+                            "children_data":[
+                                {
+                                    "id":4
+                                },
+                                {
+                                    "id":5
+                                },
+                                {
+                                    "id":6
+                                }
+                            ],
+                            "url_path":"gear/gear-3"
+                        },
+                        "sort":[
+                            4
+                        ]
+                    },
+                    {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id":"9",
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/9",
+                            "is_active": True,
+                            "level":2,
+                            "product_count":6,
+                            "children_count":"1",
+                            "parent_id":2,
+                            "name":"Training",
+                            "id":9,
+                            "url_key":"training-9",
+                            "children_data":[
+                                {
+                                    "id":10
+                                }
+                            ],
+                            "url_path":"training/training-9"
+                        },
+                        "sort":[
+                            5
+                        ]
+                    },
+                    {
+                        "_index":"vue_storefront_catalog_1552559102",
+                        "_type":"category",
+                        "_id":"37",
+                        "_score": None,
+                        "_source":{
+                            "path":"1/2/37",
+                            "is_active": True,
+                            "level":2,
+                            "product_count":0,
+                            "children_count":"0",
+                            "parent_id":2,
+                            "name":"Sale",
+                            "id":37,
+                            "url_key":"sale-37",
+                            "url_path":"sale/sale-37"
+                        },
+                        "sort":[
+                            6
+                        ]
+                    }
+                ]
+            }
+        }
+        return simple_response(response)
 
         response = {
             "items": [
