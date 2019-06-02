@@ -35,8 +35,8 @@ class PublicAPI(http.Controller):
             products = []
             for element in data:
 
+                # Preparing data for "configurable_options"
                 variants_array = []
-
                 attribute_line_ids = element.get('attribute_line_ids')
                 for attribute_line_id in attribute_line_ids:
                     variant = request.env['product.template.attribute.line'].sudo().search_read(
@@ -55,8 +55,35 @@ class PublicAPI(http.Controller):
                             limit=None,
                             order=None)
                         variant['attributes'].append(attribute)
-
                     variants_array.append(variant)
+
+                # Preparing data for "configurable_children"
+                # "product.attribute.value.product.product.rel" relates products with attribute values
+                # find products for current template
+                configurable_childrens = request.env['product.product'].sudo().search_read(
+                domain=[('product_tmpl_id', '=', element.get('id'))],
+                fields=['id', 'attribute_value_ids'],
+                offset=None,
+                limit=None,
+                order=None)
+                configurable_children_array = []
+                for configurable_children in configurable_childrens:
+
+                    configurable_children['attributes'] = []
+
+                    value_ids = configurable_children['attribute_value_ids']
+                    for value_id in value_ids:
+                        attribute = request.env['product.attribute.value'].sudo().search_read(
+                            domain=[('id', '=', value_id)],
+                            fields=['name'],
+                            offset=None,
+                            limit=None,
+                            order=None)
+                        configurable_children['attributes'].append(attribute)
+
+                    configurable_children_array.append(
+                        self.configurable_children_JSON(configurable_children),
+                    )
 
                 products.append(self.productJSON(
                     element.get('name'),
@@ -64,15 +91,23 @@ class PublicAPI(http.Controller):
                     element.get('default_code'),
                     element.get('attribute_line_ids'),
                     variants_array,
+                    configurable_children_array,
                 ))
             return valid_response(products)
         else:
             return invalid_response(data)
 
-    def productJSON(self, name, item_id, code, attribute_line_ids, variants):
+    def configurable_children_JSON(self, configurable_children):
+        result = {
+            "configurable_children": configurable_children,
+        }
+        return result
+
+    def productJSON(self, name, item_id, code, attribute_line_ids, variants, configurable_children_array):
         source = {
             "attribute_line_ids": attribute_line_ids,
             "variants": variants,
+            "configurable_children_array": configurable_children_array,
        "pattern":"197",
        "description":"<p>When rising temps threaten to melt you down, Elisa EverCool™ Tee brings serious relief. Moisture-wicking fabric pulls sweat away from your skin, while the innovative seams hug your muscles to enhance your range of motion.</p>\n<p>• Purple heather v-neck tee.<br />• Short-Sleeves.<br />• Luma EverCool™ fabric. <br />• Machine wash/line dry.</p>",
        "eco_collection":"1",
