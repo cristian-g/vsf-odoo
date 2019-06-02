@@ -2,6 +2,7 @@ import functools
 import logging
 import json
 import werkzeug.wrappers
+import collections
 from odoo import http
 from odoo.http import request
 from odoo.addons.restful.common import valid_response, invalid_response, extract_arguments, simple_response
@@ -502,7 +503,6 @@ class APIController(http.Controller):
     @validate_optional_token
     @http.route('/api/cart/pull', type='http', auth="none", methods=['GET'], csrf=False)
     def cart(self, **payload):
-
         return simple_response(
             {
                 "code": 200,
@@ -694,7 +694,7 @@ class APIController(http.Controller):
             "disable_auto_group_change":0
         }
 
-    @http.route('/api/cart/update', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    @http.route('/api/cart/update2', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def edit_quantity_options(self, **payload):
         data = {
         }
@@ -710,7 +710,7 @@ class APIController(http.Controller):
         )
 
     @validate_optional_token
-    @http.route('/api/cart/update', type='http', auth="none", methods=['POST'], csrf=False)
+    @http.route('/api/cart/update2', type='http', auth="none", methods=['POST'], csrf=False)
     def edit_quantity(self, **payload):
 
         payload_line_id = payload.get('line_id')
@@ -800,9 +800,66 @@ class APIController(http.Controller):
         else:
             return invalid_response('missing_line', 'line with id %s could not be found' % payload.get('line_id'), 404)
 
+    @http.route('/api/cart/update', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def update_cart_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
     @validate_token
-    @http.route('/api/add_to_cart', methods=['POST'], type='http', auth='none', csrf=False)
-    def add_to_cart(self, **payload):
+    @http.route('/api/cart/update', methods=['POST'], type='http', auth='none', csrf=False)
+    def update_cart(self, **payload):
+
+        body = request.httprequest.get_data()
+        payload = json.loads(body.decode("utf-8"))
+
+        # We need: product id
+        # We have: product template id and product_attribute_value_id s
+
+        # Use received product_tmpl_id to retrieve product ids from product.product
+        received_product_tmpl_id = int(payload.get('cartItem').get('sku'))
+
+        configurable_item_options = payload.get('cartItem').get('product_option').get('extension_attributes').get('configurable_item_options')
+
+        desired_options_array = []
+        for configurable_item_option in configurable_item_options:
+            desired_options_array.append(
+                int(configurable_item_option.get('option_value'))
+            )
+
+        products = request.env['product.product'].sudo().search_read(
+            domain=[('product_tmpl_id', '=', received_product_tmpl_id)],
+            fields=['id', 'attribute_value_ids'],
+            offset=None,
+            limit=None,
+            order=None)
+
+        desired_product_id = -1
+
+        for product in products:
+
+            actual_options_array = []
+
+            value_ids = product['attribute_value_ids']
+            for value_id in value_ids:
+                actual_options_array.append(value_id)
+
+            # If product_attribute_value_id s match with the received ones, this product id is the desired one
+            desired = collections.Counter(desired_options_array) == collections.Counter(actual_options_array)
+
+            if desired:
+                desired_product_id = product['id']
+
+        desired_quantity = 1
 
         user_data = request.env['res.users'].sudo().search_read(
             domain=[('id', '=', request.session.uid)],
@@ -820,17 +877,37 @@ class APIController(http.Controller):
         )
         resource = request.env['sale.order.line'].sudo().create({
             'order_id': int(order[0].get('id')),
-            'product_id': int(payload.get('product_id')),
-            'product_uom_qty': payload.get('quantity'),
+            'product_id': desired_product_id,
+            'product_uom_qty': desired_quantity,
             'customer_lead': 0.0,
             'name': 'New line',
             'price_unit': 100.0,
         })
-        data = {'id': resource.id}
-        if resource:
-            return valid_response(data)
-        else:
-            return invalid_response(data)
+
+        # Response
+        # data = {'id': resource.id}
+        # if resource:
+        #     return valid_response(data)
+        # else:
+        #     return invalid_response(data)
+
+        response = {
+            "code": 200,
+            "result":
+                {
+                    # "item_id": 5853,
+                    # "sku": "MS10-XS-Black",
+                    # "qty": 2,
+                    # "name": "Logan  HeatTec&reg; Tee-XS-Black",
+                    # "price": 24,
+                    # "product_type": "simple",
+                    # "quote_id": "81668"
+                }
+        }
+
+        return simple_response(
+            response
+        )
 
     @validate_token
     @http.route('/api/set_shipping', type='http', auth="none", methods=['PATCH'], csrf=False)

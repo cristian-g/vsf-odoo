@@ -261,7 +261,7 @@ class PublicAPI(http.Controller):
           "36",
           "2"
        ],
-       "sku": "MH" + str(item_id),
+       "sku": str(item_id),
        "stock":{
           "min_sale_qty":1,
           "item_id":item_id,
