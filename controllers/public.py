@@ -11,6 +11,8 @@ class PublicAPI(http.Controller):
     """."""
 
     category_offset = 2
+    size_attribute_name = "Talla"
+    color_attribute_name = "Color"
 
     def __init__(self):
         return
@@ -50,7 +52,7 @@ class PublicAPI(http.Controller):
                     for value_id in value_ids:
                         attribute = request.env['product.attribute.value'].sudo().search_read(
                             domain=[('id', '=', value_id)],
-                            fields=['name'],
+                            fields=['name', 'html_color'],
                             offset=None,
                             limit=None,
                             order=None)
@@ -75,14 +77,14 @@ class PublicAPI(http.Controller):
                     for value_id in value_ids:
                         attribute = request.env['product.attribute.value'].sudo().search_read(
                             domain=[('id', '=', value_id)],
-                            fields=['name'],
+                            fields=['id', 'name', 'attribute_id'],
                             offset=None,
                             limit=None,
                             order=None)
                         configurable_children['attributes'].append(attribute)
 
                     configurable_children_array.append(
-                        self.configurable_children_JSON(configurable_children),
+                        configurable_children
                     )
 
                 products.append(self.productJSON(
@@ -97,75 +99,139 @@ class PublicAPI(http.Controller):
         else:
             return invalid_response(data)
 
-    def configurable_children_JSON(self, configurable_children):
+    def configurable_option_JSON(self, variant, item_id):
+
+        attribute_id = variant.get("attribute_id")[0]
+        attribute_name = variant.get("attribute_id")[1]
+
+        attribute_label_json = None
+        attribute_code_json = None
+
+        if attribute_name == self.size_attribute_name:
+            attribute_label_json = "Size"
+            attribute_code_json = "size"
+        elif attribute_name == self.color_attribute_name:
+            attribute_label_json = "Color"
+            attribute_code_json = "color"
+
+        values_array = []
+        attributes = variant.get("attributes")
+        for attribute in attributes:
+
+            if attribute_name == self.size_attribute_name:
+                values_array.append({
+                    "value_index": attribute[0].get("id"),
+                    "label": str(attribute[0].get("name")),
+                })
+            elif attribute_name == self.color_attribute_name:
+                values_array.append({
+                    "value_index": attribute[0].get("id"),
+                    "label": "#" + str(attribute[0].get("html_color")),
+                })
+
         result = {
-            "configurable_children": configurable_children,
-        }
+             "attribute_id": attribute_id,
+             "values": values_array,
+             "product_id": item_id,
+             "id": attribute_id,
+             "label": attribute_label_json,
+             "position": 0,
+             "attribute_code": attribute_code_json
+          }
         return result
 
-    def productJSON(self, name, item_id, code, attribute_line_ids, variants, configurable_children_array):
+    def configurable_children_JSON(self, configurable, item_id):
+
+        # Get size and color
+        size_id = None
+        color_id = None
+        attributes = configurable.get("attributes")
+        for attribute in attributes:
+
+            attribute_name = attribute[0].get("attribute_id")[1]
+
+            if attribute_name == self.size_attribute_name:
+                size_id = attribute[0].get("id")
+            elif attribute_name == self.color_attribute_name:
+                color_id = attribute[0].get("id")
+
+        size_id_string = str(size_id)
+        color_id_string = str(color_id)
+
+        result = {
+             "image":"/w/s/ws06-yellow_main.jpg",
+             "thumbnail":"/w/s/ws06-yellow_main.jpg",
+             "color": color_id_string,
+             "small_image":"/w/s/ws06-yellow_main.jpg",
+             "tax_class_id":"2",
+             "has_options":"0",
+             "url_key":"elisa-evercool-trade-tee-xl-yellow",
+             "regular_price":35.670001,
+             "required_options":"0",
+             "max_price":35.670001,
+             "minimal_regular_price":35.670001,
+             "size": size_id_string,
+             "final_price":35.670001,
+             "special_price":0,
+             "price":29,
+             "minimal_price":35.670001,
+             "name": size_id_string + "-" + color_id_string,
+             "id": configurable.get("id"),
+             "category_ids":[
+                "25",
+                "33",
+                "8",
+                "36",
+                "2"
+             ],
+             # "sku":"WS06-XL-Yellow",
+             "sku":"WS06-" + size_id_string + "-" + color_id_string,
+             "max_regular_price":35.670001,
+             "status":1,
+             "priceTax":6.67,
+             "priceInclTax":35.67,
+             "specialPriceTax": None,
+             "specialPriceInclTax": None
+          }
+        return result
+
+    def productJSON(self, name, item_id, code, attribute_line_ids, variants, configurable_children):
+
+        # Configurable options
+        configurable_options_array = []
+        for variant in variants:
+            configurable_options_array.append(
+                self.configurable_option_JSON(variant, item_id)
+            )
+
+        # Configurable children
+        configurable_children_array = []
+        for configurable in configurable_children:
+            configurable_children_array.append(
+                self.configurable_children_JSON(configurable, item_id)
+            )
+
         source = {
             "attribute_line_ids": attribute_line_ids,
             "variants": variants,
             "configurable_children_array": configurable_children_array,
+
+
+
+
        "pattern":"197",
        "description":"<p>When rising temps threaten to melt you down, Elisa EverCool™ Tee brings serious relief. Moisture-wicking fabric pulls sweat away from your skin, while the innovative seams hug your muscles to enhance your range of motion.</p>\n<p>• Purple heather v-neck tee.<br />• Short-Sleeves.<br />• Luma EverCool™ fabric. <br />• Machine wash/line dry.</p>",
        "eco_collection":"1",
-       "configurable_options":[
-          {
-             "attribute_id":"93",
-             "values":[
-                {
-                   "value_index":52,
-                   "label":"Gray"
-                },
-                {
-                   "value_index":57,
-                   "label":"Purple"
-                },
-                {
-                   "value_index":58,
-                   "label":"Red"
-                }
-             ],
-             "product_id":item_id,
-             "id":201,
-             "label":"Color",
-             "position":1,
-             "attribute_code":"color"
-          },
-          {
-             "attribute_id":"142",
-             "values":[
-                {
-                   "value_index":167,
-                   "label":"XS"
-                },
-                {
-                   "value_index":168,
-                   "label":"S"
-                },
-                {
-                   "value_index":169,
-                   "label":"M"
-                },
-                {
-                   "value_index":170,
-                   "label":"L"
-                },
-                {
-                   "value_index":171,
-                   "label":"XL"
-                }
-             ],
-             "product_id":item_id,
-             "id":200,
-             "label":"Size",
-             "position":0,
-             "attribute_code":"size"
-          }
-       ],
-       "tsk":1551705236617,
+
+
+
+            # START OF CONFIGURABLE OPTIONS
+       "configurable_options_original": variants,
+       "configurable_options": configurable_options_array,
+
+            # END OF CONFIGURABLE OPTIONS
+
+            "tsk":1551705236617,
        "custom_attributes": None,
        "size_options":[
           167,
@@ -181,7 +247,8 @@ class PublicAPI(http.Controller):
        "color_options":[
           52,
           57,
-          58
+          58,
+          59
        ],
        "links":{
 
@@ -248,513 +315,15 @@ class PublicAPI(http.Controller):
        "special_price":0,
        "minimal_price":35.670001,
        "name": name,
-       "configurable_children":[
-          {
-             "image":"/w/s/ws06-gray_main.jpg",
-             "thumbnail":"/w/s/ws06-gray_main.jpg",
-             "color":"52",
-             "small_image":"/w/s/ws06-gray_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xs-gray",
-             "required_options":"0",
-             "size":"167",
-             "price":29,
-             "name": name + "-XS-Gray",
-             "id":1450,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-XS-Gray",
-             "status":1,
-             "special_price":0,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-purple_main.jpg",
-             "thumbnail":"/w/s/ws06-purple_main.jpg",
-             "color":"57",
-             "small_image":"/w/s/ws06-purple_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xs-purple",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"167",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-XS-Purple",
-             "id":1451,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-XS-Purple",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-red_main.jpg",
-             "thumbnail":"/w/s/ws06-red_main.jpg",
-             "color":"58",
-             "small_image":"/w/s/ws06-red_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xs-red",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"167",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-XS-Red",
-             "id":1452,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-XS-Red",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-gray_main.jpg",
-             "thumbnail":"/w/s/ws06-gray_main.jpg",
-             "color":"52",
-             "small_image":"/w/s/ws06-gray_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-s-gray",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"168",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-S-Gray",
-             "id":1453,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-S-Gray",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-purple_main.jpg",
-             "thumbnail":"/w/s/ws06-purple_main.jpg",
-             "color":"57",
-             "small_image":"/w/s/ws06-purple_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-s-purple",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"168",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-S-Purple",
-             "id":1454,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-S-Purple",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-red_main.jpg",
-             "thumbnail":"/w/s/ws06-red_main.jpg",
-             "color":"58",
-             "small_image":"/w/s/ws06-red_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-s-red",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"168",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-S-Red",
-             "id":1455,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-S-Red",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-gray_main.jpg",
-             "thumbnail":"/w/s/ws06-gray_main.jpg",
-             "color":"52",
-             "small_image":"/w/s/ws06-gray_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-m-gray",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"169",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-M-Gray",
-             "id":1456,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-M-Gray",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-purple_main.jpg",
-             "thumbnail":"/w/s/ws06-purple_main.jpg",
-             "color":"57",
-             "small_image":"/w/s/ws06-purple_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-m-purple",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"169",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-M-Purple",
-             "id":1457,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-M-Purple",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-red_main.jpg",
-             "thumbnail":"/w/s/ws06-red_main.jpg",
-             "color":"58",
-             "small_image":"/w/s/ws06-red_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-m-red",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"169",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-M-Red",
-             "id":1458,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-M-Red",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-gray_main.jpg",
-             "thumbnail":"/w/s/ws06-gray_main.jpg",
-             "color":"52",
-             "small_image":"/w/s/ws06-gray_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-l-gray",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"170",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-L-Gray",
-             "id":1459,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-L-Gray",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-purple_main.jpg",
-             "thumbnail":"/w/s/ws06-purple_main.jpg",
-             "color":"57",
-             "small_image":"/w/s/ws06-purple_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-l-purple",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"170",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-L-Purple",
-             "id":1460,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-L-Purple",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-red_main.jpg",
-             "thumbnail":"/w/s/ws06-red_main.jpg",
-             "color":"58",
-             "small_image":"/w/s/ws06-red_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-l-red",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"170",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-L-Red",
-             "id":1461,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-L-Red",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-gray_main.jpg",
-             "thumbnail":"/w/s/ws06-gray_main.jpg",
-             "color":"52",
-             "small_image":"/w/s/ws06-gray_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xl-gray",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"171",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-XL-Gray",
-             "id":1462,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-XL-Gray",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-purple_main.jpg",
-             "thumbnail":"/w/s/ws06-purple_main.jpg",
-             "color":"57",
-             "small_image":"/w/s/ws06-purple_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xl-purple",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"171",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-XL-Purple",
-             "id":1463,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-XL-Purple",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          },
-          {
-             "image":"/w/s/ws06-red_main.jpg",
-             "thumbnail":"/w/s/ws06-red_main.jpg",
-             "color":"58",
-             "small_image":"/w/s/ws06-red_main.jpg",
-             "tax_class_id":"2",
-             "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xl-red",
-             "regular_price":35.670001,
-             "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
-             "size":"171",
-             "final_price":35.670001,
-             "special_price":0,
-             "price":29,
-             "minimal_price":35.670001,
-             "name": name + "-XL-Red",
-             "id":1464,
-             "category_ids":[
-                "25",
-                "33",
-                "8",
-                "36",
-                "2"
-             ],
-             "sku":"WS06-XL-Red",
-             "max_regular_price":35.670001,
-             "status":1,
-             "priceTax":6.67,
-             "priceInclTax":35.67,
-             "specialPriceTax": None,
-             "specialPriceInclTax": None
-          }
-       ],
-       "max_regular_price":35.670001,
+
+            # START OF CONFIGURABLE CHILDREN
+
+            "configurable_children_original": configurable_children,
+            "configurable_children": configurable_children_array,
+
+            # END OF CONFIGURABLE CHILDREN
+
+            "max_regular_price":35.670001,
        "category":[
           {
              "path":"women/tops-women/tees-women/tees-25",
