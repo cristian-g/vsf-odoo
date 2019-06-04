@@ -185,7 +185,8 @@ class PublicAPI(http.Controller):
                 "2"
              ],
              # "sku":"WS06-XL-Yellow",
-             "sku":"WS06-" + size_id_string + "-" + color_id_string,
+             # "sku":"WS06-" + size_id_string + "-" + color_id_string,
+             "sku": str(configurable.get("id")),
              "max_regular_price":35.670001,
              "status":1,
              "priceTax":6.67,

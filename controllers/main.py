@@ -503,59 +503,6 @@ class APIController(http.Controller):
     @validate_optional_token
     @http.route('/api/cart/pull', type='http', auth="none", methods=['GET'], csrf=False)
     def cart(self, **payload):
-        return simple_response(
-            {
-                "code": 200,
-                "result": [
-                    {
-                        "item_id": 66257,
-                        "sku": "WS08-M-Black",
-                        "qty": 1,
-                        "name": "Minerva LumaTech&trade; V-Tee",
-                        "price": 32,
-                        "product_type": "configurable",
-                        "quote_id": "dceac8e2172a1ff0cfba24d757653257",
-                        "product_option": {
-                            "extension_attributes": {
-                                "configurable_item_options": [
-                                    {
-                                        "option_id": "93",
-                                        "option_value": 49
-                                    },
-                                    {
-                                        "option_id": "142",
-                                        "option_value": 169
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "item_id": 66266,
-                        "sku": "WS08-XS-Red",
-                        "qty": 1,
-                        "name": "Minerva LumaTech&trade; V-Tee",
-                        "price": 32,
-                        "product_type": "configurable",
-                        "quote_id": "dceac8e2172a1ff0cfba24d757653257",
-                        "product_option": {
-                            "extension_attributes": {
-                                "configurable_item_options": [
-                                    {
-                                        "option_id": "93",
-                                        "option_value": 58
-                                    },
-                                    {
-                                        "option_id": "142",
-                                        "option_value": 167
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                ]
-            }
-        )
 
         if request.session.uid:
 
@@ -611,13 +558,16 @@ class APIController(http.Controller):
                 )
 
                 items = []
-                items.append(self.cart_item_json(93, "color", "Color"))
-                items.append(self.cart_item_json(142, "size", "Size"))
+                lines = data[0]['lines']
+                for line in lines:
+                    product_id = line['product_id'][0]
+                    items.append(self.cart_item_json(line['name'], product_id))
 
                 return simple_response(
                     {
                         "code": 200,
-                        "result": items
+                        "result": items,
+                        "data_original": data[0]['lines']
                     }
                 )
             else:
@@ -635,9 +585,10 @@ class APIController(http.Controller):
             )
 
     def cart_item_json(self, name, item_id):
-        return {
+        result = {
           "item_id": item_id,
-          "sku": "WS08-XS-Red",
+          # "sku": "WS08-XS-Red",
+          "sku": str(item_id),
           "qty": 1,
           "name": name,
           "price": 32,
@@ -658,6 +609,7 @@ class APIController(http.Controller):
             }
           }
         }
+        return result
 
     def user_json(self, email):
         return {
@@ -836,6 +788,14 @@ class APIController(http.Controller):
                 int(configurable_item_option.get('option_value'))
             )
 
+        product_templates = request.env['product.template'].sudo().search_read(
+            domain=[('id', '=', received_product_tmpl_id)],
+            fields=['name'],
+            offset=None,
+            limit=None,
+            order=None)
+        product_template_name = product_templates[0]["name"]
+
         products = request.env['product.product'].sudo().search_read(
             domain=[('product_tmpl_id', '=', received_product_tmpl_id)],
             fields=['id', 'attribute_value_ids'],
@@ -880,7 +840,7 @@ class APIController(http.Controller):
             'product_id': desired_product_id,
             'product_uom_qty': desired_quantity,
             'customer_lead': 0.0,
-            'name': 'New line',
+            'name': product_template_name,
             'price_unit': 100.0,
         })
 
