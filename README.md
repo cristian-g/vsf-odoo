@@ -6,6 +6,8 @@
 4. Install module
 ## Class diagram
 ![Class diagram](docs/vuepress/public/class_diagram.png)
+## Architecture
+![Architecture](docs/vuepress/public/architecture.png)
 ## Endpoints
 This section contains an example of call to each endpoint. If you are testing it locally, your base url can be: `base_url = 'http://localhost:8069'`
 
