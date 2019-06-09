@@ -1,11 +1,11 @@
 {
-    'name': 'RESTful API',
+    'name': 'Vue Storefront API',
     'version': '0.0.1',
     'category': 'API',
     'author': 'Cristian González Ruz',
     'website': 'http://cristiangonzalez.com',
-    'summary': 'RESTful API',
-    'support': 'hello@cristiangonzalez.com',
+    'summary': 'API for eCommerce PWA',
+    'support': 'vsfodoo@cristiangonzalez.com',
     'description': """
 RESTful API
 ===========
