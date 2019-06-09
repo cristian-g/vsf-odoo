@@ -574,8 +574,8 @@ class APIController(http.Controller):
                 return invalid_response(data)
         else:
             items = []
-            items.append(self.cart_item_json("Minerva LumaTech&trade; V-Tee", 66266))
-            items.append(self.cart_item_json("Minerva 2", 66267))
+            # items.append(self.cart_item_json("Minerva LumaTech&trade; V-Tee", 66266))
+            # items.append(self.cart_item_json("Minerva 2", 66267))
 
             return simple_response(
                 {
