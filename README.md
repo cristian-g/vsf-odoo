@@ -104,3 +104,13 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 ![Categories and subcategories](docs/vuepress/public/categories_and_subcategories.gif)
 ### Variants
 ![Variants](docs/vuepress/public/variants.gif)
+
+## The license
+
+Odoo module for Vue Storefront source code is completely free and released under the [MIT License](https://github.com/cristian-g/vsf-odoo/blob/master/LICENSE).
+
+## Contributing
+
+If you like the idea behind Odoo and Vue Storefront and want to become a contributor - do not hesitate and check our [list of the active issues](https://github.com/cristian-g/vsf-odoo/issues) or contact me directly via vsfodoo@cristiangonzalez.com.
+
+If you have discovered a 🐜 or have a feature suggestion, feel free to create an issue on Github.
