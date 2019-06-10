@@ -91,13 +91,17 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 
 ## Installation of the Odoo module
 1. `cd C:\Program Files (x86)\Odoo 12.0\server\odoo\addons`
-2. `git clone https://github.com/cristian-g/restful.git restful`
+2. `git clone https://github.com/cristian-g/vsf-odoo.git vue_storefront`
 3. Update apps/modules list
 ![List](docs/vuepress/public/list.png)
 ![Update list](docs/vuepress/public/update_list.png)
 4. Install module
 ![Install](docs/vuepress/public/install.png)
 ![Installed](docs/vuepress/public/installed.png)
+
+## Installation of Vue Storefront
+Note that the Odoo module just includes the needed API. Continue with the Vue Storefront installation:
+[https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md](https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md)
 
 ## Examples
 ### Product listing
