@@ -6,7 +6,9 @@ def valid_response(data, status=200):
     """Valid Response
     This will be return when the http request was successfully processed."""
     data = {
-        'items': data,
+        'hits': {
+            'hits': data,
+        },
         'total': len(data),
         'start': 0,
         'perPage': len(data),
