@@ -761,8 +761,8 @@ class PublicAPI(http.Controller):
                             "parent_id": parent_id,
                             "name": name,
                             "id": id + self.category_offset,
-                            "url_path":"categories/category-" + (id + self.category_offset),
-                            "url_key":"category-" + (id + self.category_offset),
+                            "url_path": "categories/category-" + str(id + self.category_offset),
+                            "url_key": "category-" + str(id + self.category_offset),
                             "children_data": children_data
                         },
                         "sort":[
