@@ -37,7 +37,7 @@ While the default SearchAdapter provided by Vue Storefront retrieves data from t
 
 Changes that must be done in order to achieve a working communication between the front-end and the Odoo back-end are avaliable on this repo:
 
-[https://github.com/cristian-g/vue-storefront](https://github.com/cristian-g/vue-storefront)
+[https://github.com/cristian-g/vue-storefront](https://github.com/cristian-g/vue-storefront/compare/5c3f4aa2f827b4910248f4a666b24e93ba5d5248...develop)
 
 ## Odoo module
 
