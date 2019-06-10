@@ -107,6 +107,11 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 ### Variants
 ![Variants](docs/vuepress/public/variants.gif)
 
+## Roadmap
+
+- Open-source alpha release (June) - Done
+- Beta release (July)
+
 ## The license
 
 Odoo module for Vue Storefront source code is completely free and released under the [MIT License](https://github.com/cristian-g/vsf-odoo/blob/master/LICENSE).
