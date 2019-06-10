@@ -28,7 +28,7 @@ The class called SearchAdapter is a client-side code which is responsible of ret
 -  Category
 -  Tax rule
 
-![UML class diagram of SearchAdapter client-side class](docs/vuepress/public/search_adapter.png)
+<img width="400" alt="UML class diagram of SearchAdapter client-side class" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/search_adapter.png?raw=true">
 
 As a result, this class is responsible of loading the product listing that appears on the home screen and category pages, not only when the user makes a search.
 While the default SearchAdapter provided by Vue Storefront retrieves data from the ElasticSearch back-end, this project uses a RESTful API using JSON format as back-end. 
