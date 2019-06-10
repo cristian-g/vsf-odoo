@@ -7,7 +7,7 @@ from odoo.addons.restful.common import invalid_response, valid_response, simple_
 
 _logger = logging.getLogger(__name__)
 
-class PublicAPI(http.Controller):
+class PublicAPIController(http.Controller):
     """."""
 
     category_offset = 2

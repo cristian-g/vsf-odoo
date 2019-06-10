@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 expires_in = 'restful.access_token_expires_in'
 
 
-class APIToken(http.Controller):
+class TokenAPIController(http.Controller):
     """."""
 
     def __init__(self):

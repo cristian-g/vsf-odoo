@@ -59,7 +59,7 @@ _routes = [
 ]
 
 
-class APIController(http.Controller):
+class PrivateAPIController(http.Controller):
     """."""
 
     def __init__(self):
