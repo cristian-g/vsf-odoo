@@ -96,3 +96,11 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 4. Install module
 ![Install](docs/vuepress/public/install.png)
 ![Installed](docs/vuepress/public/installed.png)
+
+## Examples
+### Product listing
+![Product listing](docs/vuepress/public/product_listing.gif)
+### Categories and subcategories
+![Categories and subcategories](docs/vuepress/public/categories_and_subcategories.gif)
+### Variants
+![Variants](docs/vuepress/public/variants.gif)
