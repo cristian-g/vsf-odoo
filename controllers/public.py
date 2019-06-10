@@ -30,7 +30,7 @@ class PublicAPI(http.Controller):
             #}),
         #)
         data = request.env['product.template'].sudo().search_read(
-            domain=[], fields=['id', 'name', 'description', 'price', 'public_categ_ids', 'default_code', 'attribute_line_ids'], offset=None, limit=None,
+            domain=[], fields=['id', 'name', 'description', 'list_price', 'public_categ_ids', 'default_code', 'attribute_line_ids'], offset=None, limit=None,
             order=None)
         if data:
             #return valid_response(self.productJSON())
@@ -71,6 +71,7 @@ class PublicAPI(http.Controller):
                 configurable_children_array = []
                 for configurable_children in configurable_childrens:
 
+                    configurable_children['list_price'] = element.get('list_price')
                     configurable_children['attributes'] = []
 
                     value_ids = configurable_children['attribute_value_ids']
@@ -91,6 +92,7 @@ class PublicAPI(http.Controller):
                     element.get('name'),
                     element.get('id'),
                     element.get('default_code'),
+                    element.get('list_price'),
                     element.get('attribute_line_ids'),
                     variants_array,
                     configurable_children_array,
@@ -166,15 +168,15 @@ class PublicAPI(http.Controller):
              "tax_class_id":"2",
              "has_options":"0",
              "url_key":"elisa-evercool-trade-tee-xl-yellow",
-             "regular_price":35.670001,
+             "regular_price": configurable.get("list_price"),
              "required_options":"0",
-             "max_price":35.670001,
-             "minimal_regular_price":35.670001,
+             "max_price": configurable.get("list_price"),
+             "minimal_regular_price": configurable.get("list_price"),
              "size": size_id_string,
-             "final_price":35.670001,
+             "final_price": configurable.get("list_price"),
              "special_price":0,
              "price":29,
-             "minimal_price":35.670001,
+             "minimal_price": configurable.get("list_price"),
              "name": size_id_string + "-" + color_id_string,
              "id": configurable.get("id"),
              "category_ids":[
@@ -187,16 +189,16 @@ class PublicAPI(http.Controller):
              # "sku":"WS06-XL-Yellow",
              # "sku":"WS06-" + size_id_string + "-" + color_id_string,
              "sku": str(configurable.get("id")),
-             "max_regular_price":35.670001,
+             "max_regular_price": configurable.get("list_price"),
              "status":1,
              "priceTax":6.67,
-             "priceInclTax":35.67,
+             "priceInclTax": configurable.get("list_price"),
              "specialPriceTax": None,
              "specialPriceInclTax": None
           }
         return result
 
-    def productJSON(self, name, item_id, code, attribute_line_ids, variants, configurable_children):
+    def productJSON(self, name, item_id, code, price, attribute_line_ids, variants, configurable_children):
 
         # Configurable options
         configurable_options_array = []
@@ -243,7 +245,7 @@ class PublicAPI(http.Controller):
        ],
        "regular_price":29,
        "erin_recommends":"0",
-       "final_price":35.670001,
+       "final_price": price,
        "price":29,
        "color_options":[
           52,
@@ -310,11 +312,11 @@ class PublicAPI(http.Controller):
        "url_key":"elisa-evercool-trade-tee",
        "performance_fabric":"0",
        "sale":"0",
-       "max_price":35.670001,
-       "minimal_regular_price":35.670001,
+       "max_price": price,
+       "minimal_regular_price": price,
        "material":"153,154",
        "special_price":0,
-       "minimal_price":35.670001,
+       "minimal_price": price,
        "name": name,
 
             # START OF CONFIGURABLE CHILDREN
@@ -324,7 +326,7 @@ class PublicAPI(http.Controller):
 
             # END OF CONFIGURABLE CHILDREN
 
-            "max_regular_price":35.670001,
+            "max_regular_price": price,
        "category":[
           {
              "path":"women/tops-women/tees-women/tees-25",
@@ -359,7 +361,7 @@ class PublicAPI(http.Controller):
        ],
        "status":1,
        "priceTax":6.67,
-       "priceInclTax":35.67,
+       "priceInclTax": price,
        "specialPriceTax": None,
        "specialPriceInclTax": None
     }
