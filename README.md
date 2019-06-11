@@ -106,10 +106,12 @@ Note that the Odoo module just includes the needed API. Continue with the Vue St
 <p align="center">
     <img align="center" alt="Product listing" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/product_listing.gif?raw=true">
 </p>
+
 ### Categories and subcategories
 <p align="center">
     <img align="center" alt="Categories and subcategories" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/categories_and_subcategories.gif?raw=true">
 </p>
+
 ### Variants
 <p align="center">
     <img align="center" alt="Variants" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/variants.gif?raw=true">
