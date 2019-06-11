@@ -56,26 +56,24 @@ They are declared as Python classes that handle requests by extending the Contro
 
 #### PublicAPIController
 
-Handles requests which do not use user authentication.
-
-Examples: retrieve products, sign up, etc.
+- Handles requests which do not use user authentication.
+- Examples: retrieve products, sign up, etc.
 
 #### PrivateAPIController
 
-Handles requests which can use user authentication (it can either be required or optional).
-
-Examples: add product to cart, edit profile, etc.
+- Handles requests which can use user authentication (it can either be required or optional).
+- Examples: add product to cart, edit profile, etc.
 
 #### TokenAPIController
 
-Handles requests about generating or invalidating authentication tokens. It receives the credentials of the user – email and password – and then returns the computed token.
+- Handles requests about generating or invalidating authentication tokens. It receives the credentials of the user – email and password – and then returns the computed token.
 
 ### Business objects
 
 They are declared as Python classes extending Model class from odoo.models package which integrates them into the automated persistence system (database). In the case of this project:
 
-- ** AccessToken** is a new model created to encapsulate the attributes of each authentication token, such as its lifetime and the related user.
-- ** User** model has been explicitly created in order to extend the existing User model to add the related identification tokens.
+- **AccessToken** is a new model created to encapsulate the attributes of each authentication token, such as its lifetime and the related user.
+- **User** model has been explicitly created in order to extend the existing User model to add the related identification tokens.
 
 ### Data files
 
@@ -105,11 +103,17 @@ Note that the Odoo module just includes the needed API. Continue with the Vue St
 
 ## Examples
 ### Product listing
+<p align="center">
 ![Product listing](docs/vuepress/public/product_listing.gif)
+</p>
 ### Categories and subcategories
+<p align="center">
 ![Categories and subcategories](docs/vuepress/public/categories_and_subcategories.gif)
+</p>
 ### Variants
+<p align="center">
 ![Variants](docs/vuepress/public/variants.gif)
+</p>
 
 ## Roadmap
 
