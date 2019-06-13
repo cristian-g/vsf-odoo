@@ -372,6 +372,366 @@ class PublicAPIController(http.Controller):
 
     @http.route('/api/catalog/vue_storefront_catalog/attribute/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def attributes_json(self, **payload):
+        result = {
+           "took":0,
+           "timed_out": False,
+           "_shards":{
+              "total":5,
+              "successful":5,
+              "skipped":0,
+              "failed":0
+           },
+           "hits":{
+              "total":4,
+              "max_score":0,
+              "hits":[
+                 {
+                    "_index":"vue_storefront_catalog_1552559102",
+                    "_type":"attribute",
+                    "_id":"145",
+                    "_score":0,
+                    "_source":{
+                       "is_wysiwyg_enabled": False,
+                       "is_html_allowed_on_front": True,
+                       "used_for_sort_by": False,
+                       "is_filterable": True,
+                       "is_filterable_in_search": False,
+                       "is_used_in_grid": False,
+                       "is_visible_in_grid": False,
+                       "is_filterable_in_grid": False,
+                       "position":0,
+                       "apply_to":[
+
+                       ],
+                       "is_searchable":"0",
+                       "is_visible_in_advanced_search":"0",
+                       "is_comparable":"0",
+                       "is_used_for_promo_rules":"1",
+                       "is_visible_on_front":"0",
+                       "used_in_product_listing":"0",
+                       "is_visible": True,
+                       "scope":"global",
+                       "attribute_id":145,
+                       "attribute_code":"erin_recommends",
+                       "frontend_input":"boolean",
+                       "entity_type_id":"4",
+                       "is_required": False,
+                       "options":[
+                          {
+                             "label":"Yes",
+                             "value":"1"
+                          },
+                          {
+                             "label":"No",
+                             "value":"0"
+                          }
+                       ],
+                       "is_user_defined": True,
+                       "default_frontend_label":"Erin Recommends",
+                       "frontend_labels": None,
+                       "backend_type":"int",
+                       "source_model":"Magento\\Eav\\Model\\Entity\\Attribute\\Source\\Boolean",
+                       "default_value":"",
+                       "is_unique":"0",
+                       "validation_rules":[
+
+                       ],
+                       "id":145,
+                       "tsk":1551705231251
+                    }
+                 },
+                 {
+                    "_index":"vue_storefront_catalog_1552559102",
+                    "_type":"attribute",
+                    "_id":"142",
+                    "_score":0,
+                    "_source":{
+                       "is_wysiwyg_enabled": False,
+                       "is_html_allowed_on_front": True,
+                       "used_for_sort_by": False,
+                       "is_filterable": True,
+                       "is_filterable_in_search": False,
+                       "is_used_in_grid": False,
+                       "is_visible_in_grid": False,
+                       "is_filterable_in_grid": False,
+                       "position":0,
+                       "apply_to":[
+
+                       ],
+                       "is_searchable":"0",
+                       "is_visible_in_advanced_search":"0",
+                       "is_comparable":"0",
+                       "is_used_for_promo_rules":"1",
+                       "is_visible_on_front":"0",
+                       "used_in_product_listing":"1",
+                       "is_visible": True,
+                       "scope":"global",
+                       "attribute_id":142,
+                       "attribute_code":"size",
+                       "frontend_input":"select",
+                       "entity_type_id":"4",
+                       "is_required": False,
+                       "options":[
+                          {
+                             "label":" ",
+                             "value":""
+                          },
+                          {
+                             "label":"55 cm",
+                             "value":"91"
+                          },
+                          {
+                             "label":"XS",
+                             "value":"167"
+                          },
+                          {
+                             "label":"65 cm",
+                             "value":"92"
+                          },
+                          {
+                             "label":"S",
+                             "value":"168"
+                          },
+                          {
+                             "label":"75 cm",
+                             "value":"93"
+                          },
+                          {
+                             "label":"M",
+                             "value":"169"
+                          },
+                          {
+                             "label":"6 foot",
+                             "value":"94"
+                          },
+                          {
+                             "label":"L",
+                             "value":"170"
+                          },
+                          {
+                             "label":"8 foot",
+                             "value":"95"
+                          },
+                          {
+                             "label":"XL",
+                             "value":"171"
+                          },
+                          {
+                             "label":"10 foot",
+                             "value":"96"
+                          },
+                          {
+                             "label":"28",
+                             "value":"172"
+                          },
+                          {
+                             "label":"29",
+                             "value":"173"
+                          },
+                          {
+                             "label":"30",
+                             "value":"174"
+                          },
+                          {
+                             "label":"31",
+                             "value":"175"
+                          },
+                          {
+                             "label":"32",
+                             "value":"176"
+                          },
+                          {
+                             "label":"33",
+                             "value":"177"
+                          },
+                          {
+                             "label":"34",
+                             "value":"178"
+                          },
+                          {
+                             "label":"36",
+                             "value":"179"
+                          },
+                          {
+                             "label":"38",
+                             "value":"180"
+                          }
+                       ],
+                       "is_user_defined": True,
+                       "default_frontend_label":"Size",
+                       "frontend_labels": None,
+                       "backend_type":"int",
+                       "source_model":"Magento\\Eav\\Model\\Entity\\Attribute\\Source\\Table",
+                       "default_value":"91",
+                       "is_unique":"0",
+                       "validation_rules":[
+
+                       ],
+                       "id":142,
+                       "tsk":1551705231251
+                    }
+                 },
+                 {
+                    "_index":"vue_storefront_catalog_1552559102",
+                    "_type":"attribute",
+                    "_id":"93",
+                    "_score":0,
+                    "_source":{
+                       "is_wysiwyg_enabled": False,
+                       "is_html_allowed_on_front": True,
+                       "used_for_sort_by": False,
+                       "is_filterable": True,
+                       "is_filterable_in_search": False,
+                       "is_used_in_grid": True,
+                       "is_visible_in_grid": False,
+                       "is_filterable_in_grid": True,
+                       "position":0,
+                       "apply_to":[
+                          "simple",
+                          "virtual",
+                          "configurable"
+                       ],
+                       "is_searchable":"0",
+                       "is_visible_in_advanced_search":"0",
+                       "is_comparable":"0",
+                       "is_used_for_promo_rules":"1",
+                       "is_visible_on_front":"0",
+                       "used_in_product_listing":"1",
+                       "is_visible": True,
+                       "scope":"global",
+                       "attribute_id":93,
+                       "attribute_code":"color",
+                       "frontend_input":"select",
+                       "entity_type_id":"4",
+                       "is_required": False,
+                       "options":[
+                          {
+                             "label":" ",
+                             "value":""
+                          },
+                          {
+                             "label":"Black",
+                             "value":"49"
+                          },
+                          {
+                             "label":"Blue",
+                             "value":"50"
+                          },
+                          {
+                             "label":"Brown",
+                             "value":"51"
+                          },
+                          {
+                             "label":"Gray",
+                             "value":"52"
+                          },
+                          {
+                             "label":"Green",
+                             "value":"53"
+                          },
+                          {
+                             "label":"Lavender",
+                             "value":"54"
+                          },
+                          {
+                             "label":"Multi",
+                             "value":"55"
+                          },
+                          {
+                             "label":"Orange",
+                             "value":"56"
+                          },
+                          {
+                             "label":"Purple",
+                             "value":"57"
+                          },
+                          {
+                             "label":"Red",
+                             "value":"58"
+                          },
+                          {
+                             "label":"White",
+                             "value":"59"
+                          },
+                          {
+                             "label":"Yellow",
+                             "value":"60"
+                          }
+                       ],
+                       "is_user_defined": True,
+                       "default_frontend_label":"Color",
+                       "frontend_labels": None,
+                       "backend_type":"int",
+                       "source_model":"Magento\\Eav\\Model\\Entity\\Attribute\\Source\\Table",
+                       "default_value":"49",
+                       "is_unique":"0",
+                       "validation_rules":[
+
+                       ],
+                       "id":93,
+                       "tsk":1551705231251
+                    }
+                 },
+                 {
+                    "_index":"vue_storefront_catalog_1552559102",
+                    "_type":"attribute",
+                    "_id":"77",
+                    "_score":0,
+                    "_source":{
+                       "is_wysiwyg_enabled": False,
+                       "is_html_allowed_on_front": False,
+                       "used_for_sort_by": True,
+                       "is_filterable": True,
+                       "is_filterable_in_search": False,
+                       "is_used_in_grid": False,
+                       "is_visible_in_grid": False,
+                       "is_filterable_in_grid": False,
+                       "position":0,
+                       "apply_to":[
+                          "simple",
+                          "virtual",
+                          "bundle",
+                          "downloadable",
+                          "configurable"
+                       ],
+                       "is_searchable":"1",
+                       "is_visible_in_advanced_search":"1",
+                       "is_comparable":"0",
+                       "is_used_for_promo_rules":"0",
+                       "is_visible_on_front":"0",
+                       "used_in_product_listing":"1",
+                       "is_visible": True,
+                       "scope":"global",
+                       "attribute_id":77,
+                       "attribute_code":"price",
+                       "frontend_input":"price",
+                       "entity_type_id":"4",
+                       "is_required": True,
+                       "options":[
+
+                       ],
+                       "is_user_defined": False,
+                       "default_frontend_label":"Price",
+                       "frontend_labels": None,
+                       "backend_type":"decimal",
+                       "backend_model":"Magento\\Catalog\\Model\\Product\\Attribute\\Backend\\Price",
+                       "is_unique":"0",
+                       "validation_rules":[
+
+                       ],
+                       "id":77,
+                       "tsk":1551705231251
+                    }
+                 }
+              ]
+           }
+        }
+        return simple_response(result)
+
+
+
+
+
         attributes = []
         attributes.append(self.attributeJSON("93", "color", "Color"))
         attributes.append(self.attributeJSON("142", "size", "Size"))
@@ -762,7 +1122,7 @@ class PublicAPIController(http.Controller):
                             "name": name,
                             "id": id + self.category_offset,
                             "url_path": "categories/category-" + str(id + self.category_offset),
-                            "url_key": "category-" + str(id + self.category_offset),
+                            "url_key": str(id + self.category_offset),
                             "children_data": children_data
                         },
                         "sort":[
