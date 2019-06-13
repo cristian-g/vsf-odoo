@@ -37,7 +37,7 @@ While the default SearchAdapter provided by Vue Storefront retrieves data from t
 
 Changes that must be done in order to achieve a working communication between the front-end and the Odoo back-end are avaliable on this repo:
 
-[https://github.com/cristian-g/vue-storefront](https://github.com/cristian-g/vue-storefront)
+[https://github.com/cristian-g/vue-storefront](https://github.com/cristian-g/vue-storefront/compare/5c3f4aa2f827b4910248f4a666b24e93ba5d5248...develop)
 
 ## Odoo module
 
@@ -56,26 +56,24 @@ They are declared as Python classes that handle requests by extending the Contro
 
 #### PublicAPIController
 
-Handles requests which do not use user authentication.
-
-Examples: retrieve products, sign up, etc.
+- Handles requests which do not use user authentication.
+- Examples: retrieve products, sign up, etc.
 
 #### PrivateAPIController
 
-Handles requests which can use user authentication (it can either be required or optional).
-
-Examples: add product to cart, edit profile, etc.
+- Handles requests which can use user authentication (it can either be required or optional).
+- Examples: add product to cart, edit profile, etc.
 
 #### TokenAPIController
 
-Handles requests about generating or invalidating authentication tokens. It receives the credentials of the user – email and password – and then returns the computed token.
+- Handles requests about generating or invalidating authentication tokens. It receives the credentials of the user – email and password – and then returns the computed token.
 
 ### Business objects
 
 They are declared as Python classes extending Model class from odoo.models package which integrates them into the automated persistence system (database). In the case of this project:
 
-- ** AccessToken** is a new model created to encapsulate the attributes of each authentication token, such as its lifetime and the related user.
-- ** User** model has been explicitly created in order to extend the existing User model to add the related identification tokens.
+- **AccessToken** is a new model created to encapsulate the attributes of each authentication token, such as its lifetime and the related user.
+- **User** model has been explicitly created in order to extend the existing User model to add the related identification tokens.
 
 ### Data files
 
@@ -91,7 +89,7 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 
 ## Installation of the Odoo module
 1. `cd C:\Program Files (x86)\Odoo 12.0\server\odoo\addons`
-2. `git clone https://github.com/cristian-g/restful.git restful`
+2. `git clone https://github.com/cristian-g/vsf-odoo.git vue_storefront`
 3. Update apps/modules list
 ![List](docs/vuepress/public/list.png)
 ![Update list](docs/vuepress/public/update_list.png)
@@ -99,13 +97,30 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 ![Install](docs/vuepress/public/install.png)
 ![Installed](docs/vuepress/public/installed.png)
 
+## Installation of Vue Storefront
+Note that the Odoo module just includes the needed API. Continue with the Vue Storefront installation:
+[https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md](https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md)
+
 ## Examples
 ### Product listing
-![Product listing](docs/vuepress/public/product_listing.gif)
+<p align="center">
+    <img align="center" alt="Product listing" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/product_listing.gif?raw=true">
+</p>
+
 ### Categories and subcategories
-![Categories and subcategories](docs/vuepress/public/categories_and_subcategories.gif)
+<p align="center">
+    <img align="center" alt="Categories and subcategories" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/categories_and_subcategories.gif?raw=true">
+</p>
+
 ### Variants
-![Variants](docs/vuepress/public/variants.gif)
+<p align="center">
+    <img align="center" alt="Variants" src="https://github.com/cristian-g/vsf-odoo/blob/master/docs/vuepress/public/variants.gif?raw=true">
+</p>
+
+## Roadmap
+
+- Open-source alpha release (June) - Done
+- Beta release (July)
 
 ## The license
 
