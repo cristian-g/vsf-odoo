@@ -98,8 +98,15 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 ![Installed](docs/vuepress/public/installed.png)
 
 ## Installation of Vue Storefront
-Note that the Odoo module just includes the needed API. Continue with the Vue Storefront installation:
-[https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md](https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md)
+Note that the Odoo module just includes the needed API. 
+
+Install Vue Storefront, including my SearchAdapter from my repo: [https://github.com/cristian-g/vue-storefront](https://github.com/cristian-g/vue-storefront)
+
+Remember to set ```useExactUrlsNoProxy``` to ```true```, if you are not using ImageMagick or similar.
+
+In order to set up a production environment, it is recommended to follow [this instructions](https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/installation/production-setup.md).
+
+Otherwise, in case you are just developing, just run ```yarn``` in order to install the dependencies and then ```yarn dev``` in order to compile and run the front-end in your browser.
 
 ## Examples
 ### Product listing
