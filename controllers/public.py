@@ -10,6 +10,7 @@ _logger = logging.getLogger(__name__)
 class PublicAPIController(http.Controller):
     """."""
 
+    host = "http://localhost:8069"
     category_offset = 2
     size_attribute_name = "Talla"
     color_attribute_name = "Color"
@@ -161,10 +162,10 @@ class PublicAPIController(http.Controller):
         color_id_string = str(color_id)
 
         result = {
-             "image":"/w/s/ws06-yellow_main.jpg",
-             "thumbnail":"/w/s/ws06-yellow_main.jpg",
+             "image": self.host + "/web/image/product.product/" + str(configurable.get("id")) + "/image",
+             "thumbnail": self.host + "/web/image/product.product/" + str(configurable.get("id")) + "/image",
              "color": color_id_string,
-             "small_image":"/w/s/ws06-yellow_main.jpg",
+             "small_image": self.host + "/web/image/product.product/" + str(configurable.get("id")) + "/image",
              "tax_class_id":"2",
              "has_options":"0",
              "url_key":"elisa-evercool-trade-tee-xl-yellow",
@@ -213,6 +214,9 @@ class PublicAPIController(http.Controller):
             configurable_children_array.append(
                 self.configurable_children_JSON(configurable, item_id)
             )
+
+        # First variant id
+        first_variant_id = configurable_children[0].get("id")
 
         source = {
             "attribute_line_ids": attribute_line_ids,
@@ -285,28 +289,14 @@ class PublicAPIController(http.Controller):
 #       "url_path":"women/tops-women/tees-women/tees-25/elisa-evercool-and-trade-tee-1465.html",
        "slug": code,
        "url_path": code,
-       "image":"/w/s/ws06-purple_main.jpg",
+       # "image":"/w/s/ws06-purple_main.jpg",
+       "image": self.host + "/web/image/product.product/" + str(first_variant_id) + "/image",
        "new":"1",
-       "thumbnail":"/w/s/ws06-purple_main.jpg",
+       "thumbnail": self.host + "/web/image/product.product/" + str(first_variant_id) + "/image",
        "visibility":4,
        "type_id":"configurable",
        "tax_class_id":"2",
-       "media_gallery":[
-          {
-             "vid": None,
-             "image":"/w/s/ws06-purple_main.jpg",
-             "pos":1,
-             "typ":"image",
-             "lab":""
-          },
-          {
-             "vid": None,
-             "image":"/w/s/ws06-purple_back.jpg",
-             "pos":2,
-             "typ":"image",
-             "lab":""
-          }
-       ],
+       "media_gallery": [],
        "climate":"205,209",
        "style_general":"136",
        "url_key":"elisa-evercool-trade-tee",
