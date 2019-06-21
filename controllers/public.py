@@ -898,8 +898,20 @@ class PublicAPIController(http.Controller):
         query_json = json.loads(payload.get('request')).get('query')
         if query_json:
             specific_url_key = json.loads(payload.get('request')).get('query').get('bool').get('filter').get('bool').get('must')[0].get('terms').get('url_key')[0]
-            return simple_response({
-                    "specific_url_key": specific_url_key
+            int_specific_url_key = int(specific_url_key)
+            # Find category
+            categories = request.env['product.public.category'].sudo().search_read(
+                domain=[('id', '=', int_specific_url_key)],
+                fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
+                offset=None, limit=None,
+                order=None)
+            if categories:
+                parent_id = 2
+                response = self.categories_to_response(categories, 2, parent_id)
+                return simple_response(response)
+            else:
+                return invalid_response({
+                    "error": 500
                 })
 
         applied_filter = json.loads(payload.get('request')).get('_appliedFilters')[0]
@@ -1107,28 +1119,53 @@ class PublicAPIController(http.Controller):
             children_data.append({
                 "id": child
             })
-        result = {
-                        "_index":"vue_storefront_catalog_1552559102",
-                        "_type":"category",
-                        "_id": id,
-                        "_score": None,
-                        "_source":{
-                            "path":"1/2/20",
-                            "is_active": True,
-                            "level": level,
-                            "product_count":1,
-                            "children_count": len(children_data),
-                            "parent_id": parent_id,
-                            "name": name,
-                            "id": id + self.category_offset,
-                            "url_path": "categories/category-" + str(id + self.category_offset),
-                            "url_key": str(id + self.category_offset),
-                            "children_data": children_data
-                        },
-                        "sort":[
-                            2
-                        ]
-                    }
+        children_count = len(children_data)
+
+        if children_count == 0:
+            result = {
+                            "_index":"vue_storefront_catalog_1552559102",
+                            "_type":"category",
+                            "_id": id,
+                            "_score": None,
+                            "_source":{
+                                "path":"1/2/20",
+                                "is_active": True,
+                                "level": level,
+                                "product_count":1,
+                                "children_count": str(children_count),
+                                "parent_id": parent_id,
+                                "name": name,
+                                "id": id + self.category_offset,
+                                "url_path": "categories/category-" + str(id + self.category_offset),
+                                "url_key": str(id + self.category_offset),
+                            },
+                            "sort":[
+                                2
+                            ]
+                        }
+        else:
+            result = {
+                "_index": "vue_storefront_catalog_1552559102",
+                "_type": "category",
+                "_id": id,
+                "_score": None,
+                "_source": {
+                    "path": "1/2/20",
+                    "is_active": True,
+                    "level": level,
+                    "product_count": 1,
+                    "children_count": str(children_count),
+                    "parent_id": parent_id,
+                    "name": name,
+                    "id": id + self.category_offset,
+                    "url_path": "categories/category-" + str(id + self.category_offset),
+                    "url_key": str(id + self.category_offset),
+                    "children_data": children_data
+                },
+                "sort": [
+                    2
+                ]
+            }
         return result
 
     @http.route('/api/category_products', methods=['GET'], type='http', auth='none', csrf=False)
