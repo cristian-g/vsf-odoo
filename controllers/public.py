@@ -892,6 +892,16 @@ class PublicAPIController(http.Controller):
         #str(json.loads(payload.get('request')).get('_appliedFilters')[0].get('value').get('eq'))
         # == 2 --> root categories
 
+        request_json = json.loads(payload.get('request'))
+
+        # Check if detail of category
+        query_json = json.loads(payload.get('request')).get('query')
+        if query_json:
+            specific_url_key = json.loads(payload.get('request')).get('query').get('bool').get('filter').get('bool').get('must')[0].get('terms').get('url_key')[0]
+            return simple_response({
+                    "specific_url_key": specific_url_key
+                })
+
         applied_filter = json.loads(payload.get('request')).get('_appliedFilters')[0]
         if applied_filter.get('attribute') == "url_key":
             parent_id = 2
