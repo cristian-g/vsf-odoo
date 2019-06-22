@@ -9,7 +9,7 @@
     'description': """
 RESTful API
 ===========
-See https://github.com/cristian-g/restful
+See https://github.com/cristian-g/vsf-odoo
 """,
     'depends': [
         'web',
@@ -20,7 +20,7 @@ See https://github.com/cristian-g/restful
         'views/res_users.xml',
         'security/ir.model.access.csv',
     ],
-    'images': ['static/description/main_screenshot.png'],
+    'images': ['static/description/icon.png', 'static/description/main_screenshot.png'],
     'license': 'OEEL-1',
     'installable': True,
     'auto_install': False,
