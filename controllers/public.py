@@ -915,6 +915,26 @@ class PublicAPIController(http.Controller):
                 })
 
         applied_filter = json.loads(payload.get('request')).get('_appliedFilters')[0]
+
+        # Check if detail of category with slug
+        if applied_filter.get('attribute') == "slug":
+            slug = applied_filter.get('value').get('eq')
+            requested_id = int(slug.split("/")[-1])
+            # Find category
+            categories = request.env['product.public.category'].sudo().search_read(
+                domain=[('id', '=', requested_id)],
+                fields=['id', 'name', 'display_name', 'parent_id', 'child_id'],
+                offset=None, limit=None,
+                order=None)
+            if categories:
+                parent_id = 2
+                response = self.categories_to_response(categories, 2, parent_id)
+                return simple_response(response)
+            else:
+                return invalid_response({
+                    "error": 500
+                })
+
         if applied_filter.get('attribute') == "url_key":
             parent_id = 2
         else:
