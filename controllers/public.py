@@ -919,7 +919,7 @@ class PublicAPIController(http.Controller):
         # Check if detail of category with slug
         if applied_filter.get('attribute') == "slug":
             slug = applied_filter.get('value').get('eq')
-            requested_id = int(slug.split("/")[-1])
+            requested_id = int(slug.split("-")[-1]) - self.category_offset
             # Find category
             categories = request.env['product.public.category'].sudo().search_read(
                 domain=[('id', '=', requested_id)],
