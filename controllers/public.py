@@ -3,7 +3,7 @@ import json
 import werkzeug.wrappers
 from odoo import http
 from odoo.http import request
-from odoo.addons.restful.common import invalid_response, valid_response, simple_response
+from odoo.addons.vue_storefront.common import invalid_response, valid_response, simple_response
 
 _logger = logging.getLogger(__name__)
 

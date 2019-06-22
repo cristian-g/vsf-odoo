@@ -3,11 +3,11 @@ import json
 import werkzeug.wrappers
 from odoo import http
 from odoo.http import request, Response
-from odoo.addons.restful.common import invalid_response, valid_response, simple_response
+from odoo.addons.vue_storefront.common import invalid_response, valid_response, simple_response
 
 _logger = logging.getLogger(__name__)
 
-expires_in = 'restful.access_token_expires_in'
+expires_in = 'vue_storefront.access_token_expires_in'
 
 
 class TokenAPIController(http.Controller):

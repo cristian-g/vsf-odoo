@@ -5,7 +5,7 @@ import werkzeug.wrappers
 import collections
 from odoo import http
 from odoo.http import request
-from odoo.addons.restful.common import valid_response, invalid_response, extract_arguments, simple_response
+from odoo.addons.vue_storefront.common import valid_response, invalid_response, extract_arguments, simple_response
 
 _logger = logging.getLogger(__name__)
 
