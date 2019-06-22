@@ -20,21 +20,30 @@ class PublicAPIController(http.Controller):
 
     @http.route('/api/catalog/vue_storefront_catalog/product/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def products(self, **payload):
-        # Successful response:
-        #return werkzeug.wrappers.Response(
-            #status=200,
-            #content_type='application/json; charset=utf-8',
-            #headers=[('Cache-Control', 'no-store'),
-            #         ('Pragma', 'no-cache')],
-            #response=json.dumps({
-            #    'products': 'list of products',
-            #}),
-        #)
+
+        # Detect specific category
+        requested_id = -1
+        applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
+        for applied_filter in applied_filters:
+            if applied_filter.get('attribute') == "category_ids":
+                slug = applied_filter.get('value').get('in')[0]
+                requested_id = int(slug.split("-")[-1]) - self.category_offset
+        domain = []
+        if requested_id != -1:
+            domain = [('public_categ_ids', 'in', [requested_id])]
+
         data = request.env['product.template'].sudo().search_read(
-            domain=[], fields=['id', 'name', 'description', 'list_price', 'public_categ_ids', 'default_code', 'attribute_line_ids'], offset=None, limit=None,
+            domain=domain, fields=[
+                'id',
+                'name',
+                'description',
+                'list_price',
+                'public_categ_ids',
+                'default_code',
+                'attribute_line_ids'
+            ], offset=None, limit=None,
             order=None)
         if data:
-            #return valid_response(self.productJSON())
             products = []
             for element in data:
 
@@ -1187,20 +1196,6 @@ class PublicAPIController(http.Controller):
                 ]
             }
         return result
-
-    @http.route('/api/category_products', methods=['GET'], type='http', auth='none', csrf=False)
-    def category_products(self, **payload):
-        data = request.env['product.template'].sudo().search_read(
-            domain=[('public_categ_ids', 'in', [payload.get('category_id')])],
-            fields=['id', 'name', 'description', 'price', 'public_categ_ids'],
-            offset=None,
-            limit=None,
-            order=None
-        )
-        if data:
-            return valid_response(data)
-        else:
-            return invalid_response(data)
 
     @http.route('/api/stock', methods=['GET'], type='http', auth='none', csrf=False)
     def stock(self, **payload):
