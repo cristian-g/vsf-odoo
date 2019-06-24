@@ -6,6 +6,7 @@ import collections
 from odoo import http
 from odoo.http import request
 from odoo.addons.vue_storefront.common import valid_response, invalid_response, extract_arguments, simple_response
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -447,15 +448,33 @@ class PrivateAPIController(http.Controller):
     @http.route('/api/cart/create', type='http', auth="none", methods=['POST'], csrf=False)
     def cart_create(self, **payload):
 
-        #body = request.httprequest.get_data()
-        #body_json = json.loads(body.decode("utf-8"))
+        sale_order = request.env['sale.order'].sudo().create({
+            'currency_id': 1,
+            'date_order': datetime.now(),
+            'name': 'SO',
+            'partner_id': 4,
+            'partner_invoice_id': 4,
+            'partner_shipping_id': 4,
+            'picking_policy': 'direct',
+            'pricelist_id': 1,
+            'warehouse_id': 1,
+            'state': 'draft',
+            'team_id': 2,
+        })
 
-        return simple_response(
-            {
-                "code": 200,
-                "result": "81668"
-            }
-        )
+        if sale_order:
+            return simple_response(
+                {
+                    "code": 200,
+                    "result": str(sale_order.id)
+                }
+            )
+        else:
+            return invalid_response(
+                {
+                    "code": 500,
+                }
+            )
 
     @http.route('/api/cart/delete', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def cart_delete_options(self, **payload):
@@ -1309,83 +1328,3 @@ class PrivateAPIController(http.Controller):
             ],
             response=data
         )
-
-    @validate_token
-    @http.route(_routes, type='http', auth="none", methods=['POST'], csrf=False)
-    def create(self, model=None, id=None, **payload):
-        ioc_name = model
-        model = request.env[self._model].sudo().search(
-            [('model', '=', model)], limit=1)
-        if model:
-            try:
-                resource = request.env[model.model].sudo().create(payload)
-            except Exception as e:
-                return invalid_response('params', e)
-            else:
-                data = {'id': resource.id}
-                if resource:
-                    return valid_response(data)
-                else:
-                    return valid_response(data)
-        return invalid_response('invalid object model', 'The model %s is not available in the registry.' % ioc_name)
-
-    @validate_token
-    @http.route(_routes, type='http', auth="none", methods=['PUT'], csrf=False)
-    def put(self, model=None, id=None, **payload):
-        """."""
-        try:
-            _id = int(id)
-        except Exception as e:
-            return invalid_response('invalid object id', 'invalid literal %s for id with base ' % id)
-        _model = request.env[self._model].sudo().search(
-            [('model', '=', model)], limit=1)
-        if not _model:
-            return invalid_response('invalid object model', 'The model %s is not available in the registry.' % model, 404)
-        try:
-            request.env[_model.model].sudo().browse(_id).write(payload)
-        except Exception as e:
-            return invalid_response('exception', e.name)
-        else:
-            return valid_response('update %s record with id %s successfully!' % (_model.model, _id))
-
-    @validate_token
-    @http.route(_routes, type='http', auth="none", methods=['DELETE'], csrf=False)
-    def delete(self, model=None, id=None, **payload):
-        """."""
-        try:
-            _id = int(id)
-        except Exception as e:
-            return invalid_response('invalid object id', 'invalid literal %s for id with base ' % id)
-        try:
-            record = request.env[model].sudo().search([('id', '=', _id)])
-            if record:
-                record.unlink()
-            else:
-                return invalid_response('missing_record', 'record object with id %s could not be found' % _id, 404)
-        except Exception as e:
-            return invalid_response('exception', e.name, 503)
-        else:
-            return valid_response('record %s has been successfully deleted' % record.id)
-
-    @validate_token
-    @http.route(_routes, type='http', auth="none", methods=['PATCH'], csrf=False)
-    def patch(self, model=None, id=None, action=None, **payload):
-        """."""
-        try:
-            _id = int(id)
-        except Exception as e:
-            return invalid_response('invalid object id', 'invalid literal %s for id with base ' % id)
-        try:
-            record = request.env[model].sudo().search([('id', '=', _id)])
-            _callable = action in [method for method in dir(
-                record) if callable(getattr(record, method))]
-            if record and _callable:
-                # action is a dynamic variable.
-                getattr(record, action)()
-            else:
-                return invalid_response('missing_record',
-                                        'record object with id %s could not be found or %s object has no method %s' % (_id, model, action), 404)
-        except Exception as e:
-            return invalid_response('exception', e, 503)
-        else:
-            return valid_response('record %s has been successfully patched' % record.id)

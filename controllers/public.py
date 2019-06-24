@@ -26,8 +26,10 @@ class PublicAPIController(http.Controller):
         applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
         for applied_filter in applied_filters:
             if applied_filter.get('attribute') == "category_ids":
-                slug = applied_filter.get('value').get('in')[0]
-                requested_id = int(slug.split("-")[-1]) - self.category_offset
+                ins = applied_filter.get('value').get('in')
+                if len(ins) == 1:
+                    slug = applied_filter.get('value').get('in')[0]
+                    requested_id = int(slug.split("-")[-1]) - self.category_offset
         domain = []
         if requested_id != -1:
             domain = [('public_categ_ids', 'in', [requested_id])]
