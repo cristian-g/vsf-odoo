@@ -925,7 +925,8 @@ class PublicAPIController(http.Controller):
                     "error": 500
                 })
 
-        applied_filter = json.loads(payload.get('request')).get('_appliedFilters')[0]
+        applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
+        applied_filter = applied_filters[0]
 
         # Check if detail of category with slug
         if applied_filter.get('attribute') == "slug":
@@ -946,7 +947,7 @@ class PublicAPIController(http.Controller):
                     "error": 500
                 })
 
-        if applied_filter.get('attribute') == "url_key":
+        if applied_filter.get('attribute') == "url_key" or (len(applied_filters) == 1 and applied_filter.get('attribute') == "is_active"):
             parent_id = 2
         else:
             parent_id = applied_filter.get('value').get('eq')
