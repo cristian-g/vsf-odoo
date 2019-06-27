@@ -991,16 +991,7 @@ class PrivateAPIController(http.Controller):
             "code":200,
             "result":"OK"
         }
-        return werkzeug.wrappers.Response(
-            status=200,
-            content_type='application/json; charset=utf-8',
-            headers=[
-                ('Access-Control-Allow-Origin', '*'),
-                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
-                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
-            ],
-            response=data
-        )
+        return simple_response(data)
 
     @http.route('/api/cart/shipping-methods', methods=['OPTIONS'], type='http', auth='none', csrf=False)
     def shipping_methods_options(self, **payload):
