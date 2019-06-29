@@ -90,10 +90,11 @@ They are static assets, such as images, CSS files or JavaScript files that can b
 ## Installation of the Odoo module
 1. `cd C:\Program Files (x86)\Odoo 12.0\server\odoo\addons`
 2. `git clone https://github.com/cristian-g/vsf-odoo.git vue_storefront`
-3. Update apps/modules list
+3. Copy `data/ir_config_param_example.xml` to `data/ir_config_param.xml` and set your desired params
+4. Update apps/modules list
 ![List](docs/vuepress/public/list.png)
 ![Update list](docs/vuepress/public/update_list.png)
-4. Install module
+5. Install module
 ![Install](docs/vuepress/public/install.png)
 ![Installed](docs/vuepress/public/installed.png)
 
