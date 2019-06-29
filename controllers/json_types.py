@@ -1,4 +1,4 @@
-class JsonTypes():
+class JSONTypes():
 
     @staticmethod
     def productJSON(name, item_id, code, price, attribute_line_ids, variants, configurable_children, size_attribute_name, color_attribute_name, host_odoo):
@@ -7,7 +7,7 @@ class JsonTypes():
         configurable_options_array = []
         for variant in variants:
             configurable_options_array.append(
-                JsonTypes.configurable_option_JSON(
+                JSONTypes.configurable_option_JSON(
                     variant,
                     item_id,
                     size_attribute_name,
@@ -19,7 +19,7 @@ class JsonTypes():
         configurable_children_array = []
         for configurable in configurable_children:
             configurable_children_array.append(
-                JsonTypes.configurable_children_JSON(
+                JSONTypes.configurable_children_JSON(
                     configurable,
                     item_id,
                     size_attribute_name,
@@ -457,7 +457,7 @@ class JsonTypes():
     def categories_to_response(categories, level, parent_id, category_offset):
         categories_array = []
         for category in categories:
-            categories_array.append(JsonTypes.category_json(
+            categories_array.append(JSONTypes.category_json(
                 category["name"],
                 category["id"],
                 parent_id,

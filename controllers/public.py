@@ -4,7 +4,7 @@ import werkzeug.wrappers
 from odoo import http
 from odoo.http import request
 from odoo.addons.vue_storefront.common import invalid_response, valid_response, simple_response
-from odoo.addons.vue_storefront.controllers.json_types import JsonTypes
+from odoo.addons.vue_storefront.controllers.json_types import JSONTypes
 
 _logger = logging.getLogger(__name__)
 
@@ -12,10 +12,10 @@ class PublicAPIController(http.Controller):
     """."""
 
     def __init__(self):
-        self.host_odoo = request.env.ref('vue_storefront.host_odoo').sudo().value
-        self.category_offset = request.env.ref('vue_storefront.category_offset').sudo().value
-        self.size_attribute_name = request.env.ref('vue_storefront.size_attribute_name').sudo().value
-        self.color_attribute_name = request.env.ref('vue_storefront.color_attribute_name').sudo().value
+        self.host_odoo = str(request.env.ref('vue_storefront.host_odoo').sudo().value)
+        self.category_offset = int(request.env.ref('vue_storefront.category_offset').sudo().value)
+        self.size_attribute_name = str(request.env.ref('vue_storefront.size_attribute_name').sudo().value)
+        self.color_attribute_name = str(request.env.ref('vue_storefront.color_attribute_name').sudo().value)
         return
 
     @http.route('/api/catalog/vue_storefront_catalog/product/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
@@ -100,7 +100,7 @@ class PublicAPIController(http.Controller):
                         configurable_children
                     )
 
-                products.append(JsonTypes.productJSON(
+                products.append(JSONTypes.productJSON(
                     element.get('name'),
                     element.get('id'),
                     element.get('default_code'),
@@ -535,7 +535,7 @@ class PublicAPIController(http.Controller):
                 order=None)
             if categories:
                 parent_id = 2
-                response = JsonTypes.categories_to_response(categories, 2, parent_id, self.category_offset)
+                response = JSONTypes.categories_to_response(categories, 2, parent_id, self.category_offset)
                 return simple_response(response)
             else:
                 return invalid_response({
@@ -557,7 +557,7 @@ class PublicAPIController(http.Controller):
                 order=None)
             if categories:
                 parent_id = 2
-                response = self.categories_to_response(categories, 2, parent_id)
+                response = JSONTypes.categories_to_response(categories, 2, parent_id, self.category_offset)
                 return simple_response(response)
             else:
                 return invalid_response({
@@ -577,7 +577,7 @@ class PublicAPIController(http.Controller):
                 offset=None, limit=None,
                 order=None)
             if categories:
-                response = self.categories_to_response(categories, 2, parent_id)
+                response = JSONTypes.categories_to_response(categories, 2, parent_id, self.category_offset)
                 return simple_response(response)
             else:
                 return invalid_response({
@@ -590,7 +590,7 @@ class PublicAPIController(http.Controller):
                 offset=None, limit=None,
                 order=None)
             if categories:
-                response = self.categories_to_response(categories, 3, parent_id)
+                response = JSONTypes.categories_to_response(categories, 3, parent_id, self.category_offset)
                 return simple_response(response)
             else:
                 return invalid_response({
