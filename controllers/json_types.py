@@ -482,3 +482,68 @@ class JSONTypes():
             }
         }
         return response
+
+    @staticmethod
+    def attributeJSON(
+            is_html_allowed_on_front,
+            used_for_sort_by,
+            is_used_in_grid,
+            is_filterable_in_grid,
+            apply_to,
+            is_searchable,
+            is_visible_in_advanced_search,
+            is_used_for_promo_rules,
+            used_in_product_listing,
+            attribute_id,
+            attribute_code,
+            frontend_input,
+            is_required,
+            options,
+            is_user_defined,
+            default_frontend_label,
+            backend_type,
+            backend_model,
+            source_model,
+            default_value,
+            id
+        ):
+        response = {
+           "is_wysiwyg_enabled": False,
+           "is_html_allowed_on_front": is_html_allowed_on_front,
+           "used_for_sort_by": used_for_sort_by,
+           "is_filterable": True,
+           "is_filterable_in_search": False,
+           "is_used_in_grid": is_used_in_grid,
+           "is_visible_in_grid": False,
+           "is_filterable_in_grid": is_filterable_in_grid,
+           "position":0,
+           "apply_to": apply_to,
+           "is_searchable": is_searchable,
+           "is_visible_in_advanced_search": is_visible_in_advanced_search,
+           "is_comparable":"0",
+           "is_used_for_promo_rules": is_used_for_promo_rules,
+           "is_visible_on_front":"0",
+           "used_in_product_listing": used_in_product_listing,
+           "is_visible": True,
+           "scope":"global",
+           "attribute_id": attribute_id,
+           "attribute_code": attribute_code,
+           "frontend_input": frontend_input,
+           "entity_type_id":"4",
+           "is_required": is_required,
+           "options": options,
+           "is_user_defined": is_user_defined,
+           "default_frontend_label": default_frontend_label,
+           "frontend_labels": None,
+           "backend_type": backend_type,
+           "backend_model": backend_model,
+           "source_model": source_model,
+           "default_value": default_value,
+           "is_unique":"0",
+           "validation_rules":[
+
+           ],
+           "id": id,
+           "tsk":1551705231251
+        }
+        return response
