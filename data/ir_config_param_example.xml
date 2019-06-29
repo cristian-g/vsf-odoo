@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="host_odoo" model="ir.config_parameter">
+            <field name="key">host_odoo</field>
+            <field name="value">http://localhost:8069</field>
+        </record>
+        <record id="category_offset" model="ir.config_parameter">
+            <field name="key">category_offset</field>
+            <field name="value">2</field>
+        </record>
+        <record id="size_attribute_name" model="ir.config_parameter">
+            <field name="key">size_attribute_name</field>
+            <field name="value">Talla</field>
+        </record>
+        <record id="color_attribute_name" model="ir.config_parameter">
+            <field name="key">color_attribute_name</field>
+            <field name="value">Color</field>
+        </record>
+        <record id="access_token_expires_in" model="ir.config_parameter">
+            <field name="key">access_token_expires_in</field>
+            <field name="value">600</field>
+        </record>
+    </data>
+</odoo>

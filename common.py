@@ -2,6 +2,11 @@ import ast
 import json
 import werkzeug.wrappers
 
+host = "http://localhost:8069"
+category_offset = 2
+size_attribute_name = "Talla"
+color_attribute_name = "Color"
+
 def valid_response(data, status=200):
     """Valid Response
     This will be return when the http request was successfully processed."""
