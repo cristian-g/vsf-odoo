@@ -564,3 +564,22 @@ class PublicAPIController(http.Controller):
             return simple_response(data)
         else:
             return invalid_response(data)
+
+    @http.route('/api/catalog/vue_storefront_catalog/review/_search', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def reviews_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/catalog/vue_storefront_catalog/review/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
+    def reviews(self, **payload):
+        return valid_response([])
