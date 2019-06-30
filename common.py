@@ -10,6 +10,12 @@ color_attribute_name = "Color"
 def valid_response(data, status=200):
     """Valid Response
     This will be return when the http request was successfully processed."""
+    hits = []
+    for hit in data:
+        hits.append({
+            "_id": str(hit.get("id")),
+            '_source': hit,
+        })
     data = {
         'total': len(data),
         'hits': {
