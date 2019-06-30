@@ -524,78 +524,15 @@ class PrivateAPIController(http.Controller):
     def cart(self, **payload):
 
         if request.session.uid:
-
-            user_data = request.env['res.users'].sudo().search_read(
-                domain=[('id', '=', request.session.uid)],
-                fields=['partner_id'],
-                offset=None,
-                limit=1,
-                order=None
+            items = []
+            return simple_response(
+                {
+                    "code": 200,
+                    "result": items
+                }
             )
-            data = request.env['sale.order'].sudo().search_read(
-                domain=[
-                    ('partner_id', '=', user_data[0].get('partner_id')[0]),
-                    ('state', '=', 'draft'),
-                ],
-                fields=[
-                    'id',
-                    'state',
-                    #'date_order',
-                    'require_payment',
-                    #'create_date',
-                    #'confirmation_date',
-                    'amount_untaxed',
-                    'amount_tax',
-                    'amount_total',
-                    #'write_date',
-                ],
-                offset=None,
-                limit=1,
-                order='create_date DESC'
-            )
-            if data:
-                data[0]['lines'] = request.env['sale.order.line'].sudo().search_read(
-                    domain=[('order_id', '=', data[0]['id'])],
-                    fields=[
-                        'id',
-                        'name',
-                        'invoice_status',
-                        'price_unit',
-                        'price_subtotal',
-                        'price_tax',
-                        'price_total',
-                        'price_reduce',
-                        'price_reduce_taxinc',
-                        'price_reduce_taxexcl',
-                        'discount',
-                        'product_id',
-                        'product_uom_qty',
-                    ],
-                    offset=None,
-                    limit=None,
-                    order='id DESC'
-                )
-
-                items = []
-                lines = data[0]['lines']
-                for line in lines:
-                    product_id = line['product_id'][0]
-                    items.append(self.cart_item_json(line['name'], product_id))
-
-                return simple_response(
-                    {
-                        "code": 200,
-                        "result": items,
-                        "data_original": data[0]['lines']
-                    }
-                )
-            else:
-                return invalid_response(data)
         else:
             items = []
-            # items.append(self.cart_item_json("Minerva LumaTech&trade; V-Tee", 66266))
-            # items.append(self.cart_item_json("Minerva 2", 66267))
-
             return simple_response(
                 {
                     "code": 200,

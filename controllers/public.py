@@ -460,7 +460,7 @@ class PublicAPIController(http.Controller):
         else:
             parent_id = applied_filter.get('value').get('eq')
 
-        if parent_id == 2:
+        if parent_id == 2 or parent_id is None:
             # Root categories
             categories = request.env['product.public.category'].sudo().search_read(
                 domain=[('parent_id', '=', False)],
