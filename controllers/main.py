@@ -445,36 +445,72 @@ class PrivateAPIController(http.Controller):
             response=data
         )
 
+    @validate_optional_token
     @http.route('/api/cart/create', type='http', auth="none", methods=['POST'], csrf=False)
     def cart_create(self, **payload):
 
-        sale_order = request.env['sale.order'].sudo().create({
-            'currency_id': 1,
-            'date_order': datetime.now(),
-            'name': 'SO',
-            'partner_id': 4,
-            'partner_invoice_id': 4,
-            'partner_shipping_id': 4,
-            'picking_policy': 'direct',
-            'pricelist_id': 1,
-            'warehouse_id': 1,
-            'state': 'draft',
-            'team_id': 2,
-        })
-
-        if sale_order:
-            return simple_response(
-                {
-                    "code": 200,
-                    "result": str(sale_order.id)
-                }
+        if request.session.uid:
+            user_data = request.env['res.users'].sudo().search_read(
+                domain=[('id', '=', request.session.uid)],
+                fields=['partner_id'],
+                offset=None,
+                limit=1,
+                order=None
             )
+            partner_id = int(user_data[0].get('partner_id')[0])
+            sale_order = request.env['sale.order'].sudo().create({
+                'currency_id': 1,
+                'date_order': datetime.now(),
+                'name': 'SO',
+                'partner_id': partner_id,
+                'partner_invoice_id': partner_id,
+                'partner_shipping_id': partner_id,
+                'picking_policy': 'direct',
+                'pricelist_id': 1,
+                'warehouse_id': 1,
+                'state': 'draft',
+                'team_id': 2,
+            })
+            if sale_order:
+                return simple_response(
+                    {
+                        "code": 200,
+                        "result": str(sale_order.id)
+                    }
+                )
+            else:
+                return invalid_response(
+                    {
+                        "code": 500,
+                    }
+                )
         else:
-            return invalid_response(
-                {
-                    "code": 500,
-                }
-            )
+            sale_order = request.env['sale.order'].sudo().create({
+                'currency_id': 1,
+                'date_order': datetime.now(),
+                'name': 'SO',
+                'partner_id': 4,
+                'partner_invoice_id': 4,
+                'partner_shipping_id': 4,
+                'picking_policy': 'direct',
+                'pricelist_id': 1,
+                'warehouse_id': 1,
+                'state': 'draft',
+                'team_id': 2,
+            })
+            if sale_order:
+                return simple_response(
+                    {
+                        "code": 200,
+                        "result": str(sale_order.id)
+                    }
+                )
+            else:
+                return invalid_response(
+                    {
+                        "code": 500,
+                    }
+                )
 
     @http.route('/api/cart/delete', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def cart_delete_options(self, **payload):
