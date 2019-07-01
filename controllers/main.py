@@ -559,22 +559,45 @@ class PrivateAPIController(http.Controller):
     @http.route('/api/cart/pull', type='http', auth="none", methods=['GET'], csrf=False)
     def cart(self, **payload):
 
-        if request.session.uid:
-            items = []
-            return simple_response(
-                {
-                    "code": 200,
-                    "result": items
-                }
-            )
-        else:
-            items = []
-            return simple_response(
-                {
-                    "code": 200,
-                    "result": items
-                }
-            )
+        cart_id = int(payload.get('cartId'))
+
+        # if request.session.uid:
+
+        cart_lines = request.env['sale.order.line'].sudo().search_read(
+            domain=[('order_id', '=', cart_id)],
+            fields=[
+                'id',
+                'name',
+                'invoice_status',
+                'price_unit',
+                'price_subtotal',
+                'price_tax',
+                'price_total',
+                'price_reduce',
+                'price_reduce_taxinc',
+                'price_reduce_taxexcl',
+                'discount',
+                'product_id',
+                'product_uom_qty',
+            ],
+            offset=None,
+            limit=None,
+            order='id DESC'
+        )
+
+        items = []
+        for line in cart_lines:
+            product_id = line['product_id'][0]
+            items.append(self.cart_item_json(line['name'], product_id))
+
+        return simple_response(
+            {
+                "code": 200,
+                "result": items,
+                "cart_id": int(payload.get('cartId')),
+                "original": cart_lines,
+            }
+        )
 
     def cart_item_json(self, name, item_id):
         result = {
