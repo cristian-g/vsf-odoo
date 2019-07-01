@@ -65,7 +65,10 @@ class APIAccessToken(models.Model):
     @api.multi
     def has_expired(self):
         self.ensure_one()
-        return datetime.now() > fields.Datetime.from_string(self.expires)
+        if int(self.env.ref(expires_in).sudo().value) == 0:
+            return False
+        else:
+            return datetime.now() > fields.Datetime.from_string(self.expires)
 
     @api.multi
     def _allow_scopes(self, scopes):

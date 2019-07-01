@@ -19,7 +19,7 @@
         </record>
         <record id="access_token_expires_in" model="ir.config_parameter">
             <field name="key">access_token_expires_in</field>
-            <field name="value">600</field>
+            <field name="value">0</field>
         </record>
     </data>
 </odoo>
