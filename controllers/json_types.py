@@ -549,7 +549,7 @@ class JSONTypes():
         return response
 
     @staticmethod
-    def order_json(order_id, confirmation_date, amount_total):
+    def order_json(order_id, confirmation_date, amount_total, items_array):
         result = {
             "applied_rule_ids": "1,5",
             "base_currency_code": "USD",
@@ -604,58 +604,7 @@ class JSONTypes():
             "total_qty_ordered": 1,
             "updated_at": confirmation_date,
             "weight": 1,
-            "items": [
-                {
-                    "amount_refunded": 0,
-                    "applied_rule_ids": "1,5",
-                    "base_amount_refunded": 0,
-                    "base_discount_amount": 3.3,
-                    "base_discount_invoiced": 0,
-                    "base_discount_tax_compensation_amount": 0,
-                    "base_original_price": 22,
-                    "base_price": 22,
-                    "base_price_incl_tax": 27.06,
-                    "base_row_invoiced": 0,
-                    "base_row_total": 22,
-                    "base_row_total_incl_tax": 27.06,
-                    "base_tax_amount": 4.3,
-                    "base_tax_invoiced": 0,
-                    "created_at": confirmation_date,
-                    "discount_amount": 3.3,
-                    "discount_invoiced": 0,
-                    "discount_percent": 15,
-                    "free_shipping": 0,
-                    "discount_tax_compensation_amount": 0,
-                    "is_qty_decimal": 0,
-                    "is_virtual": 0,
-                    "item_id": 224,
-                    "name": "Radiant Tee-XS-Blue",
-                    "no_discount": 0,
-                    "order_id": order_id,
-                    "original_price": 22,
-                    "price": 22,
-                    "price_incl_tax": 27.06,
-                    "product_id": 1546,
-                    "product_type": "simple",
-                    "qty_canceled": 0,
-                    "qty_invoiced": 0,
-                    "qty_ordered": 1,
-                    "qty_refunded": 0,
-                    "qty_shipped": 0,
-                    "quote_item_id": 675,
-                    "row_invoiced": 0,
-                    "row_total": 22,
-                    "row_total_incl_tax": 27.06,
-                    "row_weight": 1,
-                    "sku": "WS12-XS-Blue",
-                    "store_id": 1,
-                    "tax_amount": 4.3,
-                    "tax_invoiced": 0,
-                    "tax_percent": 23,
-                    "updated_at": confirmation_date,
-                    "weight": 1
-                }
-            ],
+            "items": items_array,
             "billing_address": {
                 "address_type": "billing",
                 "city": "Some city2",
@@ -779,5 +728,59 @@ class JSONTypes():
                     }
                 ]
             }
+        }
+        return result
+
+    @staticmethod
+    def order_item_json(order_id, confirmation_date, amount_total, item_name):
+        result = {
+            "amount_refunded": 0,
+            "applied_rule_ids": "1,5",
+            "base_amount_refunded": 0,
+            "base_discount_amount": 3.3,
+            "base_discount_invoiced": 0,
+            "base_discount_tax_compensation_amount": 0,
+            "base_original_price": 22,
+            "base_price": 22,
+            "base_price_incl_tax": 27.06,
+            "base_row_invoiced": 0,
+            "base_row_total": 22,
+            "base_row_total_incl_tax": 27.06,
+            "base_tax_amount": 4.3,
+            "base_tax_invoiced": 0,
+            "created_at": confirmation_date,
+            "discount_amount": 3.3,
+            "discount_invoiced": 0,
+            "discount_percent": 15,
+            "free_shipping": 0,
+            "discount_tax_compensation_amount": 0,
+            "is_qty_decimal": 0,
+            "is_virtual": 0,
+            "item_id": 224,
+            "name": item_name,
+            "no_discount": 0,
+            "order_id": order_id,
+            "original_price": 22,
+            "price": 22,
+            "price_incl_tax": 27.06,
+            "product_id": 1546,
+            "product_type": "simple",
+            "qty_canceled": 0,
+            "qty_invoiced": 0,
+            "qty_ordered": 1,
+            "qty_refunded": 0,
+            "qty_shipped": 0,
+            "quote_item_id": 675,
+            "row_invoiced": 0,
+            "row_total": 22,
+            "row_total_incl_tax": 27.06,
+            "row_weight": 1,
+            "sku": "WS12-XS-Blue",
+            "store_id": 1,
+            "tax_amount": 4.3,
+            "tax_invoiced": 0,
+            "tax_percent": 23,
+            "updated_at": confirmation_date,
+            "weight": 1
         }
         return result

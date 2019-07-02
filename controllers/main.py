@@ -201,10 +201,22 @@ class PrivateAPIController(http.Controller):
             order_id = int(order.get('id'))
             confirmation_date = str(order.get('confirmation_date'))
             amount_total = order.get('amount_total')
+
+            # Order items
+            # TODO query items
+            items_array = []
+            items_array.append(JSONTypes.order_item_json(
+                order_id,
+                confirmation_date,
+                amount_total,
+                "Radiant Tee-XS-Blue",
+            ))
+
             orders_array.append(JSONTypes.order_json(
                 order_id,
                 confirmation_date,
                 amount_total,
+                items_array,
             ))
 
         return simple_response(
