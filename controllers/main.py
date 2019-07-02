@@ -1009,10 +1009,19 @@ class PrivateAPIController(http.Controller):
 
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
+        # cart_id = int(payload.get('cart_id'))
+        cart_id = int(body_json.get('cart_id'))
+
+        request.env['sale.order'].sudo().search([
+            ('id', '=', cart_id)
+        ]).write({
+            'confirmation_date': datetime.now(),
+            'state': 'sale',
+        })
 
         data = {
-            "code":200,
-            "result":"OK"
+            "code": 200,
+            "result": "OK"
         }
         return simple_response(data)
 
