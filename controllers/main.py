@@ -587,19 +587,48 @@ class PrivateAPIController(http.Controller):
 
         items = []
         for line in cart_lines:
+
             product_id = line['product_id'][0]
-            items.append(self.cart_item_json(line['name'], product_id))
+
+            # Prepare configurable_item_options
+            product_data = request.env['product.product'].sudo().search_read(
+                domain=[('id', '=', product_id)],
+                fields=['attribute_value_ids'],
+                offset=None,
+                limit=None,
+                order=None)
+            configurable_item_options = []
+            value_ids = product_data[0]['attribute_value_ids']
+            for value_id in value_ids:
+                attribute_value = request.env['product.attribute.value'].sudo().search_read(
+                    domain=[('id', '=', value_id)],
+                    fields=['attribute_id'],
+                    offset=None,
+                    limit=None,
+                    order=None)
+                attribute_id = attribute_value[0]['attribute_id'][0]
+                configurable_item_options.append(
+                    self.configurable_item_option_json(
+                        str(attribute_id),
+                        int(value_id)
+                    )
+                )
+
+            items.append(self.cart_item_json(
+                line['name'],
+                product_id,
+                configurable_item_options,
+            ))
 
         return simple_response(
             {
                 "code": 200,
                 "result": items,
                 "cart_id": int(payload.get('cartId')),
-                "original": cart_lines,
             }
         )
 
-    def cart_item_json(self, name, item_id):
+    def cart_item_json(self, name, item_id, configurable_item_options):
         result = {
           "item_id": item_id,
           # "sku": "WS08-XS-Red",
@@ -611,18 +640,16 @@ class PrivateAPIController(http.Controller):
           "quote_id": "dceac8e2172a1ff0cfba24d757653257",
           "product_option": {
             "extension_attributes": {
-              "configurable_item_options": [
-                {
-                  "option_id": "93",
-                  "option_value": 58
-                },
-                {
-                  "option_id": "142",
-                  "option_value": 167
-                }
-              ]
+              "configurable_item_options": configurable_item_options
             }
           }
+        }
+        return result
+
+    def configurable_item_option_json(self, option_id, option_value):
+        result = {
+            "option_id": option_id,
+            "option_value": option_value
         }
         return result
 
