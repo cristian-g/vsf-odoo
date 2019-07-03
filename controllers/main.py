@@ -201,21 +201,66 @@ class PrivateAPIController(http.Controller):
             order_id = int(order.get('id'))
             confirmation_date = str(order.get('confirmation_date'))
             amount_total = order.get('amount_total')
+            amount_tax = order.get('amount_tax')
+            amount_untaxed = order.get('amount_untaxed')
 
             # Order items
-            # TODO query items
+
+
+            cart_lines = request.env['sale.order.line'].sudo().search_read(
+                domain=[('order_id', '=', order_id)],
+                fields=[
+                    'id',
+                    'name',
+                    'invoice_status',
+                    'price_unit',
+                    'price_subtotal', # row total without tax
+                    'price_tax', # row total of tax
+                    'price_total', # row total with tax
+                    'price_reduce',
+                    'price_reduce_taxexcl', # price unit without tax (also can be price_unit)
+                    'price_reduce_taxinc', # price unit with tax
+                    'discount',
+                    'product_id',
+                    'product_uom_qty',  # quantity
+                ],
+                offset=None,
+                limit=None,
+                order='id DESC'
+            )
+
             items_array = []
-            items_array.append(JSONTypes.order_item_json(
-                order_id,
-                confirmation_date,
-                amount_total,
-                "Radiant Tee-XS-Blue",
-            ))
+            for line in cart_lines:
+                product_id = line['product_id'][0]
+                name = line['name']
+                sku = line['product_id'][0]
+
+                price_unit_without_tax = line['price_reduce_taxexcl']
+                price_unit_with_tax = line['price_reduce_taxinc']
+                row_total_tax = line['price_tax']
+                row_total_without_tax = line['price_subtotal']
+                row_total_with_tax = line['price_total']
+                quantity = int(line['product_uom_qty'])
+
+                items_array.append(JSONTypes.order_item_json(
+                    order_id,
+                    confirmation_date,
+                    name,
+                    sku,
+                    price_unit_without_tax,
+                    quantity,
+                    row_total_with_tax,
+                    0,
+                ))
 
             orders_array.append(JSONTypes.order_json(
                 order_id,
                 confirmation_date,
                 amount_total,
+                amount_tax,
+                amount_untaxed,
+                0,
+                0,
                 items_array,
             ))
 
