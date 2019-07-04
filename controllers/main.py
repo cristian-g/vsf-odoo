@@ -191,6 +191,8 @@ class PrivateAPIController(http.Controller):
                 'id',
                 'confirmation_date',
                 'amount_total',
+                'amount_tax',
+                'amount_untaxed',
             ],
             offset=None,
             limit=None,
@@ -689,11 +691,12 @@ class PrivateAPIController(http.Controller):
 
         product_templates = request.env['product.template'].sudo().search_read(
             domain=[('id', '=', received_product_tmpl_id)],
-            fields=['name'],
+            fields=['name', 'list_price'],
             offset=None,
             limit=None,
             order=None)
         product_template_name = product_templates[0]["name"]
+        price_unit = product_templates[0]["list_price"]
 
         products = request.env['product.product'].sudo().search_read(
             domain=[('product_tmpl_id', '=', received_product_tmpl_id)],
@@ -754,7 +757,7 @@ class PrivateAPIController(http.Controller):
             'product_uom_qty': desired_quantity,
             'customer_lead': 0.0,
             'name': product_template_name,
-            'price_unit': 100.0,
+            'price_unit': price_unit,
         })
 
         response = {
