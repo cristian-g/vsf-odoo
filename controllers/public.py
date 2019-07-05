@@ -21,18 +21,28 @@ class PublicAPIController(http.Controller):
     @http.route('/api/catalog/vue_storefront_catalog/product/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def products(self, **payload):
 
+        applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
+
+        # Search domain
+        domain = []
+
         # Detect specific category
         requested_id = -1
-        applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
         for applied_filter in applied_filters:
             if applied_filter.get('attribute') == "category_ids":
                 ins = applied_filter.get('value').get('in')
                 if len(ins) == 1:
                     slug = applied_filter.get('value').get('in')[0]
                     requested_id = int(slug.split("-")[-1]) - self.category_offset
-        domain = []
         if requested_id != -1:
             domain = [('public_categ_ids', 'in', [requested_id])]
+
+        # Detect specific product
+        applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
+        applied_filter = applied_filters[0]
+        if applied_filter.get('attribute') == "sku":
+            sku = int(applied_filter.get('value').get('eq'))
+            domain = [('id', '=', sku)]
 
         data = request.env['product.template'].sudo().search_read(
             domain=domain, fields=[

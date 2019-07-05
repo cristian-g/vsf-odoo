@@ -1,3 +1,5 @@
+import urllib.parse
+
 class JSONTypes():
 
     @staticmethod
@@ -20,6 +22,7 @@ class JSONTypes():
         for configurable in configurable_children:
             configurable_children_array.append(
                 JSONTypes.configurable_children_JSON(
+                    name,
                     configurable,
                     item_id,
                     size_attribute_name,
@@ -112,7 +115,7 @@ class JSONTypes():
        "media_gallery": [],
        "climate":"205,209",
        "style_general":"136",
-       "url_key":"elisa-evercool-trade-tee",
+       "url_key": JSONTypes.url_key(name),
        "performance_fabric":"0",
        "sale":"0",
        "max_price": price,
@@ -216,7 +219,11 @@ class JSONTypes():
         return result
 
     @staticmethod
-    def configurable_children_JSON(configurable, item_id, size_attribute_name, color_attribute_name, host_odoo):
+    def url_key(name):
+        return urllib.parse.quote_plus(name).lower().replace("+", "-")
+
+    @staticmethod
+    def configurable_children_JSON(name, configurable, item_id, size_attribute_name, color_attribute_name, host_odoo):
 
         # Get size and color
         size_id = None
@@ -241,7 +248,7 @@ class JSONTypes():
              "small_image": host_odoo + "/web/image/product.product/" + str(configurable.get("id")) + "/image",
              "tax_class_id":"2",
              "has_options":"0",
-             "url_key":"elisa-evercool-trade-tee-xl-yellow",
+             "url_key": JSONTypes.url_key(name),
              "regular_price": configurable.get("list_price"),
              "required_options":"0",
              "max_price": configurable.get("list_price"),
