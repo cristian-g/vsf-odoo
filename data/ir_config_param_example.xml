@@ -21,5 +21,9 @@
             <field name="key">access_token_expires_in</field>
             <field name="value">0</field>
         </record>
+        <record id="firebase_private_key" model="ir.config_parameter">
+            <field name="key">firebase_private_key</field>
+            <field name="value">XXXXXXXXXXXXXXXX</field>
+        </record>
     </data>
 </odoo>

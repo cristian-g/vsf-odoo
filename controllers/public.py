@@ -1,4 +1,5 @@
 import logging
+import requests
 import json
 import werkzeug.wrappers
 from odoo import http
@@ -16,6 +17,7 @@ class PublicAPIController(http.Controller):
         self.category_offset = int(request.env.ref('vue_storefront.category_offset').sudo().value)
         self.size_attribute_name = str(request.env.ref('vue_storefront.size_attribute_name').sudo().value)
         self.color_attribute_name = str(request.env.ref('vue_storefront.color_attribute_name').sudo().value)
+        self.firebase_private_key = str(request.env.ref('vue_storefront.firebase_private_key').sudo().value)
         return
 
     @http.route('/api/catalog/vue_storefront_catalog/product/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
@@ -593,3 +595,41 @@ class PublicAPIController(http.Controller):
     @http.route('/api/catalog/vue_storefront_catalog/review/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def reviews(self, **payload):
         return valid_response([])
+
+    @http.route('/api/notifications/suscribe', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def notifications_suscribe_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/notifications/suscribe', methods=['POST'], type='http', auth='none', csrf=False)
+    def notifications_suscribe(self, **payload):
+        body = request.httprequest.get_data()
+        payload = json.loads(body.decode("utf-8"))
+
+        token = payload.get('token')
+
+        url = "https://iid.googleapis.com/iid/v1/" + token + "/rel/topics/all"
+
+        payload = {}
+
+        header = {
+            "Content-type": "application/json",
+            "Authorization": "key=" + self.firebase_private_key
+        }
+
+        response_decoded_json = requests.post(url, data=payload, headers=header)
+        response_json = response_decoded_json.json()
+
+        return werkzeug.wrappers.Response(
+            status=200,
+        )
