@@ -632,4 +632,11 @@ class PublicAPIController(http.Controller):
 
         return werkzeug.wrappers.Response(
             status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response={}
         )
