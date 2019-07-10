@@ -43,7 +43,7 @@ class JSONTypes():
 
 
        "pattern":"197",
-       "description":"<p>When rising temps threaten to melt you down, Elisa EverCool™ Tee brings serious relief. Moisture-wicking fabric pulls sweat away from your skin, while the innovative seams hug your muscles to enhance your range of motion.</p>\n<p>• Purple heather v-neck tee.<br />• Short-Sleeves.<br />• Luma EverCool™ fabric. <br />• Machine wash/line dry.</p>",
+       "description": "La nueva temporada llega con un estilo que te renovará de pies a cabeza como nunca antes. Los nuevos colores de la temporada 2019 llegan para quedarse en esta nueva colección con la marca como protagonista de tu nuevo estilo.",
        "eco_collection":"1",
 
 
@@ -564,7 +564,8 @@ class JSONTypes():
             amount_untaxed,
             shipping_amount,
             discount_amount,
-            items_array
+            items_array,
+            name
     ):
         result = {
             "applied_rule_ids": "1,5",
@@ -628,8 +629,8 @@ class JSONTypes():
                 "country_id": "PL",
                 "email": "pkarwatka28@example.com",
                 "entity_id": 204,
-                "firstname": "Piotr",
-                "lastname": "Karwatka",
+                "firstname": name,
+                "lastname": "",
                 "parent_id": order_id,
                 "postcode": "50-203",
                 "street": [

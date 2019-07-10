@@ -102,18 +102,52 @@ class PrivateAPIController(http.Controller):
     @http.route('/api/user/me', type='http', auth="none", methods=['GET'], csrf=False)
     def profile(self, **payload):
 
-        data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
-        if data:
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['login', 'partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )[0]
+        partner_data = request.env['res.partner'].sudo().search_read(
+            domain=[('id', '=', user_data.get('partner_id')[0])],
+            fields=[
+                'id',
+                'email',
+                'name',
+                'phone',
+                'company_name',
+                'commercial_company_name',
+                'vat',
+                'street',
+                'street2',
+                'city',
+                'zip',
+                'country_id',
+                'state_id',
+            ],
+            offset=None,
+            limit=1,
+            order=None
+        )[0]
+        if partner_data:
             #return valid_response(data)
-            user_info = data[0]
             response_data = {
                 "code":200,
                 "result":
-                    self.user_json(user_info.get('login'))
+                    self.user_json(
+                        partner_data.get('id'), # id
+                        user_data.get('login'), # email
+                        partner_data.get('name'), # name
+                        partner_data.get('street'), # street
+                        partner_data.get('city'), # city
+                        partner_data.get('zip'), # zip
+                        partner_data.get('street2'), # country_id
+                    )
             }
             return simple_response(response_data, 200)
         else:
-            return invalid_response(data)
+            return invalid_response({})
 
     @validate_token
     @http.route('/api/user/me', type='http', auth="none", methods=['POST'], csrf=False)
@@ -122,6 +156,56 @@ class PrivateAPIController(http.Controller):
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
 
+        user_data = request.env['res.users'].sudo().search_read(
+            domain=[('id', '=', request.session.uid)],
+            fields=['login', 'partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )[0]
+        partner_id = user_data.get('partner_id')[0]
+        partner_data = request.env['res.partner'].sudo().search_read(
+            domain=[('id', '=', partner_id)],
+            fields=[
+                'id',
+                'email',
+                'name',
+                'phone',
+                'company_name',
+                'commercial_company_name',
+                'vat',
+                'street',
+                'street2',
+                'city',
+                'zip',
+                'country_id',
+                'state_id',
+            ],
+            offset=None,
+            limit=1,
+            order=None
+        )[0]
+        firstname = body_json.get('customer').get('firstname')
+        email = body_json.get('customer').get('email')
+        address = body_json.get('customer').get('addresses')[0]
+        city = address.get('city')
+        country_id = address.get('country_id')
+        postcode = address.get('postcode')
+        street = address.get('street')[0]
+        request.env['res.partner'].sudo().search([('id', '=', partner_id)]).write({
+            'name': firstname,
+            'email': email,
+            'street': street,
+            'city': city,
+            'zip': postcode,
+            'street2': country_id,
+        })
+        if payload.get('email') != partner_data.get('email'):
+            # Running this will cause to expire the token on web session (web module)
+            request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({
+                'login': email,
+            })
+
         data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
         if data:
             #return valid_response(data)
@@ -129,47 +213,19 @@ class PrivateAPIController(http.Controller):
             response_data = {
                 "code":200,
                 "result":
-                    self.user_json(user_info.get('login'))
+                    self.user_json(
+                        partner_data.get('id'), # id
+                        user_data.get('login'), # email
+                        partner_data.get('name'), # name
+                        partner_data.get('street'), # street
+                        partner_data.get('city'), # city
+                        partner_data.get('zip'), # zip
+                        partner_data.get('street2'),  # country_id
+                    )
             }
             return simple_response(response_data, 200)
         else:
             return invalid_response(data)
-
-    @validate_token
-    @http.route('/api/edit_profile', type='http', auth="none", methods=['PATCH'], csrf=False)
-    def edit_profile(self, **payload):
-        user_data = request.env['res.users'].sudo().search_read(
-            domain=[('id', '=', request.session.uid)],
-            fields=['partner_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        partner_data = request.env['res.partner'].sudo().search_read(
-            domain=[('id', '=', user_data[0].get('partner_id')[0])],
-            fields=['email'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        request.env['res.partner'].sudo().search([('id', '=', user_data[0].get('partner_id')[0])]).write({
-            'name': payload.get('name'),
-            'email': payload.get('email'),
-            'phone': payload.get('phone'),
-            'company_name': payload.get('company_name'),
-            'commercial_company_name': payload.get('company_name'),
-            'vat': payload.get('nif'),
-            'street': payload.get('street'),
-            'city': payload.get('city'),
-            'zip': payload.get('zip'),
-            'country_id': 68,
-            'state_id': payload.get('state_id'),
-        })
-        if payload.get('email') != partner_data[0].get('email'):
-            # Running this will cause to expire the token on web session (web module)
-            request.env['res.users'].sudo().search([('id', '=', request.session.uid)]).write({
-                'login': payload.get('email'),
-            })
 
     @validate_token
     @http.route('/api/user/order-history', type='http', auth="none", methods=['GET'], csrf=False)
@@ -182,6 +238,15 @@ class PrivateAPIController(http.Controller):
             limit=1,
             order=None
         )
+        partner_data = request.env['res.partner'].sudo().search_read(
+            domain=[('id', '=', user_data.get('partner_id')[0])],
+            fields=[
+                'name',
+            ],
+            offset=None,
+            limit=1,
+            order=None
+        )[0]
         orders = request.env['sale.order'].sudo().search_read(
             domain=[
                 ('partner_id', '=', user_data[0].get('partner_id')[0]),
@@ -264,6 +329,7 @@ class PrivateAPIController(http.Controller):
                 0,
                 0,
                 items_array,
+                partner_data.get('name')
             ))
 
         return simple_response(
@@ -512,19 +578,27 @@ class PrivateAPIController(http.Controller):
         }
         return result
 
-    def user_json(self, email):
+    def user_json(self,
+        id,
+        email,
+        name,
+        street,
+        city,
+        zip,
+        country_id,
+    ):
         return {
-            "id":158,
-            "group_id":1,
-            "default_shipping":"67",
-            "created_at":"2018-02-28 12:05:39",
-            "updated_at":"2018-03-29 10:46:03",
-            "created_in":"Default Store View",
+            "id": id,
+            "group_id": 1,
+            "default_shipping": "67",
+            "created_at": "2018-02-28 12:05:39",
+            "updated_at": "2018-03-29 10:46:03",
+            "created_in": "Default Store View",
             "email": email,
-            "firstname":"Piotr",
-            "lastname":"Karwatka",
-            "store_id":1,
-            "website_id":1,
+            "firstname": name,
+            "lastname": "",
+            "store_id": 1,
+            "website_id": 1,
             "addresses":[
                     {
                         "id":67,
@@ -536,13 +610,14 @@ class PrivateAPIController(http.Controller):
                                 "region_id":0
                             },
                         "region_id":0,
-                        "country_id":"PL",
-                        "street": ["Street name","13"],
+                        "country_id": country_id,
+                        "street": [street,""],
                         "telephone":"",
-                        "postcode":"41-157",
-                        "city":"Wrocław",
-                        "firstname":"John","lastname":"Murphy",
-                        "default_shipping":True
+                        "postcode": zip,
+                        "city": city,
+                        "firstname": name,
+                        "lastname": "",
+                        "default_shipping": True
                     }],
             "disable_auto_group_change":0
         }
