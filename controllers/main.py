@@ -1002,13 +1002,13 @@ class PrivateAPIController(http.Controller):
                     "carrier_code":"flatrate",
                     "method_code":"flatrate",
                     "carrier_title":"Flat Rate",
-                    "method_title":"Fixed",
-                    "amount":5,
-                    "base_amount":5
+                    "method_title":"Gratis",
+                    "amount":0,
+                    "base_amount":0
                     ,"available":True,
                     "error_message":"",
-                    "price_excl_tax":5,
-                    "price_incl_tax":5
+                    "price_excl_tax":0,
+                    "price_incl_tax":0
                 }
             ]
         }
@@ -1023,15 +1023,7 @@ class PrivateAPIController(http.Controller):
                 [
                     {
                         "code":"cashondelivery",
-                        "title":"Cash On Delivery"
-                    },
-                    {
-                        "code":"checkmo","title":
-                        "Check / Money order"
-                    },
-                    {
-                        "code":"free",
-                        "title":"No Payment Information Required"
+                        "title":"Contra reembolso"
                     }
                 ]
         }
