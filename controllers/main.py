@@ -237,11 +237,23 @@ class PrivateAPIController(http.Controller):
             offset=None,
             limit=1,
             order=None
-        )
+        )[0]
         partner_data = request.env['res.partner'].sudo().search_read(
             domain=[('id', '=', user_data.get('partner_id')[0])],
             fields=[
                 'name',
+                'id',
+                'email',
+                'phone',
+                'company_name',
+                'commercial_company_name',
+                'vat',
+                'street', # street
+                'street2',
+                'city', # city
+                'zip', # postcode
+                'country_id',
+                'state_id',
             ],
             offset=None,
             limit=1,
@@ -249,7 +261,7 @@ class PrivateAPIController(http.Controller):
         )[0]
         orders = request.env['sale.order'].sudo().search_read(
             domain=[
-                ('partner_id', '=', user_data[0].get('partner_id')[0]),
+                ('partner_id', '=', user_data.get('partner_id')[0]),
                 ('state', '=', 'sale'),
             ],
             fields=[
@@ -329,7 +341,10 @@ class PrivateAPIController(http.Controller):
                 0,
                 0,
                 items_array,
-                partner_data.get('name')
+                partner_data.get('name'),
+                partner_data.get('city'), # city
+                partner_data.get('zip'), # postcode
+                partner_data.get('street'), # street
             ))
 
         return simple_response(
@@ -485,8 +500,6 @@ class PrivateAPIController(http.Controller):
     def cart(self, **payload):
 
         cart_id = int(payload.get('cartId'))
-
-        # if request.session.uid:
 
         cart_lines = request.env['sale.order.line'].sudo().search_read(
             domain=[('order_id', '=', cart_id)],
@@ -1045,6 +1058,30 @@ class PrivateAPIController(http.Controller):
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
 
+        cart_id = int(payload.get('cartId'))
+
+        order = request.env['sale.order'].sudo().search_read(
+            domain=[
+                ('id', '=', cart_id),
+            ],
+            fields=[
+                'id',
+                'confirmation_date',
+                'amount_total',
+                'amount_tax',
+                'amount_untaxed',
+            ],
+            offset=None,
+            limit=None,
+            order='create_date DESC'
+        )
+
+        order_id = int(order.get('id'))
+        confirmation_date = str(order.get('confirmation_date'))
+        amount_total = order.get('amount_total')
+        amount_tax = order.get('amount_tax')
+        amount_untaxed = order.get('amount_untaxed')
+
         data = {
           "code": 200,
           "result": {
@@ -1060,7 +1097,7 @@ class PrivateAPIController(http.Controller):
             ],
             "totals": {
               "grand_total": 45.8,
-              "base_grand_total": 55.18,
+              "base_grand_total": amount_total,
               "subtotal": 48,
               "base_subtotal": 48,
               "discount_amount": -8.86,
@@ -1146,7 +1183,7 @@ class PrivateAPIController(http.Controller):
                 {
                   "code": "grand_total",
                   "title": "Grand Total",
-                  "value": 55.18,
+                  "value": amount_total,
                   "area": "footer"
                 }
               ]
@@ -1176,11 +1213,35 @@ class PrivateAPIController(http.Controller):
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
 
+        cart_id = int(payload.get('cartId'))
+
+        order = request.env['sale.order'].sudo().search_read(
+            domain=[
+                ('id', '=', cart_id),
+            ],
+            fields=[
+                'id',
+                'confirmation_date',
+                'amount_total',
+                'amount_tax',
+                'amount_untaxed',
+            ],
+            offset=None,
+            limit=None,
+            order='create_date DESC'
+        )
+
+        order_id = int(order.get('id'))
+        confirmation_date = str(order.get('confirmation_date'))
+        amount_total = order.get('amount_total')
+        amount_tax = order.get('amount_tax')
+        amount_untaxed = order.get('amount_untaxed')
+
         data = {
           "code": 200,
           "result": {
             "grand_total": 45.8,
-            "base_grand_total": 55.18,
+            "base_grand_total": amount_total,
             "subtotal": 48,
             "base_subtotal": 48,
             "discount_amount": -8.86,
@@ -1267,7 +1328,7 @@ class PrivateAPIController(http.Controller):
               {
                 "code": "grand_total",
                 "title": "Grand Total",
-                "value": 55.18,
+                "value": amount_total,
                 "area": "footer"
               }
             ]

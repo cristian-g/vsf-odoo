@@ -565,7 +565,10 @@ class JSONTypes():
             shipping_amount,
             discount_amount,
             items_array,
-            name
+            name,
+            city,
+            postcode,
+            street,
     ):
         result = {
             "applied_rule_ids": "1,5",
@@ -579,7 +582,7 @@ class JSONTypes():
             "base_shipping_tax_amount": 0,
             "base_subtotal": amount_untaxed,
             "base_subtotal_incl_tax": amount_total,
-            "base_tax_amount": 4.3,
+            "base_tax_amount": amount_tax,
             "base_total_due": amount_total,
             "base_to_global_rate": 1,
             "base_to_order_rate": 1,
@@ -615,7 +618,7 @@ class JSONTypes():
             "store_to_order_rate": 0,
             "subtotal": amount_untaxed,
             "subtotal_incl_tax": amount_total,
-            "tax_amount": 4.3,
+            "tax_amount": amount_tax,
             "total_due": amount_total,
             "total_item_count": 1,
             "total_qty_ordered": 1,
@@ -624,7 +627,7 @@ class JSONTypes():
             "items": items_array,
             "billing_address": {
                 "address_type": "billing",
-                "city": "Some city2",
+                "city": city,
                 "company": "Divante",
                 "country_id": "PL",
                 "email": "pkarwatka28@example.com",
@@ -632,10 +635,10 @@ class JSONTypes():
                 "firstname": name,
                 "lastname": "",
                 "parent_id": order_id,
-                "postcode": "50-203",
+                "postcode": postcode,
                 "street": [
-                    "XYZ",
-                    "17"
+                    street,
+                    ""
                 ],
                 "telephone": None,
                 "vat_id": "PL8951930748"
@@ -662,18 +665,18 @@ class JSONTypes():
                         "shipping": {
                             "address": {
                                 "address_type": "shipping",
-                                "city": "Some city",
+                                "city": city,
                                 "company": "NA",
                                 "country_id": "PL",
                                 "email": "pkarwatka28@example.com",
                                 "entity_id": 203,
-                                "firstname": "Piotr",
-                                "lastname": "Karwatka",
+                                "firstname": name,
+                                "lastname": "",
                                 "parent_id": order_id,
-                                "postcode": "51-169",
+                                "postcode": postcode,
                                 "street": [
-                                    "XYZ",
-                                    "13"
+                                    street,
+                                    ""
                                 ],
                                 "telephone": None
                             },
