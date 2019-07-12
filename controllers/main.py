@@ -819,7 +819,7 @@ class PrivateAPIController(http.Controller):
             if desired:
                 desired_product_id = product['id']
 
-        desired_quantity = 1
+        desired_quantity = int(payload.get('cartItem').get('qty'))
 
         user_data = request.env['res.users'].sudo().search_read(
             domain=[('id', '=', request.session.uid)],
@@ -849,14 +849,36 @@ class PrivateAPIController(http.Controller):
         else:
             order_id = int(payload.get('cartItem').get('quoteId'))
 
-        order_line = request.env['sale.order.line'].sudo().create({
-            'order_id': order_id,
-            'product_id': desired_product_id,
-            'product_uom_qty': desired_quantity,
-            'customer_lead': 0.0,
-            'name': product_template_name,
-            'price_unit': price_unit,
-        })
+        data = request.env['sale.order.line'].sudo().search_read(
+            domain=[
+                ('order_id', '=', order_id),
+                ('product_id', '=', desired_product_id),
+            ],
+            fields=['id'],
+            offset=None,
+            limit=1,
+            order='create_date DESC'
+        )
+
+        # If line exists
+        if data:
+            # Update quantity
+            request.env['sale.order.line'].sudo().search([
+                ('order_id', '=', order_id),
+                ('product_id', '=', desired_product_id),
+            ]).write({
+                'product_uom_qty': desired_quantity,
+            })
+        else:
+            # Create new line
+            order_line = request.env['sale.order.line'].sudo().create({
+                'order_id': order_id,
+                'product_id': desired_product_id,
+                'product_uom_qty': desired_quantity,
+                'customer_lead': 0.0,
+                'name': product_template_name,
+                'price_unit': price_unit,
+            })
 
         response = {
             "code": 200,
