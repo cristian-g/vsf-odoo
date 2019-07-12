@@ -467,18 +467,65 @@ class PrivateAPIController(http.Controller):
             response=data
         )
 
+    @validate_optional_token
     @http.route('/api/cart/delete', type='http', auth="none", methods=['POST'], csrf=False)
     def cart_delete(self, **payload):
 
-        #body = request.httprequest.get_data()
-        #body_json = json.loads(body.decode("utf-8"))
+        # Request payload
+        body = request.httprequest.get_data()
+        body_json = json.loads(body.decode("utf-8"))
+        received_sku = int(body_json.get('cartItem').get('sku'))
+        received_quote_id = int(body_json.get('cartItem').get('quoteId'))
 
-        return simple_response(
-            {
-                "code": 200,
-                "result": True
-            }
-        )
+        guest_partner_id = 4
+
+        expected_partner_id = guest_partner_id
+
+        if request.session.uid:
+            user_data = request.env['res.users'].sudo().search_read(
+                domain=[('id', '=', request.session.uid)],
+                fields=['partner_id'],
+                offset=None,
+                limit=1,
+                order=None
+            )[0]
+            expected_partner_id = user_data.get('partner_id')[0]
+
+        # Check if order is related to authenticated user
+        order_data = request.env['sale.order'].sudo().search_read(
+            domain=[('id', '=', received_quote_id)],
+            fields=['partner_id'],
+            offset=None,
+            limit=1,
+            order=None
+        )[0]
+        actual_partner_id = order_data.get('partner_id')[0]
+        if actual_partner_id != expected_partner_id:
+            return simple_response(
+                {
+                    "code": 205,
+                    "result": True,
+                    "order_data": actual_partner_id,
+                    "expected_partner_id": expected_partner_id,
+                }
+            )
+            return invalid_response('params', {'errors': ['Unauthorized']}, 400)
+
+        # Remove sale order line
+        record = request.env['sale.order.line'].sudo().search([
+            ('order_id', '=', received_quote_id),
+            ('product_id', '=', received_sku),
+        ])
+        if record:
+            record.unlink()
+            return simple_response(
+                {
+                    "code": 200,
+                    "result": True
+                }
+            )
+        else:
+            return invalid_response('missing_line', 'line with order id %s could not be found' % received_quote_id, 404)
 
     @http.route('/api/cart/pull', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def cart_options(self, **payload):
@@ -703,43 +750,6 @@ class PrivateAPIController(http.Controller):
         request.env['sale.order.line'].sudo().search([('id', '=', payload_line_id)]).write({
             'product_uom_qty': payload_quantity,
         })
-
-    @validate_token
-    @http.route('/api/remove_line', type='http', auth="none", methods=['DELETE'], csrf=False)
-    def remove_line(self, **payload):
-
-        # Check if line is related to authenticated user
-        line_data = request.env['sale.order.line'].sudo().search_read(
-            domain=[('id', '=', payload.get('line_id'))],
-            fields=['order_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        order_data = request.env['sale.order'].sudo().search_read(
-            domain=[('id', '=', line_data[0].get('order_id')[0])],
-            fields=['partner_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        user_data = request.env['res.users'].sudo().search_read(
-            domain=[('id', '=', request.session.uid)],
-            fields=['partner_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        if order_data[0].get('partner_id') != user_data[0].get('partner_id'):
-            return invalid_response('params', {'errors': ['Unauthorized']})
-
-        # Remove line
-        record = request.env['sale.order.line'].sudo().search([('id', '=', payload.get('line_id'))])
-        if record:
-            record.unlink()
-            return valid_response('line %s has been successfully deleted' % record.id)
-        else:
-            return invalid_response('missing_line', 'line with id %s could not be found' % payload.get('line_id'), 404)
 
     @http.route('/api/cart/update', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def update_cart_options(self, **payload):
@@ -1064,9 +1074,9 @@ class PrivateAPIController(http.Controller):
                 'amount_untaxed',
             ],
             offset=None,
-            limit=None,
+            limit=1,
             order='create_date DESC'
-        )
+        )[0]
 
         order_id = int(order.get('id'))
         confirmation_date = str(order.get('confirmation_date'))
