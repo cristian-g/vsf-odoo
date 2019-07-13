@@ -566,6 +566,7 @@ class JSONTypes():
             discount_amount,
             items_array,
             name,
+            lastname,
             city,
             postcode,
             street,
@@ -633,7 +634,7 @@ class JSONTypes():
                 "email": "pkarwatka28@example.com",
                 "entity_id": 204,
                 "firstname": name,
-                "lastname": "",
+                "lastname": lastname,
                 "parent_id": order_id,
                 "postcode": postcode,
                 "street": [
@@ -671,7 +672,7 @@ class JSONTypes():
                                 "email": "pkarwatka28@example.com",
                                 "entity_id": 203,
                                 "firstname": name,
-                                "lastname": "",
+                                "lastname": lastname,
                                 "parent_id": order_id,
                                 "postcode": postcode,
                                 "street": [

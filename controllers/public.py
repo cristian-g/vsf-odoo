@@ -542,7 +542,7 @@ class PublicAPIController(http.Controller):
         password = payload.get('password')
 
         resource = request.env['res.users'].sudo().create({
-                  'name': firstname,
+                  'name': firstname + " " + lastname,
                   'parent_name': lastname,
                   'login': email,
                   'company_ids': [1],

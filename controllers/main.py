@@ -131,14 +131,17 @@ class PrivateAPIController(http.Controller):
             order=None
         )[0]
         if partner_data:
-            #return valid_response(data)
+            split_result = partner_data.get('name').split()
+            name = split_result[0]
+            lastname = " ".join(split_result[1:])
             response_data = {
                 "code":200,
                 "result":
                     self.user_json(
                         partner_data.get('id'), # id
                         user_data.get('login'), # email
-                        partner_data.get('name'), # name
+                        name, # name
+                        lastname, # lastname
                         partner_data.get('street'), # street
                         partner_data.get('city'), # city
                         partner_data.get('zip'), # zip
@@ -208,7 +211,9 @@ class PrivateAPIController(http.Controller):
 
         data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
         if data:
-            #return valid_response(data)
+            split_result = partner_data.get('name').split()
+            name = split_result[0]
+            lastname = " ".join(split_result[1:])
             user_info = data[0]
             response_data = {
                 "code":200,
@@ -216,7 +221,8 @@ class PrivateAPIController(http.Controller):
                     self.user_json(
                         partner_data.get('id'), # id
                         user_data.get('login'), # email
-                        partner_data.get('name'), # name
+                        name, # name
+                        lastname, # lastname
                         partner_data.get('street'), # street
                         partner_data.get('city'), # city
                         partner_data.get('zip'), # zip
@@ -259,6 +265,10 @@ class PrivateAPIController(http.Controller):
             limit=1,
             order=None
         )[0]
+        split_result = partner_data.get('name').split()
+        name = split_result[0]
+        lastname = " ".join(split_result[1:])
+
         orders = request.env['sale.order'].sudo().search_read(
             domain=[
                 ('partner_id', '=', user_data.get('partner_id')[0]),
@@ -341,7 +351,8 @@ class PrivateAPIController(http.Controller):
                 0,
                 0,
                 items_array,
-                partner_data.get('name'),
+                name,
+                lastname,
                 partner_data.get('city'), # city
                 partner_data.get('zip'), # postcode
                 partner_data.get('street'), # street
@@ -635,6 +646,7 @@ class PrivateAPIController(http.Controller):
         id,
         email,
         name,
+        lastname,
         street,
         city,
         zip,
@@ -649,7 +661,7 @@ class PrivateAPIController(http.Controller):
             "created_in": "Default Store View",
             "email": email,
             "firstname": name,
-            "lastname": "",
+            "lastname": lastname,
             "store_id": 1,
             "website_id": 1,
             "addresses":[
@@ -669,7 +681,7 @@ class PrivateAPIController(http.Controller):
                         "postcode": zip,
                         "city": city,
                         "firstname": name,
-                        "lastname": "",
+                        "lastname": lastname,
                         "default_shipping": True
                     }],
             "disable_auto_group_change":0
