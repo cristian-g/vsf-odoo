@@ -1125,47 +1125,23 @@ class PrivateAPIController(http.Controller):
               "base_shipping_amount": 5,
               "shipping_discount_amount": 0,
               "base_shipping_discount_amount": 0,
-              "tax_amount": 9.38,
-              "base_tax_amount": 9.38,
+              "tax_amount": amount_tax,
+              "base_tax_amount": amount_tax,
               "weee_tax_applied_amount": None,
               "shipping_tax_amount": 0,
               "base_shipping_tax_amount": 0,
-              "subtotal_incl_tax": 59.04,
+              "subtotal_incl_tax": amount_total,
               "shipping_incl_tax": 5,
               "base_shipping_incl_tax": 5,
               "base_currency_code": "USD",
               "quote_currency_code": "USD",
               "items_qty": 2,
-              "items": [
-                {
-                  "item_id": 5853,
-                  "price": 24,
-                  "base_price": 24,
-                  "qty": 2,
-                  "row_total": 48,
-                  "base_row_total": 48,
-                  "row_total_with_discount": 0,
-                  "tax_amount": 9.38,
-                  "base_tax_amount": 9.38,
-                  "tax_percent": 23,
-                  "discount_amount": 8.86,
-                  "base_discount_amount": 8.86,
-                  "discount_percent": 15,
-                  "price_incl_tax": 29.52,
-                  "base_price_incl_tax": 29.52,
-                  "row_total_incl_tax": 59.04,
-                  "base_row_total_incl_tax": 59.04,
-                  "options": "[]",
-                  "weee_tax_applied_amount": None,
-                  "weee_tax_applied": None,
-                  "name": "Logan  HeatTec&reg; Tee-XS-Black"
-                }
-              ],
+              "items": [],
               "total_segments": [
                 {
                   "code": "subtotal",
                   "title": "Subtotal",
-                  "value": 59.04
+                  "value": amount_total
                 },
                 {
                   "code": "shipping",
@@ -1179,13 +1155,13 @@ class PrivateAPIController(http.Controller):
                 },
                 {
                   "code": "tax",
-                  "title": "Tax",
-                  "value": 9.38,
+                  "title": "I.V.A.",
+                  "value": amount_tax,
                   "area": "taxes",
                   "extension_attributes": {
                     "tax_grandtotal_details": [
                       {
-                        "amount": 9.38,
+                        "amount": amount_tax,
                         "rates": [
                           {
                             "percent": "23",
@@ -1269,68 +1245,39 @@ class PrivateAPIController(http.Controller):
             "base_shipping_amount": 5,
             "shipping_discount_amount": 0,
             "base_shipping_discount_amount": 0,
-            "tax_amount": 9.38,
-            "base_tax_amount": 9.38,
+            "tax_amount": amount_tax,
+            "base_tax_amount": amount_tax,
             "weee_tax_applied_amount": None,
             "shipping_tax_amount": 0,
             "base_shipping_tax_amount": 0,
-            "subtotal_incl_tax": 59.04,
-            "base_subtotal_incl_tax": 59.04,
+            "subtotal_incl_tax": amount_total,
+            "base_subtotal_incl_tax": amount_total,
             "shipping_incl_tax": 5,
             "base_shipping_incl_tax": 5,
             "base_currency_code": "USD",
             "quote_currency_code": "USD",
-            "items_qty": 2,
-            "items": [
-              {
-                "item_id": 5853,
-                "price": 24,
-                "base_price": 24,
-                "qty": 2,
-                "row_total": 48,
-                "base_row_total": 48,
-                "row_total_with_discount": 0,
-                "tax_amount": 9.38,
-                "base_tax_amount": 9.38,
-                "tax_percent": 23,
-                "discount_amount": 8.86,
-                "base_discount_amount": 8.86,
-                "discount_percent": 15,
-                "price_incl_tax": 29.52,
-                "base_price_incl_tax": 29.52,
-                "row_total_incl_tax": 59.04,
-                "base_row_total_incl_tax": 59.04,
-                "options": "[]",
-                "weee_tax_applied_amount": None,
-                "weee_tax_applied": None,
-                "name": "Logan  HeatTec&reg; Tee-XS-Black"
-              }
-            ],
+            "items_qty": 50,
+            "items": [],
             "total_segments": [
               {
                 "code": "subtotal",
                 "title": "Subtotal",
-                "value": 59.04
+                "value": amount_total
               },
               {
                 "code": "shipping",
-                "title": "Shipping & Handling (Flat Rate - Fixed)",
-                "value": 5
-              },
-              {
-                "code": "discount",
-                "title": "Discount",
-                "value": -8.86
+                "title": "Envío",
+                "value": 0
               },
               {
                 "code": "tax",
-                "title": "Tax",
-                "value": 9.38,
+                "title": "I.V.A.",
+                "value": amount_tax,
                 "area": "taxes",
                 "extension_attributes": {
                   "tax_grandtotal_details": [
                     {
-                      "amount": 9.38,
+                      "amount": amount_tax,
                       "rates": [
                         {
                           "percent": "23",
