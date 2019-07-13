@@ -1145,13 +1145,8 @@ class PrivateAPIController(http.Controller):
                 },
                 {
                   "code": "shipping",
-                  "title": "Shipping & Handling (Flat Rate - Fixed)",
-                  "value": 5
-                },
-                {
-                  "code": "discount",
-                  "title": "Discount",
-                  "value": -8.86
+                  "title": "Envío",
+                  "value": 0
                 },
                 {
                   "code": "tax",
