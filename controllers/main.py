@@ -131,9 +131,22 @@ class PrivateAPIController(http.Controller):
             order=None
         )[0]
         if partner_data:
+
             split_result = partner_data.get('name').split()
             name = split_result[0]
             lastname = " ".join(split_result[1:])
+
+            if partner_data.get('street2'):
+                split_result_street = partner_data.get('street2').split(';')
+                street2 = split_result_street[0]
+                if len(split_result_street) > 0:
+                    country_id = split_result_street[1]
+                else:
+                    country_id = False
+            else:
+                street2 = ''
+                country_id = False
+
             response_data = {
                 "code":200,
                 "result":
@@ -143,9 +156,10 @@ class PrivateAPIController(http.Controller):
                         name, # name
                         lastname, # lastname
                         partner_data.get('street'), # street
+                        street2, # street2
                         partner_data.get('city'), # city
                         partner_data.get('zip'), # zip
-                        partner_data.get('street2'), # country_id
+                        country_id, # country_id
                     )
             }
             return simple_response(response_data, 200)
@@ -189,19 +203,23 @@ class PrivateAPIController(http.Controller):
             order=None
         )[0]
         firstname = body_json.get('customer').get('firstname')
+        lastname = body_json.get('customer').get('lastname')
         email = body_json.get('customer').get('email')
         address = body_json.get('customer').get('addresses')[0]
+        if not lastname:
+            lastname = address.get('lastname')
         city = address.get('city')
         country_id = address.get('country_id')
         postcode = address.get('postcode')
         street = address.get('street')[0]
+        street2 = address.get('street')[1]
         request.env['res.partner'].sudo().search([('id', '=', partner_id)]).write({
-            'name': firstname,
+            'name': firstname + ' ' + lastname,
             'email': email,
             'street': street,
             'city': city,
             'zip': postcode,
-            'street2': country_id,
+            'street2': street2 + ';' + country_id,
         })
         if payload.get('email') != partner_data.get('email'):
             # Running this will cause to expire the token on web session (web module)
@@ -211,9 +229,22 @@ class PrivateAPIController(http.Controller):
 
         data = request.env['res.users'].sudo().search_read(domain=[('id', '=', request.session.uid)], fields=['id', 'login'], offset=None, limit=1, order=None)
         if data:
+
             split_result = partner_data.get('name').split()
             name = split_result[0]
             lastname = " ".join(split_result[1:])
+
+            if partner_data.get('street2'):
+                split_result_street = partner_data.get('street2').split(';')
+                street2 = split_result_street[0]
+                if len(split_result_street) > 0:
+                    country_id = split_result_street[1]
+                else:
+                    country_id = False
+            else:
+                street2 = ''
+                country_id = False
+
             user_info = data[0]
             response_data = {
                 "code":200,
@@ -224,9 +255,10 @@ class PrivateAPIController(http.Controller):
                         name, # name
                         lastname, # lastname
                         partner_data.get('street'), # street
+                        street2, #street2
                         partner_data.get('city'), # city
                         partner_data.get('zip'), # zip
-                        partner_data.get('street2'),  # country_id
+                        country_id,  # country_id
                     )
             }
             return simple_response(response_data, 200)
@@ -648,6 +680,7 @@ class PrivateAPIController(http.Controller):
         name,
         lastname,
         street,
+        street2,
         city,
         zip,
         country_id,
@@ -676,7 +709,7 @@ class PrivateAPIController(http.Controller):
                             },
                         "region_id":0,
                         "country_id": country_id,
-                        "street": [street,""],
+                        "street": [street, street2],
                         "telephone":"",
                         "postcode": zip,
                         "city": city,
