@@ -16,7 +16,7 @@ def nonce(length=40, prefix='access_token'):
     return '{}_{}'.format(prefix, str(hashlib.sha1(rbytes).hexdigest()))
 
 
-class APIAccessToken(models.Model):
+class AccessToken(models.Model):
     _name = 'api.access_token'
 
     token = fields.Char('Access Token', required=True)
@@ -81,7 +81,7 @@ class APIAccessToken(models.Model):
         return resource_scopes.issubset(provided_scopes)
 
 
-class Users(models.Model):
+class User(models.Model):
     _inherit = 'res.users'
     token_ids = fields.One2many('api.access_token', 'user_id',
                                 string="Access Tokens")

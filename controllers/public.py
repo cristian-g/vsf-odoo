@@ -523,7 +523,7 @@ class PublicAPIController(http.Controller):
         })
 
     @http.route('/api/user/create', type='http', auth="none", methods=['OPTIONS'], csrf=False)
-    def signup_options(self, **payload):
+    def sign_up_options(self, **payload):
         data = {
         }
         return werkzeug.wrappers.Response(
@@ -538,7 +538,7 @@ class PublicAPIController(http.Controller):
         )
 
     @http.route('/api/user/create', methods=['POST'], type='http', auth='none', csrf=False)
-    def signup(self, **payload):
+    def sign_up(self, **payload):
 
         body = request.httprequest.get_data()
         payload = json.loads(body.decode("utf-8"))

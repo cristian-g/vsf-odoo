@@ -82,7 +82,7 @@ class PrivateAPIController(http.Controller):
 
     @validate_token
     @http.route('/api/user/me', type='http', auth="none", methods=['OPTIONS'], csrf=False)
-    def profile_options(self, model=None, id=None, **payload):
+    def edit_profile_options(self, model=None, id=None, **payload):
         data = {
         }
         return werkzeug.wrappers.Response(
@@ -166,7 +166,7 @@ class PrivateAPIController(http.Controller):
 
     @validate_token
     @http.route('/api/user/me', type='http', auth="none", methods=['POST'], csrf=False)
-    def profile_edit(self, **payload):
+    def edit_profile(self, **payload):
 
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
@@ -491,7 +491,7 @@ class PrivateAPIController(http.Controller):
                 )
 
     @http.route('/api/cart/delete', type='http', auth="none", methods=['OPTIONS'], csrf=False)
-    def cart_delete_options(self, **payload):
+    def remove_line_options(self, **payload):
         data = {
         }
         return werkzeug.wrappers.Response(
@@ -507,7 +507,7 @@ class PrivateAPIController(http.Controller):
 
     @validate_optional_token
     @http.route('/api/cart/delete', type='http', auth="none", methods=['POST'], csrf=False)
-    def cart_delete(self, **payload):
+    def remove_line(self, **payload):
 
         # Request payload
         body = request.httprequest.get_data()
@@ -715,7 +715,7 @@ class PrivateAPIController(http.Controller):
         }
 
     @http.route('/api/cart/update', type='http', auth="none", methods=['OPTIONS'], csrf=False)
-    def update_cart_options(self, **payload):
+    def cart_update_options(self, **payload):
         data = {
         }
         return werkzeug.wrappers.Response(
@@ -731,7 +731,7 @@ class PrivateAPIController(http.Controller):
 
     @validate_optional_token
     @http.route('/api/cart/update', methods=['POST'], type='http', auth='none', csrf=False)
-    def update_cart(self, **payload):
+    def cart_update(self, **payload):
 
         body = request.httprequest.get_data()
         payload = json.loads(body.decode("utf-8"))
