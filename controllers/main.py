@@ -603,6 +603,7 @@ class PrivateAPIController(http.Controller):
                 line['name'],
                 product_id,
                 configurable_item_options,
+                payload.get('cartId'),
             ))
 
         return simple_response(
@@ -613,7 +614,7 @@ class PrivateAPIController(http.Controller):
             }
         )
 
-    def cart_item_json(self, name, item_id, configurable_item_options):
+    def cart_item_json(self, name, item_id, configurable_item_options, quote_id):
         result = {
           "item_id": item_id,
           # "sku": "WS08-XS-Red",
@@ -622,7 +623,7 @@ class PrivateAPIController(http.Controller):
           "name": name,
           "price": 32,
           "product_type": "configurable",
-          "quote_id": "dceac8e2172a1ff0cfba24d757653257",
+          "quote_id": quote_id,
           "product_option": {
             "extension_attributes": {
               "configurable_item_options": configurable_item_options
