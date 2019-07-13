@@ -40,11 +40,18 @@ class PublicAPIController(http.Controller):
             domain = [('public_categ_ids', 'in', [requested_id])]
 
         # Detect specific product
-        applied_filters = json.loads(payload.get('request')).get('_appliedFilters')
+        request_json = json.loads(payload.get('request'))
+        applied_filters = request_json.get('_appliedFilters')
         applied_filter = applied_filters[0]
         if applied_filter.get('attribute') == "sku":
             sku = int(applied_filter.get('value').get('eq'))
             domain = [('id', '=', sku)]
+
+        # Detect search
+        request_json = json.loads(payload.get('request'))
+        search_text = request_json.get('_searchText')
+        if search_text:
+            domain = [('name', 'ilike', search_text)]
 
         data = request.env['product.template'].sudo().search_read(
             domain=domain, fields=[
