@@ -501,14 +501,6 @@ class PrivateAPIController(http.Controller):
         )[0]
         actual_partner_id = order_data.get('partner_id')[0]
         if actual_partner_id != expected_partner_id:
-            return simple_response(
-                {
-                    "code": 205,
-                    "result": True,
-                    "order_data": actual_partner_id,
-                    "expected_partner_id": expected_partner_id,
-                }
-            )
             return invalid_response('params', {'errors': ['Unauthorized']}, 400)
 
         # Remove sale order line
@@ -525,7 +517,7 @@ class PrivateAPIController(http.Controller):
                 }
             )
         else:
-            return invalid_response('missing_line', 'line with order id %s could not be found' % received_quote_id, 404)
+            return invalid_response('missing_line', 'Line with order id %s could not be found.' % received_quote_id, 404)
 
     @http.route('/api/cart/pull', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def cart_options(self, **payload):
