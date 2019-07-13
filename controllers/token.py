@@ -19,7 +19,7 @@ class TokenAPIController(http.Controller):
         self._expires_in = request.env.ref(expires_in).sudo().value
 
     @http.route('/api/user/login', methods=['OPTIONS'], type='http', auth='none', csrf=False)
-    def token1(self, **post):
+    def log_in_options(self, **post):
 
         data = {
             'items': 0,
@@ -37,7 +37,7 @@ class TokenAPIController(http.Controller):
         )
 
     @http.route('/api/user/login', methods=['POST'], type='http', auth='none', csrf=False)
-    def token2(self, **post):
+    def log_in(self, **post):
 
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
@@ -102,22 +102,22 @@ class TokenAPIController(http.Controller):
             200,
         )
 
+    @http.route('/api/user/logout', methods=['OPTIONS'], type='http', auth='none', csrf=False)
+    def log_out_options(self, **post):
+        data = {}
         return werkzeug.wrappers.Response(
             status=200,
             content_type='application/json; charset=utf-8',
-            headers=[('Cache-Control', 'no-store'),
-                     ('Pragma', 'no-cache')],
-            response=json.dumps({
-                'uid': uid,
-                'user_context': request.session.get_context() if uid else {},
-                'company_id': request.env.user.company_id.id if uid else None,
-                'access_token': access_token,
-                'expires_in': self._expires_in,
-            }),
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
         )
 
-    @http.route('/api/auth/token', methods=['DELETE'], type='http', auth='none', csrf=False)
-    def delete(self, **post):
+    @http.route('/api/user/logout', methods=['DELETE'], type='http', auth='none', csrf=False)
+    def log_out(self, **post):
         """."""
         _token = request.env['api.access_token']
         access_token = request.httprequest.headers.get('access_token')

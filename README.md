@@ -130,6 +130,11 @@ Otherwise, in case you are just developing, just run ```yarn``` in order to inst
 - Open-source alpha release (June) - Done
 - Beta release (July)
 
+## Compatibility
+
+- Odoo v12
+- Vue Storefront v1.9.2
+
 ## The license
 
 Odoo module for Vue Storefront source code is completely free and released under the [MIT License](https://github.com/cristian-g/vsf-odoo/blob/master/LICENSE).

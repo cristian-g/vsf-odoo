@@ -1,6 +1,6 @@
 {
     'name': 'Vue Storefront API',
-    'version': '0.0.1',
+    'version': '0.0.2',
     'category': 'API',
     'author': 'Cristian González Ruz',
     'website': 'http://cristiangonzalez.com',

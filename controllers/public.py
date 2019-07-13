@@ -559,7 +559,6 @@ class PublicAPIController(http.Controller):
                    'groups_id': [9]
               })
 
-        #data = {'id': resource.id}
         data = {
           "code": 200,
           "result": {

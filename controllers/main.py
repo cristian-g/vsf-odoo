@@ -16,7 +16,6 @@ def validate_token(func):
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         """."""
-        #access_token = request.httprequest.headers.get('access_token')
         access_token = kwargs.get('token')
         if not access_token:
             return invalid_response('access_token_not_found', 'missing access token in request header', 401)
@@ -36,7 +35,6 @@ def validate_optional_token(func):
     @functools.wraps(func)
     def optional_wrap(self, *args, **kwargs):
         """."""
-        #access_token = request.httprequest.headers.get('access_token')
         access_token = kwargs.get('token')
 
         if access_token:
@@ -245,7 +243,6 @@ class PrivateAPIController(http.Controller):
                 street2 = ''
                 country_id = False
 
-            user_info = data[0]
             response_data = {
                 "code":200,
                 "result":
@@ -326,8 +323,6 @@ class PrivateAPIController(http.Controller):
             amount_untaxed = order.get('amount_untaxed')
 
             # Order items
-
-
             cart_lines = request.env['sale.order.line'].sudo().search_read(
                 domain=[('order_id', '=', order_id)],
                 fields=[
@@ -401,14 +396,14 @@ class PrivateAPIController(http.Controller):
                                 "filters": [
                                     {
                                         "field": "customer_email",
-                                        "value": "pkarwatka28@example.com",
+                                        "value": "example@example.com",
                                         "condition_type": "eq"
                                     }
                                 ]
                             }
                         ]
                     },
-                    "total_count": 61
+                    "total_count": 50
                 }
             }
         )
@@ -652,7 +647,6 @@ class PrivateAPIController(http.Controller):
     def cart_item_json(self, name, item_id, configurable_item_options, quote_id):
         result = {
           "item_id": item_id,
-          # "sku": "WS08-XS-Red",
           "sku": str(item_id),
           "qty": 1,
           "name": name,
@@ -698,96 +692,27 @@ class PrivateAPIController(http.Controller):
             "store_id": 1,
             "website_id": 1,
             "addresses":[
-                    {
-                        "id":67,
-                        "customer_id":158,
-                        "region":
-                            {
-                                "region_code":None,
-                                "region":None,
-                                "region_id":0
-                            },
-                        "region_id":0,
-                        "country_id": country_id,
-                        "street": [street, street2],
-                        "telephone":"",
-                        "postcode": zip,
-                        "city": city,
-                        "firstname": name,
-                        "lastname": lastname,
-                        "default_shipping": True
-                    }],
+                {
+                    "id":67,
+                    "customer_id":158,
+                    "region":
+                        {
+                            "region_code":None,
+                            "region":None,
+                            "region_id":0
+                        },
+                    "region_id":0,
+                    "country_id": country_id,
+                    "street": [street, street2],
+                    "telephone":"",
+                    "postcode": zip,
+                    "city": city,
+                    "firstname": name,
+                    "lastname": lastname,
+                    "default_shipping": True
+                }],
             "disable_auto_group_change":0
         }
-
-    @http.route('/api/cart/update2', type='http', auth="none", methods=['OPTIONS'], csrf=False)
-    def edit_quantity_options(self, **payload):
-        data = {
-        }
-        return werkzeug.wrappers.Response(
-            status=200,
-            content_type='application/json; charset=utf-8',
-            headers=[
-                ('Access-Control-Allow-Origin', '*'),
-                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
-                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
-            ],
-            response=data
-        )
-
-    @validate_optional_token
-    @http.route('/api/cart/update2', type='http', auth="none", methods=['POST'], csrf=False)
-    def edit_quantity(self, **payload):
-
-        payload_line_id = payload.get('line_id')
-        payload_quantity = payload.get('quantity')
-
-        response = {
-            "code": 200,
-            "result":
-                {
-                    "item_id": 5853,
-                    "sku": "MS10-XS-Black",
-                    "qty": 2,
-                    "name": "Logan  HeatTec&reg; Tee-XS-Black",
-                    "price": 24,
-                    "product_type": "simple",
-                    "quote_id": "81668"
-                }
-        }
-
-        return simple_response(
-            response
-        )
-
-        # Check if line is related to authenticated user
-        line_data = request.env['sale.order.line'].sudo().search_read(
-            domain=[('id', '=', payload_line_id)],
-            fields=['order_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        order_data = request.env['sale.order'].sudo().search_read(
-            domain=[('id', '=', line_data[0].get('order_id')[0])],
-            fields=['partner_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        user_data = request.env['res.users'].sudo().search_read(
-            domain=[('id', '=', request.session.uid)],
-            fields=['partner_id'],
-            offset=None,
-            limit=1,
-            order=None
-        )
-        if order_data[0].get('partner_id') != user_data[0].get('partner_id'):
-            return invalid_response('params', {'errors': ['Unauthorized']})
-
-        request.env['sale.order.line'].sudo().search([('id', '=', payload_line_id)]).write({
-            'product_uom_qty': payload_quantity,
-        })
 
     @http.route('/api/cart/update', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def update_cart_options(self, **payload):
@@ -1027,7 +952,6 @@ class PrivateAPIController(http.Controller):
 
         body = request.httprequest.get_data()
         body_json = json.loads(body.decode("utf-8"))
-        # cart_id = int(payload.get('cart_id'))
         cart_id = int(body_json.get('cart_id'))
 
         request.env['sale.order'].sudo().search([
