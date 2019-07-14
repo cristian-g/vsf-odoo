@@ -145,6 +145,16 @@ class PrivateAPIController(http.Controller):
                 street2 = ''
                 country_id = False
 
+            street = partner_data.get('street')
+            if not street:
+                street = None
+            city = partner_data.get('city')
+            if not city:
+                city = None
+            zip = partner_data.get('zip')
+            if not zip:
+                zip = None
+
             response_data = {
                 "code":200,
                 "result":
@@ -153,10 +163,10 @@ class PrivateAPIController(http.Controller):
                         user_data.get('login'), # email
                         name, # name
                         lastname, # lastname
-                        partner_data.get('street'), # street
+                        street, # street
                         street2, # street2
-                        partner_data.get('city'), # city
-                        partner_data.get('zip'), # zip
+                        city, # city
+                        zip, # zip
                         country_id, # country_id
                     )
             }
