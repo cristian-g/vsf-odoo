@@ -133,7 +133,8 @@ class PublicAPIController(http.Controller):
                 ))
             return valid_response(products)
         else:
-            return invalid_response(data)
+            # Response for no products found
+            return valid_response([])
 
     @http.route('/api/catalog/vue_storefront_catalog/attribute/_search', methods=['GET', 'OPTIONS'], type='http', auth='none', csrf=False)
     def attributes_json(self, **payload):
