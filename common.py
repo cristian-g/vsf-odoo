@@ -23,7 +23,7 @@ def valid_response(data, status=200):
             'total': len(data),
         },
         'total': len(data),
-        'took': 7,
+        'took': 0,
         'start': 0,
         'perPage': len(data)
     }
