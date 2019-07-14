@@ -583,6 +583,49 @@ class PublicAPIController(http.Controller):
         else:
             return invalid_response(data)
 
+    @http.route('/api/user/reset-password', type='http', auth="none", methods=['OPTIONS'], csrf=False)
+    def reset_password_options(self, **payload):
+        data = {
+        }
+        return werkzeug.wrappers.Response(
+            status=200,
+            content_type='application/json; charset=utf-8',
+            headers=[
+                ('Access-Control-Allow-Origin', '*'),
+                ('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'),
+                ('Access-Control-Allow-Headers', 'CONTENT-TYPE'),
+            ],
+            response=data
+        )
+
+    @http.route('/api/user/reset-password', methods=['POST'], type='http', auth='none', csrf=False)
+    def reset_password(self, **payload):
+
+        body = request.httprequest.get_data()
+        payload = json.loads(body.decode("utf-8"))
+
+        email = payload.get('email')
+
+        user_ids = request.env['res.users'].sudo().search_read(
+            domain=[('login', '=', email)],
+            fields=['id'],
+            offset=None,
+            limit=1,
+            order=None
+        )
+
+        try:
+            user_ids.action_reset_password()
+            return simple_response({
+                "code": 200,
+                "result": "OK"
+            })
+        except:
+            return simple_response({
+                "code": 200,
+                "result": "OK"
+            })
+
     @http.route('/api/catalog/vue_storefront_catalog/review/_search', type='http', auth="none", methods=['OPTIONS'], csrf=False)
     def reviews_options(self, **payload):
         data = {
