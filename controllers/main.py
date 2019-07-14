@@ -137,7 +137,7 @@ class PrivateAPIController(http.Controller):
             if partner_data.get('street2'):
                 split_result_street = partner_data.get('street2').split(';')
                 street2 = split_result_street[0]
-                if len(split_result_street) > 0:
+                if len(split_result_street) > 1:
                     country_id = split_result_street[1]
                 else:
                     country_id = False
@@ -235,7 +235,7 @@ class PrivateAPIController(http.Controller):
             if partner_data.get('street2'):
                 split_result_street = partner_data.get('street2').split(';')
                 street2 = split_result_street[0]
-                if len(split_result_street) > 0:
+                if len(split_result_street) > 1:
                     country_id = split_result_street[1]
                 else:
                     country_id = False
