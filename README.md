@@ -128,7 +128,7 @@ Otherwise, in case you are just developing, just run ```yarn``` in order to inst
 ## Roadmap
 
 - Open-source alpha release (June) - Done
-- Beta release (July)
+- Beta release (July) - Done
 
 ## Compatibility
 
